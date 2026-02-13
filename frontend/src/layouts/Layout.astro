@@ -1,23 +1,127 @@
+---
+const { title = "Alquileres Costa del Sol" } = Astro.props;
+import "../styles/global.css";
+---
+
 <!doctype html>
-<html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
-	</head>
-	<body>
-		<slot />
-	</body>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="description"
+      content="Alquileres vacacionales en la Costa del Sol"
+    />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+  </head>
+  <body
+    class="bg-slate-50 flex flex-col min-h-screen font-sans selection:bg-blue-100 selection:text-blue-900"
+  >
+    <!-- Navigation -->
+    <nav
+      class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-100"
+    >
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-20">
+          <!-- Logo -->
+          <div class="flex-shrink-0 flex items-center gap-2">
+            <span class="text-3xl">🏖️</span>
+            <a
+              href="/"
+              class="text-2xl font-bold bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent hover:opacity-80 transition"
+            >
+              Costa del Sol
+            </a>
+          </div>
+
+          <!-- Desktop Menu -->
+          <div class="hidden md:flex items-center space-x-8">
+            <a
+              href="/"
+              class="text-slate-600 hover:text-blue-600 font-medium transition duration-150"
+              >Inicio</a
+            >
+            <a
+              href="#"
+              class="text-slate-600 hover:text-blue-600 font-medium transition duration-150"
+              >Alquileres</a
+            >
+            <a
+              href="#"
+              class="text-slate-600 hover:text-blue-600 font-medium transition duration-150"
+              >Experiencias</a
+            >
+            <a
+              href="#"
+              class="bg-slate-900 text-white px-5 py-2.5 rounded-full font-medium hover:bg-blue-600 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-0.5"
+            >
+              Reservar Ahora
+            </a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-grow">
+      <slot />
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-300 border-t border-slate-800">
+      <div class="max-w-7xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
+          <div class="col-span-1 md:col-span-1">
+            <span class="text-2xl mb-4 block">☀️</span>
+            <p class="text-sm leading-relaxed text-slate-400">
+              Tu puerta de entrada al paraíso. Gestionamos los mejores
+              alojamientos vacacionales de la costa malagueña desde 2010.
+            </p>
+          </div>
+        </div>
+        <div>
+          <h3 class="text-xl font-bold mb-4">Enlaces</h3>
+          <ul class="space-y-2 text-slate-300">
+            <li><a href="#" class="hover:text-white">Sobre Nosotros</a></li>
+            <li>
+              <a href="#" class="hover:text-white">Política de Privacidad</a>
+            </li>
+            <li>
+              <a href="#" class="hover:text-white">Términos y Condiciones</a>
+            </li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="text-xl font-bold mb-4">Contacto</h3>
+          <p class="text-slate-300">📧 info@costadelsol.com</p>
+          <p class="text-slate-300">📞 +34 600 000 000</p>
+        </div>
+      </div>
+      <div
+        class="border-t border-slate-700 mt-8 pt-8 text-center text-slate-400"
+      >
+        <p>
+          &copy; {new Date().getFullYear()} Alquileres Costa del Sol. Todos los derechos
+          reservados.
+        </p>
+      </div>
+    </footer>
+  </body>
 </html>
 
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
+<style is:global>
+  /* Global styles if needed, but Tailwind handles most */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family:
+      system-ui,
+      -apple-system,
+      sans-serif;
+  }
 </style>
