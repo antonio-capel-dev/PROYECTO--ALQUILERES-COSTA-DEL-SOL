@@ -1,0 +1,61 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+// Datos SEO específicos para esta Landing
+const title = "Alquiler en Marbella | Pisos, Apartamentos y Villas de Lujo";
+const description =
+  "Descubre los mejores alquileres en Marbella. Desde apartamentos en Puerto Banús hasta villas en la Milla de Oro. Encuentra tu hogar ideal hoy.";
+---
+
+<Layout
+  title={title}
+  description={description}
+  image="/images/marbella-seo.jpg"
+>
+  <div
+    class="bg-cover bg-center h-[50vh]"
+    style="background-image: url('https://images.unsplash.com/photo-1563720223185-11003d516935?q=80&w=2070&auto=format&fit=crop');"
+  >
+    <div class="bg-black/40 w-full h-full flex items-center justify-center">
+      <h1 class="text-5xl font-bold text-white text-center drop-shadow-lg">
+        Alquileres en <span class="text-blue-400">Marbella</span>
+      </h1>
+    </div>
+  </div>
+
+  <section class="max-w-7xl mx-auto px-4 py-16">
+    <div class="prose lg:prose-xl mx-auto text-slate-600">
+      <h2>Vivir en Marbella: El sueño de la Costa del Sol</h2>
+      <p>
+        Marbella no es solo lujo; es calidad de vida. Con sus 27 km de costa,
+        esta ciudad ofrece una variedad increíble de opciones para alquilar.
+        Desde el bullicio exclusivo de <strong>Puerto Banús</strong> hasta la tranquilidad
+        del <strong>Casco Antiguo</strong>.
+      </p>
+
+      <h3>Zonas destacadas</h3>
+      <ul class="grid grid-cols-1 md:grid-cols-2 gap-4 not-prose">
+        <li class="bg-white p-4 rounded-lg shadow-sm border border-slate-100">
+          <strong class="text-blue-600 block mb-1">Puerto Banús</strong>
+          Ideal para quienes buscan lujo, compras y vida nocturna.
+        </li>
+        <li class="bg-white p-4 rounded-lg shadow-sm border border-slate-100">
+          <strong class="text-blue-600 block mb-1">Nueva Andalucía</strong>
+          Perfecto para golfistas y familias que buscan villas.
+        </li>
+      </ul>
+    </div>
+
+    <!-- Placeholder para listado dinámico -->
+    <div
+      class="mt-16 text-center bg-slate-50 p-12 rounded-2xl border-2 border-dashed border-slate-200"
+    >
+      <p class="text-xl text-slate-500 font-medium">
+        📍 Cargando propiedades en Marbella...
+      </p>
+      <p class="text-sm text-slate-400 mt-2">
+        (Conexión con Strapi en mantenimiento)
+      </p>
+    </div>
+  </section>
+</Layout>

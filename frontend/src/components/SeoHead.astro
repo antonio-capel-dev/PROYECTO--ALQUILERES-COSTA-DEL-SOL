@@ -1,0 +1,101 @@
+---
+export interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  canonicalURL?: string | URL;
+  robowots?: string;
+  type?: "website" | "article";
+}
+
+const {
+  title = "Alquileres Costa del Sol | Apartamentos y Pisos Vacacionales",
+  description = "Encuentra tu alquiler ideal en la Costa del Sol. Apartamentos en Marbella, pisos en Málaga, y casas vacacionales al mejor precio.",
+  image = "/images/og-default.jpg",
+  canonicalURL = new URL(Astro.url.pathname, Astro.site),
+  robowots = "index, follow",
+  type = "website",
+} = Astro.props;
+
+const siteName = "Alquileres Costa del Sol";
+const twitterHandle = "@alquileres_costasol"; // Placeholder
+---
+
+<!-- Global Metadata -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<meta name="generator" content={Astro.generator} />
+
+<!-- Canonical URL -->
+<link rel="canonical" href={canonicalURL} />
+
+<!-- Primary Meta Tags -->
+<title>{title}</title>
+<meta name="title" content={title} />
+<meta name="description" content={description} />
+<meta name="robots" content={robowots} />
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content={type} />
+<meta property="og:url" content={Astro.url} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={new URL(image, Astro.url)} />
+<meta property="og:site_name" content={siteName} />
+<meta property="og:locale" content="es_ES" />
+
+<!-- Twitter -->
+<meta property="twitter:card" content="summary_large_image" />
+<meta property="twitter:url" content={Astro.url} />
+<meta property="twitter:title" content={title} />
+<meta property="twitter:description" content={description} />
+<meta property="twitter:image" content={new URL(image, Astro.url)} />
+<meta property="twitter:creator" content={twitterHandle} />
+
+<!-- Sitemap Link (Auto-discovery) -->
+<link rel="sitemap" href="/sitemap-index.xml" />
+
+<!-- JSON-LD Schema: The Secret Sauce for Google -->
+<script
+  type="application/ld+json"
+  set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://alquileres-costadelsol.com/#website",
+        url: "https://alquileres-costadelsol.com",
+        name: "Alquileres Costa del Sol",
+        description:
+          "Marketplace líder de alquileres en Málaga y Costa del Sol.",
+        inLanguage: "es-ES",
+      },
+      {
+        "@type": "Organization",
+        "@id": "https://alquileres-costadelsol.com/#organization",
+        name: "Alquileres Costa del Sol",
+        url: "https://alquileres-costadelsol.com",
+        logo: {
+          "@type": "ImageObject",
+          url: "https://alquileres-costadelsol.com/favicon.svg",
+        },
+        sameAs: [
+          "https://twitter.com/alquileres_costasol",
+          "https://www.instagram.com/alquileres_costasol",
+        ],
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          {
+            "@type": "ListItem",
+            position: 1,
+            name: "Inicio",
+            item: "https://alquileres-costadelsol.com",
+          },
+        ],
+      },
+    ],
+  })}
+/>

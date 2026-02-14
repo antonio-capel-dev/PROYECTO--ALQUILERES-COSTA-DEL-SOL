@@ -1,0 +1,40 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+const title =
+  "Alquiler en Málaga Capital | Pisos en Centro, Teatinos y Malagueta";
+const description =
+  "Alquila tu piso en Málaga Capital. Zonas universitarias (Teatinos), Centro Histórico y primera línea de playa en La Malagueta.";
+---
+
+<Layout title={title} description={description} image="/images/malaga-seo.jpg">
+  <div
+    class="bg-cover bg-center h-[50vh]"
+    style="background-image: url('https://images.unsplash.com/photo-1543329063-8a3b04c852ac?q=80&w=2070&auto=format&fit=crop');"
+  >
+    <div class="bg-black/40 w-full h-full flex items-center justify-center">
+      <h1 class="text-5xl font-bold text-white text-center drop-shadow-lg">
+        Alquileres en <span class="text-purple-400">Málaga Capital</span>
+      </h1>
+    </div>
+  </div>
+
+  <section class="max-w-7xl mx-auto px-4 py-16">
+    <div class="prose lg:prose-xl mx-auto text-slate-600">
+      <h2>Málaga: La ciudad de moda en Europa</h2>
+      <p>
+        Málaga combina cultura, playa y tecnología. Es el destino preferido para
+        <strong>estudiantes</strong> y <strong>nómadas digitales</strong>.
+      </p>
+    </div>
+
+    <!-- Placeholder -->
+    <div
+      class="mt-16 text-center bg-slate-50 p-12 rounded-2xl border-2 border-dashed border-slate-200"
+    >
+      <p class="text-xl text-slate-500 font-medium">
+        📍 Cargando propiedades en Málaga...
+      </p>
+    </div>
+  </section>
+</Layout>

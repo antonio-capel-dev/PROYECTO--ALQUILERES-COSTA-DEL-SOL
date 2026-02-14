@@ -1,25 +1,18 @@
 ---
-const { title = "Alquileres Costa del Sol" } = Astro.props;
+import SeoHead from "../components/SeoHead.astro";
 import "../styles/global.css";
+
+const { title, description, image } = Astro.props;
 ---
 
 <!doctype html>
 <html lang="es">
   <head>
-    <meta charset="UTF-8" />
-    <meta
-      name="description"
-      content="Alquileres vacacionales en la Costa del Sol"
-    />
-    <meta name="viewport" content="width=device-width" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="generator" content={Astro.generator} />
-    <title>{title}</title>
+    <SeoHead title={title} description={description} image={image} />
   </head>
   <body
     class="bg-slate-50 flex flex-col min-h-screen font-sans selection:bg-blue-100 selection:text-blue-900"
   >
-    
     <nav
       class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-100"
     >
@@ -36,7 +29,6 @@ import "../styles/global.css";
             </a>
           </div>
 
-          
           <div class="hidden md:flex items-center space-x-8">
             <a
               href="/"
@@ -72,31 +64,57 @@ import "../styles/global.css";
     <!-- Footer -->
     <footer class="bg-slate-900 text-slate-300 border-t border-slate-800">
       <div class="max-w-7xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
-          <div class="col-span-1 md:col-span-1">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div class="col-span-1">
             <span class="text-2xl mb-4 block">☀️</span>
             <p class="text-sm leading-relaxed text-slate-400">
               Tu puerta de entrada al paraíso. Gestionamos los mejores
               alojamientos vacacionales de la costa malagueña desde 2010.
             </p>
           </div>
-        </div>
-        <div>
-          <h3 class="text-xl font-bold mb-4">Enlaces</h3>
-          <ul class="space-y-2 text-slate-300">
-            <li><a href="#" class="hover:text-white">Sobre Nosotros</a></li>
-            <li>
-              <a href="#" class="hover:text-white">Política de Privacidad</a>
-            </li>
-            <li>
-              <a href="#" class="hover:text-white">Términos y Condiciones</a>
-            </li>
-          </ul>
-        </div>
-        <div>
-          <h3 class="text-xl font-bold mb-4">Contacto</h3>
-          <p class="text-slate-300"> info@costadelsol.com</p>
-          <p class="text-slate-300"> +34 612 345 678</p>
+
+          <div>
+            <h3 class="text-xl font-bold mb-4">Enlaces</h3>
+            <ul class="space-y-2 text-slate-300">
+              <li><a href="#" class="hover:text-white">Sobre Nosotros</a></li>
+              <li>
+                <a href="#" class="hover:text-white">Política de Privacidad</a>
+              </li>
+              <li>
+                <a href="#" class="hover:text-white">Términos y Condiciones</a>
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 class="text-xl font-bold mb-4">Destinos Top 🚀</h3>
+            <ul class="space-y-2 text-slate-300">
+              <li>
+                <a
+                  href="/alquiler-marbella"
+                  class="hover:text-blue-400 decoration-blue-400 underline-offset-4 hover:underline"
+                  >Alquiler Marbella</a>
+              </li>
+              <li>
+                <a
+                  href="/alquiler-malaga"
+                  class="hover:text-blue-400 decoration-blue-400 underline-offset-4 hover:underline"
+                  >Alquiler Málaga</a>
+              </li>
+              <li>
+                <a
+                  href="/#rentals"
+                  class="hover:text-blue-400 decoration-blue-400 underline-offset-4 hover:underline"
+                  >Ver Todo</a>
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 class="text-xl font-bold mb-4">Contacto</h3>
+            <p class="text-slate-300">info@costadelsol.com</p>
+            <p class="text-slate-300">+34 612 345 678</p>
+          </div>
         </div>
       </div>
       <div
