@@ -1,0 +1,23 @@
+# Security
+*.pem
+*.key
+.env
+.env.production
+
+# Dependencies
+node_modules/
+.npm
+package-lock.json
+
+# Build Output
+dist/
+build/
+.output/
+
+# OS specific
+.DS_Store
+Thumbs.db
+
+# Strapi
+.tmp/
+public/uploads/
