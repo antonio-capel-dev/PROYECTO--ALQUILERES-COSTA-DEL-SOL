@@ -1,0 +1,22 @@
+{
+  "collectionName": "components_inmueble_detalles",
+  "info": {
+    "displayName": "Detalles"
+  },
+  "options": {},
+  "attributes": {
+    "habitaciones": {
+      "type": "integer"
+    },
+    "banos": {
+      "type": "integer"
+    },
+    "metros": {
+      "type": "integer"
+    },
+    "capacidad": {
+      "type": "integer"
+    }
+  },
+  "config": {}
+}

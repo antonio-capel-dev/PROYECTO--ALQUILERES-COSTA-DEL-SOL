@@ -4,7 +4,7 @@ export interface Props {
   description?: string;
   image?: string;
   canonicalURL?: string | URL;
-  robowots?: string;
+  robots?: string;
   type?: "website" | "article";
 }
 
@@ -13,7 +13,7 @@ const {
   description = "Encuentra tu alquiler ideal en la Costa del Sol. Apartamentos en Marbella, pisos en Málaga, y casas vacacionales al mejor precio.",
   image = "/images/og-default.jpg",
   canonicalURL = new URL(Astro.url.pathname, Astro.site),
-  robowots = "index, follow",
+  robots = "index, follow",
   type = "website",
 } = Astro.props;
 
@@ -34,7 +34,7 @@ const twitterHandle = "@alquileres_costasol"; // Placeholder
 <title>{title}</title>
 <meta name="title" content={title} />
 <meta name="description" content={description} />
-<meta name="robots" content={robowots} />
+<meta name="robots" content={robots} />
 
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content={type} />

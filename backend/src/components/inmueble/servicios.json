@@ -1,0 +1,22 @@
+{
+  "collectionName": "components_inmueble_servicios",
+  "info": {
+    "displayName": "Servicios"
+  },
+  "options": {},
+  "attributes": {
+    "wifi": {
+      "type": "boolean"
+    },
+    "aire_acondicionado": {
+      "type": "boolean"
+    },
+    "parking": {
+      "type": "boolean"
+    },
+    "mascotas": {
+      "type": "boolean"
+    }
+  },
+  "config": {}
+}

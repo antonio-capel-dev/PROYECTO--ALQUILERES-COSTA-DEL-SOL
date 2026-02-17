@@ -1,0 +1,102 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Button from "../components/ui/Button.astro";
+import Badge from "../components/ui/Badge.astro";
+---
+
+<Layout
+  title="Sobre Nosotros | Expertos en Alquileres Costa del Sol"
+  description="Conoce al equipo detrás de Alquileres Costa del Sol. Más de 10 años gestionando las mejores propiedades con confianza y transparencia."
+>
+  <!-- Hero de Página -->
+  <section
+    class="bg-brand-dark py-32 text-center px-4 relative overflow-hidden"
+  >
+    <div class="absolute inset-0 opacity-10">
+      <div
+        class="absolute top-0 right-0 w-64 h-64 bg-brand-accent rounded-full -mr-32 -mt-32 blur-3xl text-brand-accent"
+      >
+      </div>
+      <div
+        class="absolute bottom-0 left-0 w-64 h-64 bg-brand-primary rounded-full -ml-32 -mb-32 blur-3xl text-brand-primary"
+      >
+      </div>
+    </div>
+    <div class="max-w-3xl mx-auto relative z-10">
+      <Badge variant="accent" class="mb-6">Nuestra Esencia</Badge>
+      <h1
+        class="text-5xl md:text-6xl font-extrabold text-white mb-8 tracking-tight"
+      >
+        Expertos en hacerte <span class="text-brand-accent italic"
+          >sentir en casa</span
+        >
+      </h1>
+      <p class="text-slate-300 text-xl font-light leading-relaxed">
+        Desde 2010, no solo alquilamos propiedades; creamos el escenario para
+        tus mejores recuerdos en la Costa del Sol.
+      </p>
+    </div>
+  </section>
+
+  <!-- Sección Nuestra Misión -->
+  <section class="py-24 bg-white px-4 border-b border-slate-100">
+    <div
+      class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20 items-center"
+    >
+      <div class="relative">
+        <div
+          class="absolute -top-10 -left-10 w-32 h-32 bg-brand-primary/5 rounded-full blur-2xl"
+        >
+        </div>
+        <h2 class="text-4xl font-bold text-brand-dark mb-8 leading-tight">
+          Más que una inmobiliaria, <br /><span class="text-brand-primary"
+            >tu equipo local.</span
+          >
+        </h2>
+        <div class="space-y-6 text-slate-600">
+          <p>
+            En el sector inmobiliario de la Costa del Sol, la **transparencia**
+            es nuestro pilar fundamental. No solo gestionamos llaves,
+            gestionamos tus vacaciones.
+          </p>
+          <ul class="space-y-4">
+            <li class="flex items-start gap-3">
+              <span class="text-brand-accent font-bold">✓</span>
+              <span
+                ><strong>Experiencia Real:</strong> Más de 500 familias satisfechas
+                el último año.</span
+              >
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="text-brand-accent font-bold">✓</span>
+              <span
+                ><strong>Verificación Total:</strong> Todas nuestras propiedades son
+                inspeccionadas físicamente por nuestro equipo.</span
+              >
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="text-brand-accent font-bold">✓</span>
+              <span
+                ><strong>Soporte Local:</strong> Estamos en Málaga. Si nos necesitas,
+                llegamos en 30 minutos.</span
+              >
+            </li>
+          </ul>
+        </div>
+        <div class="mt-10">
+          <Button href="/contacto">Habla con nosotros</Button>
+        </div>
+      </div>
+
+      <div
+        class="bg-slate-100 rounded-3xl aspect-square flex items-center justify-center text-slate-400 group overflow-hidden"
+      >
+        {/* Placeholder de imagen de equipo */}
+        <div class="text-center group-hover:scale-110 transition duration-500">
+          <span class="text-8xl">👥</span>
+          <p class="mt-4 font-semibold">Nuestro Equipo en Marbella</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>

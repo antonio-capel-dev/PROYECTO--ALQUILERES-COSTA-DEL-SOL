@@ -1,0 +1,83 @@
+---
+import Badge from "./ui/Badge.astro";
+import Button from "./ui/Button.astro";
+
+interface Props {
+  title: string;
+  price: number;
+  slug: string;
+  image?: string;
+  location?: string;
+}
+
+const { title, price, slug, image, location } = Astro.props;
+---
+
+<!-- 
+  group: Permite que al pasar el ratón por TODA la tarjeta, 
+         cambien cosas dentro (como el zoom de la foto).
+  border-slate-100: Borde sutil, no negro. Elegante.
+  hover:-translate-y-1: Efecto "elevación" al pasar el ratón. Marca Premium.
+-->
+<article
+  class="group bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-100 overflow-hidden flex flex-col h-full transform hover:-translate-y-1"
+>
+  {/* ZONA SUPERIOR: FOTO + PRECIO */}
+  <div class="relative h-64 bg-slate-200 overflow-hidden">
+    <!-- FOTO CON ZOOM SUAVE -->
+    <!-- group-hover:scale-105: Al tocar la tarjeta, la foto crece un 5% -->
+    <div
+      class="absolute inset-0 flex items-center justify-center text-slate-400 group-hover:scale-105 transition duration-700 ease-out"
+    >
+      {
+        image ? (
+          <img src={image} alt={title} class="w-full h-full object-cover" />
+        ) : (
+          <span class="text-6xl filter grayscale group-hover:grayscale-0 transition duration-500">
+            🏡
+          </span>
+        )
+      }
+    </div>
+
+    <!-- ETIQUETA DE PRECIO (FLOTANTE) -->
+    <!-- backdrop-blur-sm: Efecto cristal esmerilado (Muy Apple/Premium) -->
+    <!-- text-brand-dark: Usamos TU color de marca, no negro puro. -->
+    <div
+      class="absolute top-4 right-4 bg-white/95 backdrop-blur-sm px-4 py-2 rounded-full shadow-lg border border-slate-100/50"
+    >
+      <span class="font-bold text-brand-dark text-lg">{price}€</span>
+      <span class="text-xs text-slate-500 font-normal">/ noche</span>
+    </div>
+  </div>
+
+  {/* ZONA INFERIOR: TEXTO + BOTÓN */}
+  <div class="p-6 flex flex-col flex-grow">
+    <!-- TÍTULO -->
+    <!-- group-hover:text-brand-primary: Al pasar el ratón, el título se pone AZUL MARCA -->
+    <h3
+      class="text-xl font-bold text-brand-dark group-hover:text-brand-primary transition line-clamp-1 mb-2"
+    >
+      {title}
+    </h3>
+
+    <!-- UBICACIÓN -->
+    <div class="flex items-center text-slate-500 text-sm mb-6">
+      <!-- text-brand-accent: El icono usa tu color CYAN  -->
+      <span class="mr-1 text-brand-accent">📍</span>
+      {location || "Costa del Sol"}
+    </div>
+
+    <!-- BOTÓN DE MARCA (NUESTRO COMPONENTE) -->
+    <!-- variant="outline": Borde azul, fondo transparente  -->
+    <!-- mt-auto: Empuja el botón al final de la tarjeta siempre -->
+    <Button
+      href={`/propiedad/${slug}`}
+      variant="outline"
+      size="sm"
+      class="w-full mt-auto"
+    >
+      Ver Disponibilidad
+    </Button>
+  </div>
+</article>

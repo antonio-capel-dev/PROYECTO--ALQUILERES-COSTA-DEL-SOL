@@ -1,0 +1,53 @@
+---
+interface Props {
+  href?: string;
+  variant?: "primary" | "secondary" | "outline" | "ghost";
+  size?: "sm" | "md" | "lg";
+  class?: string;
+  type?: "button" | "submit" | "reset";
+}
+
+const {
+  href,
+  variant = "primary",
+  size = "md",
+  class: className = "",
+  type = "button",
+} = Astro.props;
+
+// Diccionario de estilos según la variante (Sincronizado con @theme en global.css)
+const variants = {
+  primary:
+    "bg-brand-primary text-white hover:bg-brand-secondary shadow-lg hover:shadow-brand-primary/30",
+  secondary: "bg-brand-dark text-white hover:bg-slate-800",
+  outline:
+    "border-2 border-brand-primary text-brand-primary hover:bg-brand-primary/5",
+  ghost: "text-slate-600 hover:text-brand-primary hover:bg-slate-100",
+};
+
+const sizes = {
+  sm: "px-4 py-2 text-sm",
+  md: "px-6 py-3 text-base",
+  lg: "px-8 py-4 text-lg",
+};
+
+const styles = `
+  inline-flex items-center justify-center rounded-full font-bold transition-all duration-300 
+  transform active:scale-95 disabled:opacity-50 disabled:pointer-events-none
+  ${variants[variant]} 
+  ${sizes[size]} 
+  ${className}
+`;
+---
+
+{
+  href ? (
+    <a href={href} class={styles}>
+      <slot />
+    </a>
+  ) : (
+    <button type={type} class={styles}>
+      <slot />
+    </button>
+  )
+}

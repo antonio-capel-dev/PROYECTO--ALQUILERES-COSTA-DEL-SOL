@@ -1,0 +1,178 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import RentalCard from "../../components/RentalCard.astro";
+import Button from "../../components/ui/Button.astro";
+import Badge from "../../components/ui/Badge.astro";
+
+/**
+ * getStaticPaths(): Consulta todas las ubicaciones de Strapi.
+ * Por cada ubicacion genera /zona/[slug] con sus rentals asociados.
+ * populate=rentals.image trae la relacion anidada en una sola query.
+ */
+export async function getStaticPaths() {
+  const STRAPI_URL = import.meta.env.PUBLIC_STRAPI_URL || "http://localhost:1337";
+
+  let ubicaciones = [];
+  try {
+    const res = await fetch(
+      `${STRAPI_URL}/api/ubicacions?populate[rentals][populate]=image&populate=imagen`
+    );
+    const json = await res.json();
+    ubicaciones = json.data || [];
+  } catch (e) {
+    console.error("Error fetching ubicaciones for static paths:", e);
+  }
+
+  return ubicaciones.map((ubi) => ({
+    params: { slug: ubi.slug },
+    props: { ubicacion: ubi },
+  }));
+}
+
+const { ubicacion } = Astro.props;
+const STRAPI_URL = import.meta.env.PUBLIC_STRAPI_URL || "http://localhost:1337";
+
+// SEO: campos del CMS con fallback generado
+const seoTitle =
+  ubicacion.metaTitle ||
+  `Alquiler vacacional en ${ubicacion.nombre} | Pisos y Apartamentos`;
+const seoDescription =
+  ubicacion.metaDescription ||
+  `Encuentra los mejores alquileres en ${ubicacion.nombre}, Costa del Sol. Apartamentos, pisos y villas al mejor precio. Reserva directa.`;
+
+// Imagen hero de la ubicacion
+const heroImage = ubicacion.imagen?.url
+  ? ubicacion.imagen.url.startsWith("http")
+    ? ubicacion.imagen.url
+    : `${STRAPI_URL}${ubicacion.imagen.url}`
+  : undefined;
+
+// Rentals asociados a esta ubicacion (vienen por la relacion populate)
+const rentals = ubicacion.rentals || [];
+---
+
+<Layout title={seoTitle} description={seoDescription} image={heroImage}>
+  <!-- Breadcrumb -->
+  <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <ol class="flex items-center gap-2 text-sm text-slate-500">
+      <li><a href="/" class="hover:text-brand-primary transition">Inicio</a></li>
+      <li class="text-slate-300">/</li>
+      <li class="text-brand-dark font-medium">{ubicacion.nombre}</li>
+    </ol>
+  </nav>
+
+  <!-- Hero de zona -->
+  <section class="relative bg-brand-dark py-24 px-6 overflow-hidden">
+    {
+      heroImage && (
+        <img
+          src={heroImage}
+          alt={ubicacion.nombre}
+          class="absolute inset-0 w-full h-full object-cover opacity-30"
+        />
+      )
+    }
+    <div class="absolute inset-0 bg-gradient-to-t from-brand-dark/90 to-brand-dark/40"></div>
+
+    <div class="relative z-10 max-w-4xl mx-auto text-center">
+      <Badge variant="accent" class="mb-6">Costa del Sol</Badge>
+      <h1
+        class="text-5xl md:text-6xl font-extrabold text-white tracking-tight mb-6"
+      >
+        Alquileres en{" "}
+        <span
+          class="text-transparent bg-clip-text bg-gradient-to-r from-brand-accent to-brand-secondary"
+        >
+          {ubicacion.nombre}
+        </span>
+      </h1>
+      <p class="text-xl text-slate-300 max-w-2xl mx-auto font-light leading-relaxed">
+        {seoDescription}
+      </p>
+    </div>
+  </section>
+
+  <!-- Grid de propiedades -->
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 bg-brand-light">
+    <div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
+      <div>
+        <h2 class="text-3xl md:text-4xl font-bold text-brand-dark">
+          Propiedades en {ubicacion.nombre}
+        </h2>
+        <p class="text-slate-500 mt-2 text-lg">
+          {rentals.length}
+          {rentals.length === 1 ? "propiedad disponible" : "propiedades disponibles"}
+        </p>
+      </div>
+      <a
+        href="/"
+        class="flex items-center text-brand-primary font-semibold hover:text-brand-secondary transition group"
+      >
+        Ver todas las zonas
+        <span class="ml-2 transform group-hover:translate-x-1 transition">→</span>
+      </a>
+    </div>
+
+    {
+      rentals.length > 0 ? (
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+          {rentals.map((rental) => (
+            <RentalCard
+              title={rental.title}
+              price={rental.price}
+              slug={rental.slug || rental.documentId}
+              image={
+                rental.image?.url
+                  ? rental.image.url.startsWith("http")
+                    ? rental.image.url
+                    : `${STRAPI_URL}${rental.image.url}`
+                  : undefined
+              }
+              location={ubicacion.nombre}
+            />
+          ))}
+        </div>
+      ) : (
+        <div class="text-center py-24 bg-white rounded-3xl border-2 border-dashed border-slate-200">
+          <span class="text-6xl mb-6 block">🏖️</span>
+          <h3 class="text-2xl font-bold text-brand-dark mb-2">
+            Próximamente en {ubicacion.nombre}
+          </h3>
+          <p class="text-slate-500 max-w-md mx-auto mb-8">
+            Estamos preparando las mejores propiedades de esta zona. Vuelve
+            pronto o explora otras localidades.
+          </p>
+          <Button href="/" variant="outline">
+            Ver todas las propiedades
+          </Button>
+        </div>
+      )
+    }
+  </section>
+
+  <!-- Contenido SEO de la zona (richtext desde Strapi) -->
+  {
+    ubicacion.descripcion && (
+      <section class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pb-24">
+        <div class="prose prose-slate lg:prose-lg max-w-none">
+          <Fragment set:html={ubicacion.descripcion} />
+        </div>
+      </section>
+    )
+  }
+
+  <!-- CTA -->
+  <section class="bg-brand-dark py-16 px-4">
+    <div class="max-w-3xl mx-auto text-center">
+      <h2 class="text-3xl font-bold text-white mb-4">
+        ¿Buscas algo concreto en {ubicacion.nombre}?
+      </h2>
+      <p class="text-slate-300 mb-8">
+        Nuestro equipo local conoce cada rincón. Cuéntanos qué necesitas.
+      </p>
+      <Button href="/contacto" variant="primary" size="lg">
+        Contactar
+      </Button>
+    </div>
+  </section>
+</Layout>

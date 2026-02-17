@@ -1,0 +1,172 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+// Datos simulados para esta landing específica
+const properties = [
+  {
+    title: "Villa Familiar 'El Oasis'",
+    price: "150",
+    features: ["Piscina Privada", "Vistas al Mar", "3 Habitaciones", "Jardín"],
+    image: "/images/villa-oasis.jpg", // Placeholder
+  },
+  {
+    title: "Apartamento 'Horizonte Blue'",
+    price: "120",
+    features: [
+      "Piscina Comunitaria",
+      "Primera Línea",
+      "2 Habitaciones",
+      "WiFi",
+    ],
+    image: "/images/apt-horizonte.jpg", // Placeholder
+  },
+  {
+    title: "Casa Adosada 'Los Naranjos'",
+    price: "135",
+    features: [
+      "Piscina Infantil",
+      "Cerca de Playa",
+      "3 Habitaciones",
+      "Parking",
+    ],
+    image: "/images/casa-naranjos.jpg", // Placeholder
+  },
+];
+---
+
+<Layout
+  title="Alquiler vacacional en Marbella para familias: vistas al mar y piscina | Reserva"
+  description="Reserva tu alquiler vacacional ideal en Marbella para familias. Apartamentos y villas con vistas al mar, piscina y todo lo necesario para niños. ¡Mejor precio directo!"
+>
+  <!-- Hero Section específico para Long Tail -->
+  <section class="relative bg-blue-900 text-white py-24 text-center px-4">
+    <div class="absolute inset-0 overflow-hidden opacity-30">
+      <!-- Background pattern placeholder -->
+      <img
+        src="https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?q=80&w=2049&auto=format&fit=crop"
+        alt="Marbella Piscina"
+        class="w-full h-full object-cover"
+      />
+    </div>
+    <div class="relative z-10 max-w-4xl mx-auto">
+      <span
+        class="inline-block bg-blue-500/20 backdrop-blur-md px-4 py-2 rounded-full text-blue-100 font-semibold mb-6 border border-blue-400/30"
+      >
+        ☀️ Especial Familias 2026
+      </span>
+      <h1
+        class="text-4xl md:text-6xl font-extrabold tracking-tight mb-6 leading-tight"
+      >
+        Marbella en Familia: <br />
+        <span class="text-cyan-400">Piscina + Vistas al Mar</span>
+      </h1>
+      <p class="text-lg md:text-xl text-blue-100 max-w-2xl mx-auto mb-10">
+        Olvídate de hoteles masificados. Descubre villas y apartamentos
+        diseñados para que los niños disfruten y los padres descansen.
+      </p>
+      <a
+        href="#booking"
+        class="bg-yellow-500 text-yellow-900 px-8 py-4 rounded-full font-bold hover:bg-yellow-400 transition shadow-xl transform hover:-translate-y-1"
+      >
+        Ver Disponibilidad Familiar
+      </a>
+    </div>
+  </section>
+
+  <!-- Value Proposition (Why Families?) -->
+  <section class="py-16 bg-white px-4">
+    <div
+      class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-center"
+    >
+      <div class="p-6 bg-blue-50 rounded-2xl">
+        <div class="text-4xl mb-4">🏊‍♂️</div>
+        <h3 class="text-xl font-bold text-slate-900 mb-2">
+          Piscina Garantizada
+        </h3>
+        <p class="text-slate-600">
+          Todas nuestras opciones tienen piscina vigilada o privada.
+        </p>
+      </div>
+      <div class="p-6 bg-blue-50 rounded-2xl">
+        <div class="text-4xl mb-4">🌊</div>
+        <h3 class="text-xl font-bold text-slate-900 mb-2">
+          Vistas al Mediterráneo
+        </h3>
+        <p class="text-slate-600">
+          Despierta con la brisa del mar. Ubicaciones privilegiadas.
+        </p>
+      </div>
+      <div class="p-6 bg-blue-50 rounded-2xl">
+        <div class="text-4xl mb-4">👶</div>
+        <h3 class="text-xl font-bold text-slate-900 mb-2">Family Friendly</h3>
+        <p class="text-slate-600">
+          Cunas, tronas y espacios seguros para los más pequeños.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Listings -->
+  <section id="booking" class="py-20 bg-slate-50 px-4">
+    <div class="max-w-7xl mx-auto">
+      <h2 class="text-3xl font-bold text-slate-900 mb-12 text-center">
+        Alojamientos Destacados para Tu Familia
+      </h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {
+          properties.map((item) => (
+            <article class="bg-white rounded-xl shadow-sm hover:shadow-lg transition border border-slate-100 overflow-hidden">
+              <div class="h-48 bg-slate-200 flex items-center justify-center text-slate-400">
+                {/* Placeholder Image */}
+                <span class="text-4xl">🏡</span>
+              </div>
+              <div class="p-6">
+                <div class="flex justify-between items-start mb-4">
+                  <h3 class="text-xl font-bold text-slate-900">{item.title}</h3>
+                  <span class="bg-green-100 text-green-700 text-xs font-bold px-2 py-1 rounded">
+                    {item.price}€ / noche
+                  </span>
+                </div>
+                <ul class="flex flex-wrap gap-2 mb-6">
+                  {item.features.map((feat) => (
+                    <li class="text-xs bg-slate-100 text-slate-600 px-2 py-1 rounded">
+                      {feat}
+                    </li>
+                  ))}
+                </ul>
+                <a
+                  href="#"
+                  class="block w-full text-center bg-blue-600 text-white py-2 rounded-lg font-semibold hover:bg-blue-700 transition"
+                >
+                  Reservar Ahora
+                </a>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ / SEO Content -->
+  <section class="py-16 bg-white px-4 border-t border-slate-100">
+    <div class="max-w-4xl mx-auto prose prose-blue">
+      <h2 class="text-2xl font-bold text-slate-900 mb-6">
+        ¿Por qué elegir Marbella para tus vacaciones familiares?
+      </h2>
+      <p class="text-slate-600 mb-4">
+        Marbella no es solo lujo y fiesta. Es uno de los destinos más seguros y
+        amigables para familias en la Costa del Sol. Nuestros <strong
+          >alquileres vacacionales en Marbella con vistas al mar</strong
+        > están situados en zonas tranquilas como Elviria o Los Monteros, lejos del
+        ruido pero cerca de la playa.
+      </p>
+      <p class="text-slate-600 mb-4">
+        Además, contar con <strong>piscina privada o comunitaria</strong> es esencial
+        para esos días en los que el mar está agitado o simplemente quieres relajarte
+        mientras los niños juegan seguros.
+      </p>
+    </div>
+  </section>
+</Layout>

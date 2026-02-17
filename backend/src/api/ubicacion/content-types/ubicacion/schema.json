@@ -1,0 +1,44 @@
+{
+  "kind": "collectionType",
+  "collectionName": "ubicacions",
+  "info": {
+    "singularName": "ubicacion",
+    "pluralName": "ubicacions",
+    "displayName": "Ubicacion"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "nombre": {
+      "type": "string",
+      "required": true
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "nombre",
+      "required": true
+    },
+    "descripcion": {
+      "type": "richtext"
+    },
+    "imagen": {
+      "type": "media",
+      "multiple": false,
+      "required": false
+    },
+    "metaTitle": {
+      "type": "string"
+    },
+    "metaDescription": {
+      "type": "text"
+    },
+    "rentals": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::rental.rental",
+      "mappedBy": "ubicacion"
+    }
+  }
+}

@@ -1,1 +1,37 @@
 @import "tailwindcss";
+
+@theme {
+  /* Identidad de Marca "Alquileres Costa del Sol" */
+  --color-brand-dark: #0f172a;
+  --color-brand-primary: #2563eb;
+  --color-brand-secondary: #3b82f6;
+  --color-brand-accent: #06b6d4;
+  --color-brand-purple: #9333ea;
+  --color-brand-light: #f8fafc;
+
+  --font-sans: "Inter", "system-ui", "sans-serif";
+
+  /* Sombras y efectos personalizados */
+  --shadow-brand:
+    0 10px 15px -3px rgba(37, 99, 235, 0.1),
+    0 4px 6px -2px rgba(37, 99, 235, 0.05);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply font-sans antialiased text-slate-900 bg-white;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply tracking-tight font-bold;
+  }
+}

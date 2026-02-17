@@ -1,5 +1,6 @@
 ---
 import SeoHead from "../components/SeoHead.astro";
+import Button from "../components/ui/Button.astro";
 import "../styles/global.css";
 
 const { title, description, image } = Astro.props;
@@ -11,19 +12,19 @@ const { title, description, image } = Astro.props;
     <SeoHead title={title} description={description} image={image} />
   </head>
   <body
-    class="bg-slate-50 flex flex-col min-h-screen font-sans selection:bg-blue-100 selection:text-blue-900"
+    class="bg-brand-light flex flex-col min-h-screen font-sans selection:bg-brand-primary/10 selection:text-brand-primary"
   >
     <nav
-      class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-100"
+      class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-100"
     >
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-20">
           <!-- Logo -->
           <div class="flex-shrink-0 flex items-center gap-2">
-            <span class="text-3xl"></span>
+            <span class="text-3xl">☀️</span>
             <a
               href="/"
-              class="text-2xl font-bold bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent hover:opacity-80 transition"
+              class="text-2xl font-bold bg-gradient-to-r from-brand-primary to-brand-accent bg-clip-text text-transparent hover:opacity-80 transition"
             >
               Costa del Sol
             </a>
@@ -32,25 +33,22 @@ const { title, description, image } = Astro.props;
           <div class="hidden md:flex items-center space-x-8">
             <a
               href="/"
-              class="text-slate-600 hover:text-blue-600 font-medium transition duration-150"
+              class="text-slate-600 hover:text-brand-primary font-medium transition duration-150"
               >Inicio</a
             >
             <a
-              href="#"
-              class="text-slate-600 hover:text-blue-600 font-medium transition duration-150"
+              href="/nosotros"
+              class="text-slate-600 hover:text-brand-primary font-medium transition duration-150"
+              >Sobre Nosotros</a
+            >
+            <a
+              href="/#rentals"
+              class="text-slate-600 hover:text-brand-primary font-medium transition duration-150"
               >Alquileres</a
             >
-            <a
-              href="#"
-              class="text-slate-600 hover:text-blue-600 font-medium transition duration-150"
-              >Experiencias</a
-            >
-            <a
-              href="#"
-              class="bg-slate-900 text-white px-5 py-2.5 rounded-full font-medium hover:bg-blue-600 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-0.5"
-            >
+            <Button href="/contacto" variant="secondary" size="sm">
               Reservar Ahora
-            </a>
+            </Button>
           </div>
         </div>
       </div>
@@ -62,7 +60,7 @@ const { title, description, image } = Astro.props;
     </main>
 
     <!-- Footer -->
-    <footer class="bg-slate-900 text-slate-300 border-t border-slate-800">
+    <footer class="bg-brand-dark text-slate-300 border-t border-slate-800">
       <div class="max-w-7xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
         <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div class="col-span-1">
@@ -74,51 +72,55 @@ const { title, description, image } = Astro.props;
           </div>
 
           <div>
-            <h3 class="text-xl font-bold mb-4">Enlaces</h3>
+            <h3 class="text-xl font-bold text-white mb-4">Empresa</h3>
             <ul class="space-y-2 text-slate-300">
-              <li><a href="#" class="hover:text-white">Sobre Nosotros</a></li>
               <li>
-                <a href="#" class="hover:text-white">Política de Privacidad</a>
+                <a href="/nosotros" class="hover:text-brand-accent transition"
+                  >Sobre Nosotros</a
+                >
               </li>
               <li>
-                <a href="#" class="hover:text-white">Términos y Condiciones</a>
+                <a href="/contacto" class="hover:text-brand-accent transition"
+                  >Contacto</a
+                >
+              </li>
+              <li>
+                <a href="#" class="hover:text-brand-accent transition"
+                  >Privacidad</a
+                >
               </li>
             </ul>
           </div>
 
           <div>
-            <h3 class="text-xl font-bold mb-4">Destinos Top 🚀</h3>
+            <h3 class="text-xl font-bold text-white mb-4">Destinos Top 🚀</h3>
             <ul class="space-y-2 text-slate-300">
               <li>
                 <a
                   href="/alquiler-marbella"
-                  class="hover:text-blue-400 decoration-blue-400 underline-offset-4 hover:underline"
-                  >Alquiler Marbella</a>
+                  class="hover:text-brand-accent decoration-brand-accent underline-offset-4 hover:underline transition"
+                  >Alquiler Marbella</a
+                >
               </li>
               <li>
                 <a
                   href="/alquiler-malaga"
-                  class="hover:text-blue-400 decoration-blue-400 underline-offset-4 hover:underline"
-                  >Alquiler Málaga</a>
-              </li>
-              <li>
-                <a
-                  href="/#rentals"
-                  class="hover:text-blue-400 decoration-blue-400 underline-offset-4 hover:underline"
-                  >Ver Todo</a>
+                  class="hover:text-brand-accent decoration-brand-accent underline-offset-4 hover:underline transition"
+                  >Alquiler Málaga</a
+                >
               </li>
             </ul>
           </div>
 
           <div>
-            <h3 class="text-xl font-bold mb-4">Contacto</h3>
+            <h3 class="text-xl font-bold text-white mb-4">Contacto</h3>
             <p class="text-slate-300">info@costadelsol.com</p>
             <p class="text-slate-300">+34 612 345 678</p>
           </div>
         </div>
       </div>
       <div
-        class="border-t border-slate-700 mt-8 pt-8 text-center text-slate-400"
+        class="border-t border-slate-800 mt-8 py-8 text-center text-slate-500"
       >
         <p>
           &copy; {new Date().getFullYear()} Alquileres Costa del Sol. Todos los derechos
@@ -130,7 +132,6 @@ const { title, description, image } = Astro.props;
 </html>
 
 <style is:global>
-  /* Global styles if needed, but Tailwind handles most */
   h1,
   h2,
   h3,

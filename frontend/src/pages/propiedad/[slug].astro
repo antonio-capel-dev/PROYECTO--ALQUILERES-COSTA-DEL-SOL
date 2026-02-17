@@ -1,0 +1,238 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Button from "../../components/ui/Button.astro";
+import Badge from "../../components/ui/Badge.astro";
+
+/**
+ * getStaticPaths(): Astro llama a esta funcion en build-time.
+ * Consulta TODAS las propiedades de Strapi y genera una ruta /propiedad/[slug]
+ * por cada una. Esto produce HTML estatico con SEO perfecto.
+ */
+export async function getStaticPaths() {
+  const STRAPI_URL = import.meta.env.PUBLIC_STRAPI_URL || "http://localhost:1337";
+
+  let rentals = [];
+  try {
+    const res = await fetch(`${STRAPI_URL}/api/rentals?populate=*`);
+    const json = await res.json();
+    rentals = json.data || [];
+  } catch (e) {
+    console.error("Error fetching rentals for static paths:", e);
+  }
+
+  return rentals.map((rental) => ({
+    params: { slug: rental.slug },
+    props: { rental },
+  }));
+}
+
+const { rental } = Astro.props;
+const STRAPI_URL = import.meta.env.PUBLIC_STRAPI_URL || "http://localhost:1337";
+
+// SEO: Prioriza metaTitle/metaDescription del CMS, con fallback al title/description
+const seoTitle = rental.metaTitle || `${rental.title} | Alquiler en Costa del Sol`;
+const seoDescription =
+  rental.metaDescription ||
+  `Alquila ${rental.title} en ${rental.ubicacion?.nombre || rental.location || "Costa del Sol"}. Desde ${rental.price}€/noche. Reserva directa sin intermediarios.`;
+
+// Imagen: URL absoluta o relativa al Strapi
+const imageUrl = rental.image?.url
+  ? rental.image.url.startsWith("http")
+    ? rental.image.url
+    : `${STRAPI_URL}${rental.image.url}`
+  : undefined;
+
+// Componentes de Strapi (detalles y servicios)
+const detalles = rental.detalles;
+const servicios = rental.Servicios;
+
+// Ubicacion (relacion)
+const ubicacion = rental.ubicacion;
+---
+
+<Layout title={seoTitle} description={seoDescription} image={imageUrl}>
+  <!-- Breadcrumb para SEO y navegacion -->
+  <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <ol class="flex items-center gap-2 text-sm text-slate-500">
+      <li><a href="/" class="hover:text-brand-primary transition">Inicio</a></li>
+      <li class="text-slate-300">/</li>
+      {
+        ubicacion && (
+          <>
+            <li>
+              <a
+                href={`/zona/${ubicacion.slug}`}
+                class="hover:text-brand-primary transition"
+              >
+                {ubicacion.nombre}
+              </a>
+            </li>
+            <li class="text-slate-300">/</li>
+          </>
+        )
+      }
+      <li class="text-brand-dark font-medium truncate max-w-xs">{rental.title}</li>
+    </ol>
+  </nav>
+
+  <article class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-24">
+    <!-- Cabecera: Imagen + Info principal -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
+      <!-- Imagen -->
+      <div class="relative rounded-3xl overflow-hidden bg-slate-200 aspect-[4/3]">
+        {
+          imageUrl ? (
+            <img
+              src={imageUrl}
+              alt={rental.title}
+              class="w-full h-full object-cover"
+              loading="eager"
+            />
+          ) : (
+            <div class="w-full h-full flex items-center justify-center text-slate-400">
+              <span class="text-8xl">🏡</span>
+            </div>
+          )
+        }
+        <!-- Precio flotante -->
+        <div
+          class="absolute top-6 right-6 bg-white/95 backdrop-blur-sm px-6 py-3 rounded-full shadow-lg"
+        >
+          <span class="text-2xl font-bold text-brand-dark">{rental.price}€</span>
+          <span class="text-sm text-slate-500">/ noche</span>
+        </div>
+      </div>
+
+      <!-- Info principal -->
+      <div class="flex flex-col justify-center">
+        {
+          ubicacion && (
+            <Badge variant="accent" class="mb-4 self-start">
+              {ubicacion.nombre}
+            </Badge>
+          )
+        }
+
+        <h1 class="text-4xl md:text-5xl font-extrabold text-brand-dark tracking-tight mb-4">
+          {rental.title}
+        </h1>
+
+        {
+          (rental.location || ubicacion) && (
+            <p class="flex items-center text-slate-500 text-lg mb-8">
+              <span class="mr-2 text-brand-accent">📍</span>
+              {rental.location || ubicacion?.nombre || "Costa del Sol"}
+            </p>
+          )
+        }
+
+        <!-- Detalles del inmueble (componente Strapi) -->
+        {
+          detalles && (
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+              {detalles.habitaciones != null && (
+                <div class="bg-brand-light rounded-xl p-4 text-center">
+                  <span class="block text-2xl font-bold text-brand-dark">
+                    {detalles.habitaciones}
+                  </span>
+                  <span class="text-sm text-slate-500">Habitaciones</span>
+                </div>
+              )}
+              {detalles.banos != null && (
+                <div class="bg-brand-light rounded-xl p-4 text-center">
+                  <span class="block text-2xl font-bold text-brand-dark">
+                    {detalles.banos}
+                  </span>
+                  <span class="text-sm text-slate-500">Baños</span>
+                </div>
+              )}
+              {detalles.metros != null && (
+                <div class="bg-brand-light rounded-xl p-4 text-center">
+                  <span class="block text-2xl font-bold text-brand-dark">
+                    {detalles.metros}m²
+                  </span>
+                  <span class="text-sm text-slate-500">Superficie</span>
+                </div>
+              )}
+              {detalles.capacidad != null && (
+                <div class="bg-brand-light rounded-xl p-4 text-center">
+                  <span class="block text-2xl font-bold text-brand-dark">
+                    {detalles.capacidad}
+                  </span>
+                  <span class="text-sm text-slate-500">Huéspedes</span>
+                </div>
+              )}
+            </div>
+          )
+        }
+
+        <!-- Servicios (componente Strapi) -->
+        {
+          servicios && (
+            <div class="flex flex-wrap gap-3 mb-10">
+              {servicios.wifi && (
+                <span class="inline-flex items-center gap-1.5 bg-green-50 text-green-700 px-3 py-1.5 rounded-full text-sm font-medium border border-green-200">
+                  WiFi
+                </span>
+              )}
+              {servicios.aire_acondicionado && (
+                <span class="inline-flex items-center gap-1.5 bg-blue-50 text-blue-700 px-3 py-1.5 rounded-full text-sm font-medium border border-blue-200">
+                  Aire Acondicionado
+                </span>
+              )}
+              {servicios.parking && (
+                <span class="inline-flex items-center gap-1.5 bg-purple-50 text-purple-700 px-3 py-1.5 rounded-full text-sm font-medium border border-purple-200">
+                  Parking
+                </span>
+              )}
+              {servicios.mascotas && (
+                <span class="inline-flex items-center gap-1.5 bg-amber-50 text-amber-700 px-3 py-1.5 rounded-full text-sm font-medium border border-amber-200">
+                  Mascotas
+                </span>
+              )}
+            </div>
+          )
+        }
+
+        <div class="flex flex-col sm:flex-row gap-4">
+          <Button href="/contacto" variant="primary" size="lg">
+            Reservar Ahora
+          </Button>
+          <Button href="/#rentals" variant="outline" size="lg">
+            Ver más propiedades
+          </Button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Descripcion del inmueble -->
+    {
+      rental.description && (
+        <section class="mb-16">
+          <h2 class="text-2xl font-bold text-brand-dark mb-6">
+            Sobre esta propiedad
+          </h2>
+          <div class="prose prose-slate lg:prose-lg max-w-none">
+            <Fragment set:html={rental.description} />
+          </div>
+        </section>
+      )
+    }
+
+    <!-- CTA final -->
+    <section
+      class="bg-brand-dark rounded-3xl p-12 text-center"
+    >
+      <h2 class="text-3xl font-bold text-white mb-4">
+        ¿Te interesa {rental.title}?
+      </h2>
+      <p class="text-slate-300 mb-8 max-w-xl mx-auto">
+        Contacta con nuestro equipo local para confirmar disponibilidad y reservar
+        sin intermediarios.
+      </p>
+      <Button href="/contacto" variant="primary" size="lg">
+        Contactar Ahora
+      </Button>
+    </section>
+  </article>
+</Layout>

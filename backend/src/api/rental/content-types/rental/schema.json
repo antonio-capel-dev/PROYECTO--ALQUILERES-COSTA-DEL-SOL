@@ -16,17 +16,73 @@
   },
   "attributes": {
     "title": {
-      "type": "string"
+      "type": "string",
+      "required": true
     },
     "description": {
       "type": "richtext"
     },
     "price": {
-      "type": "decimal"
+      "type": "decimal",
+      "required": true
+    },
+    "city": {
+      "type": "string"
     },
     "slug": {
       "type": "uid",
-      "targetField": "title"
+      "targetField": "title",
+      "required": true
+    },
+    "location": {
+      "type": "string"
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "required": false
+    },
+    "metaTitle": {
+      "type": "string",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "metaDescription": {
+      "type": "text",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "ubicacion": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::ubicacion.ubicacion",
+      "inversedBy": "rentals"
+    },
+    "detalles": {
+      "type": "component",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "component": "inmueble.detalles",
+      "repeatable": false
+    },
+    "Servicios": {
+      "type": "component",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "component": "inmueble.servicios",
+      "repeatable": false
     }
   }
 }

@@ -1,0 +1,134 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Button from "../components/ui/Button.astro";
+import Badge from "../components/ui/Badge.astro";
+---
+
+<Layout
+  title="Contacto | Alquileres Costa del Sol"
+  description="¿Tienes alguna duda? Contacta con nuestro equipo para reservar tu estancia o gestionar tu propiedad en Málaga y Marbella."
+>
+  <section class="bg-brand-light py-24 px-4 relative overflow-hidden">
+    <!-- Decoración de fondo -->
+    <div
+      class="absolute top-0 right-0 w-96 h-96 bg-brand-primary/5 rounded-full -mr-48 -mt-48 blur-3xl"
+    >
+    </div>
+    <div
+      class="absolute bottom-0 left-0 w-96 h-96 bg-brand-accent/5 rounded-full -ml-48 -mb-48 blur-3xl"
+    >
+    </div>
+
+    <div class="max-w-7xl mx-auto relative z-10">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+        <!-- Info de contacto -->
+        <div>
+          <Badge variant="accent" class="mb-6">Estamos aquí para ti</Badge>
+          <h1
+            class="text-5xl font-extrabold text-brand-dark mb-8 tracking-tight"
+          >
+            ¿Hablamos? Estamos <br /><span class="text-brand-primary"
+              >a un solo clic</span
+            >
+          </h1>
+          <p class="text-slate-600 mb-12 text-xl leading-relaxed font-light">
+            ¿Tienes dudas sobre una propiedad o quieres que gestionemos tu
+            alquiler? Cuéntanos qué necesitas y nuestro equipo local te
+            responderá en menos de 24 horas.
+          </p>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
+            <div
+              class="flex items-start gap-4 p-6 bg-white rounded-2xl shadow-sm border border-slate-100"
+            >
+              <div
+                class="w-12 h-12 bg-brand-primary/10 rounded-xl flex items-center justify-center text-brand-primary text-xl"
+              >
+                📍
+              </div>
+              <div>
+                <h3 class="font-bold text-brand-dark">Visítanos</h3>
+                <p class="text-slate-500 text-sm leading-relaxed">
+                  Av. Ricardo Soriano, 42<br />Marbella, 29601
+                </p>
+              </div>
+            </div>
+            <div
+              class="flex items-start gap-4 p-6 bg-white rounded-2xl shadow-sm border border-slate-100"
+            >
+              <div
+                class="w-12 h-12 bg-brand-primary/10 rounded-xl flex items-center justify-center text-brand-primary text-xl"
+              >
+                📧
+              </div>
+              <div>
+                <h3 class="font-bold text-brand-dark">Escríbenos</h3>
+                <p class="text-slate-500 text-sm leading-relaxed">
+                  hola@costadelsol.com<br />soporte@costadelsol.com
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Formulario Premium -->
+        <div class="relative">
+          <div
+            class="absolute inset-0 bg-brand-primary/5 rounded-[2rem] blur-2xl -rotate-2"
+          >
+          </div>
+          <div
+            class="relative bg-white p-8 md:p-12 rounded-[2rem] shadow-2xl border border-slate-100"
+          >
+            <h2 class="text-2xl font-bold text-brand-dark mb-8">
+              Envíanos un mensaje
+            </h2>
+            <form class="space-y-6">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label class="block text-sm font-bold text-brand-dark mb-2"
+                    >Nombre Completo</label
+                  >
+                  <input
+                    type="text"
+                    required
+                    class="w-full bg-slate-50 border-transparent focus:border-brand-primary focus:bg-white rounded-xl px-5 py-4 focus:outline-none focus:ring-4 focus:ring-brand-primary/5 transition-all duration-300"
+                    placeholder="Ej. Ana García"
+                  />
+                </div>
+                <div>
+                  <label class="block text-sm font-bold text-brand-dark mb-2"
+                    >Correo Electrónico</label
+                  >
+                  <input
+                    type="email"
+                    required
+                    class="w-full bg-slate-50 border-transparent focus:border-brand-primary focus:bg-white rounded-xl px-5 py-4 focus:outline-none focus:ring-4 focus:ring-brand-primary/5 transition-all duration-300"
+                    placeholder="ana@email.com"
+                  />
+                </div>
+              </div>
+              <div>
+                <label class="block text-sm font-bold text-brand-dark mb-2"
+                  >¿En qué podemos ayudarte?</label
+                >
+                <textarea
+                  rows="4"
+                  required
+                  class="w-full bg-slate-50 border-transparent focus:border-brand-primary focus:bg-white rounded-xl px-5 py-4 focus:outline-none focus:ring-4 focus:ring-brand-primary/5 transition-all duration-300"
+                  placeholder="Cuéntanos más detalles..."></textarea>
+              </div>
+              <Button type="submit" class="w-full py-5 shadow-brand">
+                Enviar Solicitud
+              </Button>
+              <p class="text-center text-xs text-slate-400 mt-4">
+                Prometemos no enviarte spam. Tus datos están a salvo con
+                nosotros.
+              </p>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
