@@ -2,6 +2,8 @@
 import Layout from "../layouts/Layout.astro";
 import Button from "../components/ui/Button.astro";
 import RentalCard from "../components/RentalCard.astro";
+import SearchBar from "../components/SearchBar.astro";
+import InfoSection from "../components/InfoSection.astro";
 
 // 1. Fetch data from Strapi (Backend)
 const STRAPI_URL = import.meta.env.PUBLIC_STRAPI_URL || "http://localhost:1337";
@@ -19,10 +21,9 @@ try {
   title="Alquiler Vacacional Costa del Sol 2026: Pisos y Apartamentos | Trato Directo"
   description="¿Buscas el verano perfecto? Encuentra los mejores alquileres en Marbella, Málaga y Benalmádena. Pisos, Villas y Áticos desde 60€/noche. ¡Reserva hoy!"
 >
-  <!-- Hero Section -->
-  <!-- bg-brand-dark: Identidad de Marca (No hardcoded slate) -->
-  <section class="relative bg-brand-dark py-32 px-6 overflow-hidden">
-    <!-- Background Gradient/Pattern -->
+  <!-- Barra buscador -->
+  <section class="relative bg-brand-dark pt-32 pb-48 px-6 overflow-hidden">
+    <!-- Con gradiente -->
     <div class="absolute inset-0 z-0 opacity-40">
       <div
         class="absolute inset-0 bg-gradient-to-r from-brand-primary to-brand-purple mix-blend-multiply filter blur-3xl opacity-50 animate-pulse"
@@ -43,7 +44,7 @@ try {
       <h1
         class="text-5xl md:text-7xl font-extrabold text-white tracking-tight mb-8 leading-tight"
       >
-        Alquiler Vacacional en Costa del Sol: <br />
+        Alquiler Vacacional en Costa del Sol <br />
         <span
           class="text-transparent bg-clip-text bg-gradient-to-r from-brand-accent to-brand-secondary"
           >Tu Ventana al Mediterráneo</span
@@ -55,23 +56,14 @@ try {
         Desde áticos de lujo en Málaga hasta villas escondidas en Nerja. Tu
         historia inolvidable empieza con una llave.
       </p>
-
-      <!-- Botones Reutilizables -->
-      <div class="flex flex-col sm:flex-row gap-4 justify-center">
-        <Button href="#rentals" variant="primary" size="lg">
-          Ver Propiedades
-        </Button>
-        <Button
-          href="#"
-          variant="outline"
-          size="lg"
-          class="text-white border-white hover:bg-white/10"
-        >
-          Contactar Agente
-        </Button>
-      </div>
     </div>
   </section>
+
+  <!-- Search Bar (Floating) -->
+  <SearchBar />
+
+  <!-- Info Section (Marketing) -->
+  <InfoSection />
 
   <!-- Listings Grid -->
   <section
@@ -105,12 +97,14 @@ try {
       {
         data.map((rental) => (
           <RentalCard
-            title={rental.title}
-            price={rental.price}
-            slug={rental.slug || rental.documentId}
-            image={rental.image?.url ? (rental.image.url.startsWith("http") ? rental.image.url : `${STRAPI_URL}${rental.image.url}`) : undefined}
-            description={rental.description}
-            location={rental.location}
+            {...rental}
+            image={
+              rental.image?.url
+                ? rental.image.url.startsWith("http")
+                  ? rental.image.url
+                  : `${STRAPI_URL}${rental.image.url}`
+                : undefined
+            }
           />
         ))
       }

@@ -1,0 +1,112 @@
+---
+import Button from "./ui/Button.astro";
+---
+
+<!-- 
+  Search Bar Container 
+  - Glassmorphism: bg-white/10 backdrop-blur-md
+  - Floating effect: shadow-2xl
+  - Responsive: Stacked on mobile, row on desktop
+-->
+<div class="w-full max-w-4xl mx-auto -mt-8 relative z-20 px-4">
+    <div
+        class="bg-brand-dark/80 backdrop-blur-md border border-white/10 rounded-2xl shadow-2xl p-6 md:p-4"
+    >
+        <form class="flex flex-col md:flex-row gap-4">
+            <!-- Ubicación -->
+            <div class="flex-1 relative group">
+                <label
+                    class="block text-xs uppercase tracking-wider text-slate-400 font-semibold mb-1 ml-1 group-focus-within:text-brand-primary transition"
+                    >Destino</label
+                >
+                <div class="relative">
+                    <span
+                        class="absolute left-3 top-1/2 -translate-y-1/2 text-lg"
+                        >📍</span
+                    >
+                    <select
+                        class="w-full bg-white/5 border border-white/10 rounded-lg py-3 pl-10 pr-4 text-white focus:outline-none focus:ring-2 focus:ring-brand-primary appearance-none cursor-pointer hover:bg-white/10 transition"
+                    >
+                        <option value="" class="bg-brand-dark text-slate-300"
+                            >¿Dónde vas?</option
+                        >
+                        <option value="marbella" class="bg-brand-dark"
+                            >Marbella</option
+                        >
+                        <option value="malaga" class="bg-brand-dark"
+                            >Málaga Centro</option
+                        >
+                        <option value="benalmadena" class="bg-brand-dark"
+                            >Benalmádena</option
+                        >
+                    </select>
+                </div>
+            </div>
+
+            <!-- Fechas (Simulado visualmente como rango) -->
+            <div class="flex-1 relative group">
+                <label
+                    class="block text-xs uppercase tracking-wider text-slate-400 font-semibold mb-1 ml-1 group-focus-within:text-brand-primary transition"
+                    >Fechas</label
+                >
+                <div class="relative">
+                    <span
+                        class="absolute left-3 top-1/2 -translate-y-1/2 text-lg"
+                        >📅</span
+                    >
+                    <input
+                        type="text"
+                        placeholder="Entrada - Salida"
+                        class="w-full bg-white/5 border border-white/10 rounded-lg py-3 pl-10 pr-4 text-white focus:outline-none focus:ring-2 focus:ring-brand-primary placeholderable-slate-500 hover:bg-white/10 transition"
+                        onfocus="(this.type='date')"
+                        onblur="(this.type='text')"
+                    />
+                </div>
+            </div>
+
+            <!-- Viajeros -->
+            <div class="flex-1 relative group">
+                <label
+                    class="block text-xs uppercase tracking-wider text-slate-400 font-semibold mb-1 ml-1 group-focus-within:text-brand-primary transition"
+                    >Viajeros</label
+                >
+                <div class="relative">
+                    <span
+                        class="absolute left-3 top-1/2 -translate-y-1/2 text-lg"
+                        >👥</span
+                    >
+                    <select
+                        class="w-full bg-white/5 border border-white/10 rounded-lg py-3 pl-10 pr-4 text-white focus:outline-none focus:ring-2 focus:ring-brand-primary appearance-none cursor-pointer hover:bg-white/10 transition"
+                    >
+                        <option value="" class="bg-brand-dark text-slate-300"
+                            >¿Cuántos?</option
+                        >
+                        <option value="2" class="bg-brand-dark"
+                            >2 Personas</option
+                        >
+                        <option value="4" class="bg-brand-dark"
+                            >3-4 Personas</option
+                        >
+                        <option value="6" class="bg-brand-dark"
+                            >5-6 Personas</option
+                        >
+                        <option value="8+" class="bg-brand-dark"
+                            >+8 Personas</option
+                        >
+                    </select>
+                </div>
+            </div>
+
+            <!-- Botón Buscar -->
+            <div class="flex items-end">
+                <Button
+                    variant="primary"
+                    size="lg"
+                    class="w-full md:w-auto shadow-lg shadow-brand-primary/20"
+                >
+                    Buscar
+                </Button>
+            </div>
+        </form>
+    </div>
+</div>

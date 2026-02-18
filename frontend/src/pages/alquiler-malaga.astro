@@ -8,32 +8,66 @@ const description =
 ---
 
 <Layout title={title} description={description} image="/images/malaga-seo.jpg">
-  <div
-    class="bg-cover bg-center h-[50vh]"
-    style="background-image: url('https://images.unsplash.com/photo-1543329063-8a3b04c852ac?q=80&w=2070&auto=format&fit=crop');"
-  >
-    <div class="bg-black/40 w-full h-full flex items-center justify-center">
-      <h1 class="text-5xl font-bold text-white text-center drop-shadow-lg">
-        Alquileres en <span class="text-purple-400">Málaga Capital</span>
-      </h1>
+  
+  <section class="relative bg-brand-dark
+    <div class="absolute inset-0 z-0 opacity-40">
+      <div
+        class="absolute inset-0 bg-gradient-to-r from-brand-primary to-brand-purple mix-blend-multiply filter blur-3xl opacity-50 animate-pulse"
+      >
+      </div>
+      <div
+        class="absolute -top-24 -left-24 w-96 h-96 bg-brand-accent rounded-full mix-blend-multiply filter blur-3xl opacity-30"
+      >
+      </div>
     </div>
-  </div>
+
+    <div class="relative z-10 max-w-5xl mx-auto text-center">
+      <div
+        class="inline-block mb-4 px-4 py-1.5 rounded-full bg-brand-primary/10 border border-brand-primary/20 text-brand-accent text-sm font-semibold tracking-wide uppercase backdrop-blur-sm"
+      >
+        🌆 Cultura y Vida
+      </div>
+      <h1
+        class="text-5xl md:text-7xl font-extrabold text-white tracking-tight mb-8 leading-tight"
+      >
+        Alquileres en <br />
+        <span
+          class="text-transparent bg-clip-text bg-gradient-to-r from-brand-accent to-brand-secondary"
+          >Málaga Capital</span
+        >
+      </h1>
+      <p
+        class="text-xl text-slate-300 max-w-2xl mx-auto mb-10 font-light leading-relaxed"
+      >
+        Málaga combina cultura, playa y tecnología. El destino preferido de
+        Europa.
+      </p>
+    </div>
+  </section>
 
   <section class="max-w-7xl mx-auto px-4 py-16">
     <div class="prose lg:prose-xl mx-auto text-slate-600">
-      <h2>Málaga: La ciudad de moda en Europa</h2>
-      <p>
-        Málaga combina cultura, playa y tecnología. Es el destino preferido para
-        <strong>estudiantes</strong> y <strong>nómadas digitales</strong>.
+      <h2 class="text-3xl font-bold text-brand-dark mb-6">
+        Málaga: La ciudad de moda en Europa
+      </h2>
+      <p class="mb-4">
+        Zonas universitarias (Teatinos), Centro Histórico y primera línea de
+        playa en La Malagueta. Es el destino preferido para <strong
+          >estudiantes</strong
+        > y <strong>nómadas digitales</strong>.
       </p>
     </div>
 
-    <!-- Placeholder -->
+  
     <div
-      class="mt-16 text-center bg-slate-50 p-12 rounded-2xl border-2 border-dashed border-slate-200"
+      class="mt-16 text-center bg-brand-light p-12 rounded-3xl border-2 border-dashed border-brand-primary/20"
     >
-      <p class="text-xl text-slate-500 font-medium">
-        📍 Cargando propiedades en Málaga...
+      <div class="text-4xl mb-4">🚀</div>
+      <p class="text-xl text-brand-dark font-bold">
+        Cargando propiedades en Málaga...
+      </p>
+      <p class="text-sm text-slate-400 mt-2">
+        (Conexión con Strapi en mantenimiento)
       </p>
     </div>
   </section>

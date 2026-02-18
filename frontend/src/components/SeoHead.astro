@@ -18,25 +18,24 @@ const {
 } = Astro.props;
 
 const siteName = "Alquileres Costa del Sol";
-const twitterHandle = "@alquileres_costasol"; // Placeholder
+const twitterHandle = "@alquileres_costasol"; 
 ---
 
-<!-- Global Metadata -->
+<!-- Metadatos globales -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <meta name="generator" content={Astro.generator} />
 
-<!-- Canonical URL -->
+<!--url canonical  -->
 <link rel="canonical" href={canonicalURL} />
 
-<!-- Primary Meta Tags -->
+
 <title>{title}</title>
 <meta name="title" content={title} />
 <meta name="description" content={description} />
 <meta name="robots" content={robots} />
 
-<!-- Open Graph / Facebook -->
 <meta property="og:type" content={type} />
 <meta property="og:url" content={Astro.url} />
 <meta property="og:title" content={title} />
@@ -53,7 +52,6 @@ const twitterHandle = "@alquileres_costasol"; // Placeholder
 <meta property="twitter:image" content={new URL(image, Astro.url)} />
 <meta property="twitter:creator" content={twitterHandle} />
 
-<!-- Sitemap Link (Auto-discovery) -->
 <link rel="sitemap" href="/sitemap-index.xml" />
 
 <!-- JSON-LD Schema: The Secret Sauce for Google -->

@@ -1,37 +1,155 @@
 @import "tailwindcss";
 
+/* 
+  
+  Principios de Diseño:
+  1. Modularidad: Variables CSS para facilitar el mantenimiento.
+  2. Fluidez: Tipografía responsiva con `clamp()` sin media queries excesivas.
+  3. Accesibilidad: Alto contraste y escalas legibles.
+*/
+
 @theme {
-  /* Identidad de Marca "Alquileres Costa del Sol" */
+  /* 
+    PALETA DE COLORES DE MARCA (Dark Premium)
+    Definimos colores semánticos para uso en toda la aplicación.
+  */
   --color-brand-dark: #0f172a;
   --color-brand-primary: #2563eb;
   --color-brand-secondary: #3b82f6;
   --color-brand-accent: #06b6d4;
+  /* Cyan para detalles frescos/veraniegos */
   --color-brand-purple: #9333ea;
+  /* Gradientes */
   --color-brand-light: #f8fafc;
+  /* Fondos secundarios limpios */
 
-  --font-sans: "Inter", "system-ui", "sans-serif";
+  /* Tipografía Base */
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
 
-  /* Sombras y efectos personalizados */
+  /* 
+    Elevación sutil para dar profundidad al diseño "Flat".
+  */
   --shadow-brand:
     0 10px 15px -3px rgba(37, 99, 235, 0.1),
     0 4px 6px -2px rgba(37, 99, 235, 0.05);
 }
 
+/* 
+  Establecemos las reglas fundamentales del navegador.
+*/
 @layer base {
   html {
     scroll-behavior: smooth;
+    /* Navegación suave entre anclas */
+    -webkit-font-smoothing: antialiased;
+    /* Texto nítido en MacOS/iOS */
+    -moz-osx-font-smoothing: grayscale;
   }
 
   body {
-    @apply font-sans antialiased text-slate-900 bg-white;
+    @apply font-sans text-slate-900 bg-white;
+    /* Optimización de renderizado de texto */
+    text-rendering: optimizeLegibility;
   }
 
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    @apply tracking-tight font-bold;
+  /* 
+    
+    clamp(2rem, 5vw + 1rem, 4rem) significa:
+    - Nunca menos de 2rem (Móvil)
+    - Idealmente 5vw + 1rem (Pantallas intermedias)
+    - Nunca más de 4rem (Pantallas gigantes)
+  */
+  h1 {
+    @apply font-extrabold tracking-tight;
+    font-size: clamp(2.5rem, 5vw + 1rem, 4.5rem);
+    line-height: 1.1;
+  }
+
+  h2 {
+    @apply font-bold tracking-tight;
+    font-size: clamp(2rem, 4vw + 1rem, 3rem);
+    line-height: 1.2;
+  }
+
+  h3 {
+    @apply font-bold;
+    font-size: clamp(1.5rem, 3vw + 1rem, 2.25rem);
+  }
+
+  p {
+    @apply leading-relaxed;
+    /* Texto base cómodo para lectura (16px a 18px) */
+    font-size: clamp(1rem, 0.5vw + 0.875rem, 1.125rem);
+  }
+}
+
+/* 
+*/
+@layer components {
+
+  /* BOTONES (Interactive Elements) */
+  .boton {
+    @apply inline-flex items-center justify-center px-6 py-3 border text-base font-medium rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer;
+  }
+
+  .boton-primario {
+    @apply border-transparent text-white bg-brand-primary hover:bg-brand-secondary focus:ring-brand-primary shadow-lg shadow-brand-primary/30 hover:shadow-brand-primary/50;
+  }
+
+  .boton-secundario {
+    @apply border-transparent text-brand-primary bg-brand-primary/10 hover:bg-brand-primary/20 focus:ring-brand-primary;
+  }
+
+  .boton-outline {
+    @apply border-slate-200 text-slate-700 bg-transparent hover:bg-slate-50 focus:ring-slate-500;
+  }
+
+  .boton-fantasma {
+    @apply bg-transparent hover:bg-slate-100 text-slate-600;
+  }
+
+  /* Variantes de Tamaño */
+  .boton-sm {
+    @apply px-4 py-2 text-sm;
+  }
+
+  .boton-lg {
+    @apply px-8 py-4 text-lg;
+  }
+
+  /* TARJETAS (Card Component) */
+  .tarjeta {
+    @apply bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden transition-all duration-300;
+  }
+
+  .tarjeta-hover {
+    @apply hover:shadow-xl hover:-translate-y-1 hover:border-brand-primary/20;
+  }
+
+  /* FORMULARIOS (Inputs & Selects) */
+  .campo-entrada {
+    @apply w-full bg-white/5 border border-white/10 rounded-lg py-3 px-4 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-primary transition-all;
+  }
+
+  .etiqueta-campo {
+    @apply block text-xs uppercase tracking-wider text-slate-400 font-semibold mb-1 ml-1;
+  }
+
+  /* ELEMENTOSpequeños (Badges/Etiquetas) */
+  .etiqueta {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+
+  /* 
+    UTILIDADES DE ANIMACIÓN 
+    -----------------------
+    Micro-interacciones para mejorar la experiencia de usuario (UX).
+  */
+  .transicion-estandar {
+    @apply transition-all duration-300 ease-in-out;
+  }
+
+  .hover-escala {
+    @apply hover:scale-105 transition-transform duration-500 ease-out;
   }
 }

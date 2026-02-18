@@ -29,7 +29,7 @@ export async function getStaticPaths() {
 const { rental } = Astro.props;
 const STRAPI_URL = import.meta.env.PUBLIC_STRAPI_URL || "http://localhost:1337";
 
-// SEO: Prioriza metaTitle/metaDescription del CMS, con fallback al title/description
+
 const seoTitle = rental.metaTitle || `${rental.title} | Alquiler en Costa del Sol`;
 const seoDescription =
   rental.metaDescription ||
@@ -42,11 +42,11 @@ const imageUrl = rental.image?.url
     : `${STRAPI_URL}${rental.image.url}`
   : undefined;
 
-// Componentes de Strapi (detalles y servicios)
+// Componentes de Strapi 
 const detalles = rental.detalles;
 const servicios = rental.Servicios;
 
-// Ubicacion (relacion)
+// Ubicacion 
 const ubicacion = rental.ubicacion;
 ---
 
@@ -126,7 +126,7 @@ const ubicacion = rental.ubicacion;
           )
         }
 
-        <!-- Detalles del inmueble (componente Strapi) -->
+        <!-- Detalles del inmueble  -->
         {
           detalles && (
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
@@ -166,7 +166,7 @@ const ubicacion = rental.ubicacion;
           )
         }
 
-        <!-- Servicios (componente Strapi) -->
+        <!-- Servicios  -->
         {
           servicios && (
             <div class="flex flex-wrap gap-3 mb-10">
@@ -219,7 +219,7 @@ const ubicacion = rental.ubicacion;
       )
     }
 
-    <!-- CTA final -->
+    <!-- cta final -->
     <section
       class="bg-brand-dark rounded-3xl p-12 text-center"
     >
