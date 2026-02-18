@@ -502,6 +502,18 @@ export interface ApiRentalRental extends Struct.CollectionTypeSchema {
     locale: Schema.Attribute.String;
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::rental.rental'>;
     location: Schema.Attribute.String;
+    metaDescription: Schema.Attribute.Text &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    metaTitle: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
     price: Schema.Attribute.Decimal & Schema.Attribute.Required;
     publishedAt: Schema.Attribute.DateTime;
     Servicios: Schema.Attribute.Component<'inmueble.servicios', false> &
@@ -512,6 +524,10 @@ export interface ApiRentalRental extends Struct.CollectionTypeSchema {
       }>;
     slug: Schema.Attribute.UID<'title'> & Schema.Attribute.Required;
     title: Schema.Attribute.String & Schema.Attribute.Required;
+    ubicacion: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::ubicacion.ubicacion'
+    >;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;

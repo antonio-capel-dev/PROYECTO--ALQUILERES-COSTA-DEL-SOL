@@ -12,8 +12,9 @@ import Button from "./ui/Button.astro";
     <div
         class="bg-brand-dark/80 backdrop-blur-md border border-white/10 rounded-2xl shadow-2xl p-6 md:p-4"
     >
-        <form class="flex flex-col md:flex-row gap-4">
-            <!-- Ubicación -->
+        <!-- id="formulario-filtro" — punto de entrada para el JS de filtrado client-side -->
+        <form id="formulario-filtro" class="flex flex-col md:flex-row gap-4">
+            <!-- FILTRO 1: Ciudad -->
             <div class="flex-1 relative group">
                 <label
                     class="block text-xs uppercase tracking-wider text-slate-400 font-semibold mb-1 ml-1 group-focus-within:text-brand-primary transition"
@@ -25,50 +26,49 @@ import Button from "./ui/Button.astro";
                         >📍</span
                     >
                     <select
+                        id="filtro-ciudad"
                         class="w-full bg-white/5 border border-white/10 rounded-lg py-3 pl-10 pr-4 text-white focus:outline-none focus:ring-2 focus:ring-brand-primary appearance-none cursor-pointer hover:bg-white/10 transition"
                     >
                         <option value="" class="bg-brand-dark text-slate-300"
-                            >¿Dónde vas?</option
+                            >Todos los destinos</option
                         >
-                        <option value="marbella" class="bg-brand-dark"
-                            >Marbella</option
-                        >
-                        <option value="malaga" class="bg-brand-dark"
-                            >Málaga Centro</option
-                        >
-                        <option value="benalmadena" class="bg-brand-dark"
-                            >Benalmádena</option
-                        >
+                        <option value="marbella"     class="bg-brand-dark">Marbella</option>
+                        <option value="malaga"       class="bg-brand-dark">Málaga</option>
+                        <option value="benalmadena"  class="bg-brand-dark">Benalmádena</option>
+                        <option value="torremolinos" class="bg-brand-dark">Torremolinos</option>
+                        <option value="fuengirola"   class="bg-brand-dark">Fuengirola</option>
+                        <option value="estepona"     class="bg-brand-dark">Estepona</option>
                     </select>
                 </div>
             </div>
 
-            <!-- Fechas (Simulado visualmente como rango) -->
+            <!-- FILTRO 2: Precio Máximo — reemplaza "Fechas" (disponibilidad no modelada en Strapi aún) -->
             <div class="flex-1 relative group">
                 <label
                     class="block text-xs uppercase tracking-wider text-slate-400 font-semibold mb-1 ml-1 group-focus-within:text-brand-primary transition"
-                    >Fechas</label
+                    >Precio máx. (€/noche)</label
                 >
                 <div class="relative">
                     <span
                         class="absolute left-3 top-1/2 -translate-y-1/2 text-lg"
-                        >📅</span
+                        >💶</span
                     >
                     <input
-                        type="text"
-                        placeholder="Entrada - Salida"
-                        class="w-full bg-white/5 border border-white/10 rounded-lg py-3 pl-10 pr-4 text-white focus:outline-none focus:ring-2 focus:ring-brand-primary placeholderable-slate-500 hover:bg-white/10 transition"
-                        onfocus="(this.type='date')"
-                        onblur="(this.type='text')"
+                        id="filtro-precio"
+                        type="number"
+                        min="0"
+                        step="50"
+                        placeholder="Sin límite"
+                        class="w-full bg-white/5 border border-white/10 rounded-lg py-3 pl-10 pr-4 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-brand-primary hover:bg-white/10 transition"
                     />
                 </div>
             </div>
 
-            <!-- Viajeros -->
+            <!-- FILTRO 3: Capacidad mínima -->
             <div class="flex-1 relative group">
                 <label
                     class="block text-xs uppercase tracking-wider text-slate-400 font-semibold mb-1 ml-1 group-focus-within:text-brand-primary transition"
-                    >Viajeros</label
+                    >Viajeros (mín.)</label
                 >
                 <div class="relative">
                     <span
@@ -76,23 +76,16 @@ import Button from "./ui/Button.astro";
                         >👥</span
                     >
                     <select
+                        id="filtro-viajeros"
                         class="w-full bg-white/5 border border-white/10 rounded-lg py-3 pl-10 pr-4 text-white focus:outline-none focus:ring-2 focus:ring-brand-primary appearance-none cursor-pointer hover:bg-white/10 transition"
                     >
                         <option value="" class="bg-brand-dark text-slate-300"
-                            >¿Cuántos?</option
+                            >Cualquier capacidad</option
                         >
-                        <option value="2" class="bg-brand-dark"
-                            >2 Personas</option
-                        >
-                        <option value="4" class="bg-brand-dark"
-                            >3-4 Personas</option
-                        >
-                        <option value="6" class="bg-brand-dark"
-                            >5-6 Personas</option
-                        >
-                        <option value="8+" class="bg-brand-dark"
-                            >+8 Personas</option
-                        >
+                        <option value="2" class="bg-brand-dark">2+ personas</option>
+                        <option value="4" class="bg-brand-dark">4+ personas</option>
+                        <option value="6" class="bg-brand-dark">6+ personas</option>
+                        <option value="8" class="bg-brand-dark">8+ personas</option>
                     </select>
                 </div>
             </div>
