@@ -21,3 +21,12 @@ Thumbs.db
 # Strapi
 .tmp/
 public/uploads/
+backend/.cache/
+
+# Belt-and-suspenders: secretos explícitos por subcarpeta
+backend/.env
+frontend/.env
+
+# Builds en cualquier nivel
+**/dist/
+**/node_modules/
