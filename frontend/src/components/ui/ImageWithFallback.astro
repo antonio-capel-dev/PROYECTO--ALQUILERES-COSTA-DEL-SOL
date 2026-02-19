@@ -1,0 +1,25 @@
+---
+interface Props {
+  src: string;
+  alt: string;
+  class?: string;
+  fallbackSrc?: string;
+  loading?: "eager" | "lazy";
+}
+
+const {
+  src,
+  alt,
+  class: className,
+  fallbackSrc = "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80",
+  loading = "lazy",
+} = Astro.props;
+---
+
+<img
+  src={src}
+  alt={alt}
+  class={className}
+  loading={loading}
+  onerror={`this.onerror=null; this.src='${fallbackSrc}';`}
+/>

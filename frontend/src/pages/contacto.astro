@@ -9,6 +9,35 @@ import Badge from "../components/ui/Badge.astro";
   descripcion="¿Tienes alguna duda? Contacta con nuestro equipo para reservar tu estancia o gestionar tu propiedad en Málaga y Marbella."
   breadcrumbs={[{ nombre: "Contacto", url: "/contacto" }]}
 >
+  <!-- Schema.org específico para página de Contacto -->
+  <script
+    type="application/ld+json"
+    set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "ContactPage",
+      mainEntity: {
+        "@type": "Organization",
+        name: "Alquileres Costa del Sol",
+        email: "alquilercostadelsol2026@gmail.com",
+        telephone: "+34612345678",
+        contactPoint: {
+          "@type": "ContactPoint",
+          telephone: "+34612345678",
+          contactType: "customer service",
+          areaServed: "ES",
+          availableLanguage: ["es", "en", "fr"],
+        },
+        address: {
+          "@type": "PostalAddress",
+          streetAddress: "Avenida Andalucía 42",
+          addressLocality: "Málaga",
+          postalCode: "29002",
+          addressCountry: "ES",
+        },
+      },
+    })}
+  />
+
   <section class="bg-marca-clara py-24 px-4 relative overflow-hidden">
     <!-- fondo -->
     <div

@@ -9,117 +9,121 @@ import Boton from "./ui/Boton.astro";
   - Responsive: Stacked on mobile, row on desktop
 -->
 <div class="w-full max-w-4xl mx-auto -mt-8 relative z-20 px-4">
-    <div
-        class="bg-marca-oscura/80 backdrop-blur-md border border-white/10 rounded-2xl shadow-2xl p-6 md:p-4"
-    >
-        <!-- id="formulario-filtro" — punto de entrada para el JS de filtrado client-side -->
-        <form id="formulario-filtro" class="flex flex-col md:flex-row gap-4">
-            <!-- FILTRO 1: Ciudad -->
-            <div class="flex-1 relative group">
-                <label
-                    class="block text-xs uppercase tracking-wider text-slate-400 font-semibold mb-1 ml-1 group-focus-within:text-marca-primaria transition"
-                    >Destino</label
-                >
-                <div class="relative">
-                    <span
-                        class="absolute left-3 top-1/2 -translate-y-1/2 text-lg"
-                        >📍</span
-                    >
-                    <select
-                        id="filtro-ciudad"
-                        class="w-full bg-white/5 border border-white/10 rounded-lg py-3 pl-10 pr-4 text-white focus:outline-none focus:ring-2 focus:ring-marca-primaria appearance-none cursor-pointer hover:bg-white/10 transition"
-                    >
-                        <option value="" class="bg-marca-oscura text-slate-300"
-                            >Todos los destinos</option
-                        >
-                        <option value="marbella" class="bg-marca-oscura"
-                            >Marbella</option
-                        >
-                        <option value="malaga" class="bg-marca-oscura"
-                            >Málaga</option
-                        >
-                        <option value="benalmadena" class="bg-marca-oscura"
-                            >Benalmádena</option
-                        >
-                        <option value="torremolinos" class="bg-marca-oscura"
-                            >Torremolinos</option
-                        >
-                        <option value="fuengirola" class="bg-marca-oscura"
-                            >Fuengirola</option
-                        >
-                        <option value="torreDelMar" class="bg-marca-oscura"
-                            >Torre del Mar</option
-                        >
-                    </select>
-                </div>
-            </div>
+  <div
+    class="bg-marca-oscura/80 backdrop-blur-md border border-white/10 rounded-2xl shadow-2xl p-6 md:p-4"
+  >
+    <!-- id="formulario-filtro" — punto de entrada para el JS de filtrado client-side -->
+    <form id="formulario-filtro" class="flex flex-col md:flex-row gap-4">
+      <!-- FILTRO 0: Búsqueda de Texto (Regex) -->
+      <div class="flex-1 relative group min-w-[200px]">
+        <label
+          class="block text-xs uppercase tracking-wider text-slate-400 font-semibold mb-1 ml-1 group-focus-within:text-marca-primaria transition"
+          >Nombre / Referencia</label
+        >
+        <div class="relative">
+          <span class="absolute left-3 top-1/2 -translate-y-1/2 text-lg"
+            >🔍</span
+          >
+          <input
+            id="filtro-texto"
+            type="text"
+            placeholder="Ej: Villa Sol..."
+            class="w-full bg-white/5 border border-white/10 rounded-lg py-3 pl-10 pr-4 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-marca-primaria hover:bg-white/10 transition"
+          />
+        </div>
+      </div>
 
-            <!-- FILTRO 2: Precio Máximo — reemplaza "Fechas" (disponibilidad no modelada en Strapi aún) -->
-            <div class="flex-1 relative group">
-                <label
-                    class="block text-xs uppercase tracking-wider text-slate-400 font-semibold mb-1 ml-1 group-focus-within:text-marca-primaria transition"
-                    >Precio máx. (€/noche)</label
-                >
-                <div class="relative">
-                    <span
-                        class="absolute left-3 top-1/2 -translate-y-1/2 text-lg"
-                        >💶</span
-                    >
-                    <input
-                        id="filtro-precio"
-                        type="number"
-                        min="0"
-                        step="50"
-                        placeholder="Sin límite"
-                        class="w-full bg-white/5 border border-white/10 rounded-lg py-3 pl-10 pr-4 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-marca-primaria hover:bg-white/10 transition"
-                    />
-                </div>
-            </div>
+      <!-- FILTRO 1: Ciudad -->
+      <div class="flex-1 relative group">
+        <label
+          class="block text-xs uppercase tracking-wider text-slate-400 font-semibold mb-1 ml-1 group-focus-within:text-marca-primaria transition"
+          >Destino</label
+        >
+        <div class="relative">
+          <span class="absolute left-3 top-1/2 -translate-y-1/2 text-lg"
+            >📍</span
+          >
+          <select
+            id="filtro-ciudad"
+            class="w-full bg-white/5 border border-white/10 rounded-lg py-3 pl-10 pr-4 text-white focus:outline-none focus:ring-2 focus:ring-marca-primaria appearance-none cursor-pointer hover:bg-white/10 transition"
+          >
+            <option value="" class="bg-marca-oscura text-slate-300"
+              >Todos los destinos</option
+            >
+            <option value="marbella" class="bg-marca-oscura">Marbella</option>
+            <option value="malaga" class="bg-marca-oscura">Málaga</option>
+            <option value="benalmadena" class="bg-marca-oscura"
+              >Benalmádena</option
+            >
+            <option value="torremolinos" class="bg-marca-oscura"
+              >Torremolinos</option
+            >
+            <option value="fuengirola" class="bg-marca-oscura"
+              >Fuengirola</option
+            >
+            <option value="torreDelMar" class="bg-marca-oscura"
+              >Torre del Mar</option
+            >
+          </select>
+        </div>
+      </div>
 
-            <!-- FILTRO 3: Capacidad mínima -->
-            <div class="flex-1 relative group">
-                <label
-                    class="block text-xs uppercase tracking-wider text-slate-400 font-semibold mb-1 ml-1 group-focus-within:text-marca-primaria transition"
-                    >Viajeros (mín.)</label
-                >
-                <div class="relative">
-                    <span
-                        class="absolute left-3 top-1/2 -translate-y-1/2 text-lg"
-                        >👥</span
-                    >
-                    <select
-                        id="filtro-viajeros"
-                        class="w-full bg-white/5 border border-white/10 rounded-lg py-3 pl-10 pr-4 text-white focus:outline-none focus:ring-2 focus:ring-marca-primaria appearance-none cursor-pointer hover:bg-white/10 transition"
-                    >
-                        <option value="" class="bg-marca-oscura text-slate-300"
-                            >Cualquier capacidad</option
-                        >
-                        <option value="2" class="bg-marca-oscura"
-                            >2+ personas</option
-                        >
-                        <option value="4" class="bg-marca-oscura"
-                            >4+ personas</option
-                        >
-                        <option value="6" class="bg-marca-oscura"
-                            >6+ personas</option
-                        >
-                        <option value="8" class="bg-marca-oscura"
-                            >8+ personas</option
-                        >
-                    </select>
-                </div>
-            </div>
+      <!-- FILTRO 2: Precio Máximo — reemplaza "Fechas" (disponibilidad no modelada en Strapi aún) -->
+      <div class="flex-1 relative group">
+        <label
+          class="block text-xs uppercase tracking-wider text-slate-400 font-semibold mb-1 ml-1 group-focus-within:text-marca-primaria transition"
+          >Precio máx. (€/noche)</label
+        >
+        <div class="relative">
+          <span class="absolute left-3 top-1/2 -translate-y-1/2 text-lg"
+            >💶</span
+          >
+          <input
+            id="filtro-precio"
+            type="number"
+            min="0"
+            step="50"
+            placeholder="Sin límite"
+            class="w-full bg-white/5 border border-white/10 rounded-lg py-3 pl-10 pr-4 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-marca-primaria hover:bg-white/10 transition"
+          />
+        </div>
+      </div>
 
-            <!-- Botón Buscar -->
-            <div class="flex items-end">
-                <Boton
-                    variante="primario"
-                    tamano="grande"
-                    clase="w-full md:w-auto shadow-lg shadow-marca-primaria/20"
-                >
-                    Buscar
-                </Boton>
-            </div>
-        </form>
-    </div>
+      <!-- FILTRO 3: Capacidad mínima -->
+      <div class="flex-1 relative group">
+        <label
+          class="block text-xs uppercase tracking-wider text-slate-400 font-semibold mb-1 ml-1 group-focus-within:text-marca-primaria transition"
+          >Viajeros (mín.)</label
+        >
+        <div class="relative">
+          <span class="absolute left-3 top-1/2 -translate-y-1/2 text-lg"
+            >👥</span
+          >
+          <select
+            id="filtro-viajeros"
+            class="w-full bg-white/5 border border-white/10 rounded-lg py-3 pl-10 pr-4 text-white focus:outline-none focus:ring-2 focus:ring-marca-primaria appearance-none cursor-pointer hover:bg-white/10 transition"
+          >
+            <option value="" class="bg-marca-oscura text-slate-300"
+              >Cualquier capacidad</option
+            >
+            <option value="2" class="bg-marca-oscura">2+ personas</option>
+            <option value="4" class="bg-marca-oscura">4+ personas</option>
+            <option value="6" class="bg-marca-oscura">6+ personas</option>
+            <option value="8" class="bg-marca-oscura">8+ personas</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Botón Buscar -->
+      <div class="flex items-end">
+        <Boton
+          variante="primario"
+          tamano="grande"
+          clase="w-full md:w-auto shadow-lg shadow-marca-primaria/20"
+        >
+          Buscar
+        </Boton>
+      </div>
+    </form>
+  </div>
 </div>

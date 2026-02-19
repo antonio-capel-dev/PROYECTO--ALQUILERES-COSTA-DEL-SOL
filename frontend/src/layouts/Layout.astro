@@ -1,7 +1,12 @@
 ---
 import SeoHead from "../components/SeoHead.astro";
 import Boton from "../components/ui/Boton.astro";
+import { getLangFromUrl, useTranslations } from "../i18n/utils";
+import { NAV_ITEMS, FOOTER_LINKS } from "../config/navigation";
 import "../styles/global.css";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 
 const {
   titulo,
@@ -12,10 +17,16 @@ const {
   faq,
   breadcrumbs,
 } = Astro.props;
+
+// Helper para rutas localizadas (simple por ahora)
+const getPath = (href: string) => {
+  if (lang === "es") return href;
+  return `/${lang}${href}`;
+};
 ---
 
 <!doctype html>
-<html lang="es">
+<html lang={lang}>
   <head>
     <SeoHead
       titulo={titulo}
@@ -33,20 +44,21 @@ const {
       as="style"
     />
     <slot name="preload" />
+    <slot name="head" />
   </head>
   <body
-    class="bg-marca-clara flex flex-col min-h-screen font-sans selection:bg-marca-primaria/10 selection:text-marca-primaria"
+    class="bg-marca-clara flex flex-col min-h-screen selection:bg-marca-primaria/10 selection:text-marca-primaria"
   >
     <nav
       class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-100"
     >
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="contenedor-fluido">
         <div class="flex justify-between items-center h-20">
           <!-- Logo -->
           <div class="flex-shrink-0 flex items-center gap-2">
             <span class="text-3xl">☀️</span>
             <a
-              href="/"
+              href={getPath("/")}
               class="text-2xl font-bold bg-linear-to-r from-marca-primaria to-marca-acento bg-clip-text text-transparent hover:opacity-80 transition"
             >
               Costa del Sol
@@ -54,23 +66,44 @@ const {
           </div>
 
           <div class="hidden md:flex items-center space-x-8">
-            <a
-              href="/"
-              class="text-slate-600 hover:text-marca-primaria font-medium transition duration-150"
-              >Inicio</a
+            {
+              NAV_ITEMS.map((item) => (
+                <a
+                  href={getPath(item.href)}
+                  class="text-slate-600 hover:text-marca-primaria font-medium transition duration-150"
+                >
+                  {t(item.key)}
+                </a>
+              ))
+            }
+
+            <!-- Selector de Idioma -->
+            <div
+              class="flex items-center gap-2 text-sm font-medium border-l border-slate-200 pl-6 ml-2"
             >
-            <a
-              href="/nosotros"
-              class="text-slate-600 hover:text-marca-primaria font-medium transition duration-150"
-              >Sobre Nosotros</a
+              <a
+                href="/"
+                class={`transition ${lang === "es" ? "text-marca-primaria font-bold" : "text-slate-400 hover:text-marca-primaria"}`}
+                title="Español">🇪🇸 ES</a
+              >
+              <a
+                href="/en"
+                class={`transition ${lang === "en" ? "text-marca-primaria font-bold" : "text-slate-400 hover:text-marca-primaria"}`}
+                title="English">🇬🇧 EN</a
+              >
+              <a
+                href="/fr"
+                class={`transition ${lang === "fr" ? "text-marca-primaria font-bold" : "text-slate-400 hover:text-marca-primaria"}`}
+                title="Français">🇫🇷 FR</a
+              >
+            </div>
+
+            <Boton
+              href={getPath("/contacto")}
+              variante="secundario"
+              tamano="peque"
             >
-            <a
-              href="/#rentals"
-              class="text-slate-600 hover:text-marca-primaria font-medium transition duration-150"
-              >Alquileres</a
-            >
-            <Boton href="/contacto" variante="secundario" tamano="peque">
-              Reservar Ahora
+              {t("nav.reserve")}
             </Boton>
           </div>
         </div>
@@ -84,73 +117,59 @@ const {
 
     <!-- Footer -->
     <footer class="bg-marca-oscura text-slate-300 border-t border-slate-800">
-      <div class="max-w-7xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
+      <div class="contenedor-fluido py-12">
         <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div class="col-span-1">
             <span class="text-2xl mb-4 block">☀️</span>
             <p class="text-sm leading-relaxed text-slate-400">
-              Tu puerta de entrada al paraíso. Gestionamos los mejores
-              alojamientos vacacionales de la costa malagueña desde 2010.
+              {t("hero.desc")}
             </p>
           </div>
 
           <div>
-            <h3 class="text-xl font-bold text-white mb-4">Empresa</h3>
+            <h3 class="text-xl font-bold text-white mb-4">
+              {t("footer.company")}
+            </h3>
             <ul class="space-y-2 text-slate-300">
-              <li>
-                <a href="/nosotros" class="hover:text-marca-acento transition"
-                  >Sobre Nosotros</a
-                >
-              </li>
-              <li>
-                <a href="/contacto" class="hover:text-marca-acento transition"
-                  >Contacto</a
-                >
-              </li>
-              <li>
-                <a href="#" class="hover:text-marca-acento transition"
-                  >Privacidad</a
-                >
-              </li>
+              {
+                FOOTER_LINKS.company.map((link) => (
+                  <li>
+                    <a
+                      href={getPath(link.href)}
+                      class="hover:text-marca-acento transition"
+                    >
+                      {t(link.key as any)}
+                    </a>
+                  </li>
+                ))
+              }
             </ul>
           </div>
 
           <div>
-            <h3 class="text-xl font-bold text-white mb-4">Destinos Top 🚀</h3>
+            <h3 class="text-xl font-bold text-white mb-4">
+              {t("destinations.title")} 🚀
+            </h3>
             <ul class="space-y-2 text-slate-300">
-              <li>
-                <a
-                  href="/alquiler-marbella"
-                  class="hover:text-marca-acento decoration-marca-acento underline-offset-4 hover:underline transition"
-                  >Alquiler Vacacional Marbella</a
-                >
-              </li>
-              <li>
-                <a
-                  href="/alquiler-malaga"
-                  class="hover:text-marca-acento decoration-marca-acento underline-offset-4 hover:underline transition"
-                  >Alquiler Vacacional Málaga</a
-                >
-              </li>
-              <li>
-                <a
-                  href="/marbella-familias"
-                  class="hover:text-marca-acento decoration-marca-acento underline-offset-4 hover:underline transition"
-                  >Marbella para Familias</a
-                >
-              </li>
-              <li>
-                <a
-                  href="/zona/torreDelMar"
-                  class="hover:text-marca-acento decoration-marca-acento underline-offset-4 hover:underline transition"
-                  >Torre del Mar</a
-                >
-              </li>
+              {
+                FOOTER_LINKS.destinations.map((dest) => (
+                  <li>
+                    <a
+                      href={getPath(dest.href)}
+                      class="hover:text-marca-acento decoration-marca-acento underline-offset-4 hover:underline transition"
+                    >
+                      {dest.label}
+                    </a>
+                  </li>
+                ))
+              }
             </ul>
           </div>
 
           <div>
-            <h3 class="text-xl font-bold text-white mb-4">Contacto Directo</h3>
+            <h3 class="text-xl font-bold text-white mb-4">
+              {t("footer.contact")}
+            </h3>
             <p class="text-slate-300">📧 info@costadelsol.com</p>
             <p class="text-slate-300">📞 +34 612 345 678</p>
             <p class="text-sm text-slate-400 mt-4 italic">
@@ -164,24 +183,9 @@ const {
         class="border-t border-slate-800 mt-8 py-8 text-center text-slate-500"
       >
         <p>
-          &copy; {new Date().getFullYear()} Alquileres Costa del Sol. Todos los derechos
-          reservados.
+          &copy; {new Date().getFullYear()} Costa del Sol. {t("footer.rights")}
         </p>
       </div>
     </footer>
   </body>
 </html>
-
-<style is:global>
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    font-family:
-      system-ui,
-      -apple-system,
-      sans-serif;
-  }
-</style>

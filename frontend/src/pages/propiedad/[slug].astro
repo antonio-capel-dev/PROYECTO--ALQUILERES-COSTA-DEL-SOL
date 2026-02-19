@@ -58,10 +58,11 @@ const { rental } = Astro.props as { rental: Rental };
 const STRAPI_URL = import.meta.env.PUBLIC_STRAPI_URL || "http://localhost:1337";
 
 const seoTitle =
-  rental.metaTitle || `${rental.title} | Alquiler en Costa del Sol`;
+  rental.metaTitle ||
+  `${rental.title} desde ${rental.price}€ | Alquileres Costa del Sol`;
 const seoDescription =
   rental.metaDescription ||
-  `Alquila ${rental.title} en ${rental.ubicacion?.nombre || rental.location || "Costa del Sol"}. Desde ${rental.price}€/noche. Reserva directa sin intermediarios.`;
+  `Reserva ${rental.title} en ${rental.ubicacion?.nombre || "Costa del Sol"}. Alojamiento premium con capacidad para ${detalles?.capacidad || 4} personas. ¡Mejor precio garantizado!`;
 
 // Imagen: URL absoluta o relativa al Strapi
 const imageUrl = rental.image?.url
@@ -117,6 +118,57 @@ const ubicacion = rental.ubicacion;
       </li>
     </ol>
   </nav>
+
+  <!-- SEO TÉCNICO AVANZADO: Schema.org VacationRental -->
+  <fragment slot="head">
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "VacationRental",
+        name: rental.title,
+        description: seoDescription,
+        image: imageUrl ? [imageUrl] : [],
+        url: Astro.url.href,
+        priceRange: `${rental.price}€`,
+        address: {
+          "@type": "PostalAddress",
+          addressLocality:
+            ubicacion?.nombre || rental.location || "Costa del Sol",
+          addressRegion: "Málaga",
+          addressCountry: "ES",
+        },
+        numberOfRooms: detalles?.habitaciones || 1,
+        occupancy: {
+          "@type": "QuantitativeValue",
+          value: detalles?.capacidad || 2,
+        },
+        amenityFeature: [
+          servicios?.wifi
+            ? {
+                "@type": "LocationFeatureSpecification",
+                name: "WiFi",
+                value: true,
+              }
+            : null,
+          servicios?.aire_acondicionado
+            ? {
+                "@type": "LocationFeatureSpecification",
+                name: "Air Conditioning",
+                value: true,
+              }
+            : null,
+          servicios?.parking
+            ? {
+                "@type": "LocationFeatureSpecification",
+                name: "Parking",
+                value: true,
+              }
+            : null,
+        ].filter(Boolean),
+      })}
+    />
+  </fragment>
 
   <article class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-24">
     <!-- Cabecera: Imagen + Info principal -->
@@ -242,10 +294,10 @@ const ubicacion = rental.ubicacion;
         }
 
         <div class="flex flex-col sm:flex-row gap-4">
-          <Boton href="/contacto" variante="primario" tamano="lg">
+          <Boton href="/contacto" variante="primario" tamano="grande">
             Reservar Ahora
           </Boton>
-          <Boton href="/#rentals" variante="outline" tamano="lg">
+          <Boton href="/#rentals" variante="outline" tamano="grande">
             Ver más propiedades
           </Boton>
         </div>
@@ -275,7 +327,7 @@ const ubicacion = rental.ubicacion;
         Contacta con nuestro equipo local para confirmar disponibilidad y
         reservar sin intermediarios.
       </p>
-      <Boton href="/contacto" variante="primario" tamano="lg">
+      <Boton href="/contacto" variante="primario" tamano="grande">
         Contactar Ahora
       </Boton>
     </section>

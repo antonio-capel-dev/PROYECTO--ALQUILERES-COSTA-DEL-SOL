@@ -7,7 +7,13 @@ import propiedades20 from "../../data/propiedades_20.json";
 // Si este proyecto creciera, moveríamos esto a utils/data.ts
 // ───────────────────────────────────────────────────────────────────
 
-type Propiedad = {
+// ── getStaticPaths (Pagination Logic) ──────────────────────────────
+export async function getStaticPaths({ paginate }) {
+  const STRAPI_URL =
+    import.meta.env.PUBLIC_STRAPI_URL || "http://localhost:1337";
+
+  // Helper types and functions defined INSIDE getStaticPaths to ensure scope availability
+  type Propiedad = {
     slug: string;
     titulo: string;
     zona: string;
@@ -16,9 +22,9 @@ type Propiedad = {
     capacidad: number;
     habitaciones?: number;
     image_url?: string;
-};
+  };
 
-const normalizarStrapi = (r: any): Propiedad => ({
+  const normalizarStrapi = (r: any): Propiedad => ({
     slug: r.slug ?? "",
     titulo: r.title ?? "Sin título",
     zona: r.ubicacion?.ciudad ?? r.location ?? "",
@@ -27,15 +33,15 @@ const normalizarStrapi = (r: any): Propiedad => ({
     capacidad: r.detalles?.capacidad ?? 0,
     habitaciones: r.detalles?.habitaciones,
     image_url:
-        r.image_url ??
-        (r.image?.url
-            ? r.image.url.startsWith("http")
-                ? r.image.url
-                : `${import.meta.env.PUBLIC_STRAPI_URL || "http://localhost:1337"}${r.image.url}`
-            : undefined),
-});
+      r.image_url ??
+      (r.image?.url
+        ? r.image.url.startsWith("http")
+          ? r.image.url
+          : `${STRAPI_URL}${r.image.url}`
+        : undefined),
+  });
 
-const normalizarLocal = (p: any): Propiedad => ({
+  const normalizarLocal = (p: any): Propiedad => ({
     slug: p.slug,
     titulo: p.titulo,
     zona: p.zona,
@@ -44,35 +50,31 @@ const normalizarLocal = (p: any): Propiedad => ({
     capacidad: p.capacidad,
     habitaciones: p.habitaciones,
     image_url: p.image_url,
-});
+  });
 
-// ── getStaticPaths (Pagination Logic) ──────────────────────────────
-export async function getStaticPaths({ paginate }) {
-    const STRAPI_URL =
-        import.meta.env.PUBLIC_STRAPI_URL || "http://localhost:1337";
-    let allProperties: Propiedad[] = [];
+  let allProperties: Propiedad[] = [];
 
-    // 1. Fetch Data
-    try {
-        const res = await fetch(
-            `${STRAPI_URL}/api/rentals?populate=*&pagination[limit]=100`,
-        );
-        const json = await res.json();
-        const strapiData = json.data || [];
+  // 1. Fetch Data
+  try {
+    const res = await fetch(
+      `${STRAPI_URL}/api/rentals?populate=*&pagination[limit]=100`,
+    );
+    const json = await res.json();
+    const strapiData = json.data || [];
 
-        if (strapiData.length > 0) {
-            allProperties = strapiData.map(normalizarStrapi);
-        } else {
-            allProperties = (propiedades20 as any[]).map(normalizarLocal);
-        }
-    } catch (error) {
-        console.error("Error fetching Strapi for pagination:", error);
-        allProperties = (propiedades20 as any[]).map(normalizarLocal);
+    if (strapiData.length > 0) {
+      allProperties = strapiData.map(normalizarStrapi);
+    } else {
+      allProperties = (propiedades20 as any[]).map(normalizarLocal);
     }
+  } catch (error) {
+    console.error("Error fetching Strapi for pagination:", error);
+    allProperties = (propiedades20 as any[]).map(normalizarLocal);
+  }
 
-    // 2. Paginate (9 items per page)
-    // Genera rutas: /propiedades/1, /propiedades/2, etc. (o /propiedades si page=1 en config)
-    return paginate(allProperties, { pageSize: 9 });
+  // 2. Paginate (9 items per page)
+  // Genera rutas: /propiedades/1, /propiedades/2, etc. (o /propiedades si page=1 en config)
+  return paginate(allProperties, { pageSize: 9 });
 }
 
 // ── Page Props ─────────────────────────────────────────────────────
@@ -85,65 +87,62 @@ const description = `Explora nuestra colección completa de alquileres vacaciona
 ---
 
 <Layout
-    titulo={title}
-    descripcion={description}
-    urlPrevia={page.url.prev}
-    urlSiguiente={page.url.next}
+  titulo={title}
+  descripcion={description}
+  urlPrevia={page.url.prev}
+  urlSiguiente={page.url.next}
 >
-    <!-- Hero / Header -->
-    <section class="bg-marca-oscura py-20 px-6 text-center">
-        <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">
-            Catálogo Completo
-        </h1>
-        <p class="text-slate-300 text-lg">
-            Descubre todas nuestras opciones disponibles para tus próximas
-            vacaciones.
-        </p>
-    </section>
+  <!-- Hero / Header -->
+  <section class="bg-marca-oscura py-20 px-6 text-center">
+    <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">
+      Catálogo Completo
+    </h1>
+    <p class="text-slate-300 text-lg">
+      Descubre todas nuestras opciones disponibles para tus próximas vacaciones.
+    </p>
+  </section>
 
-    <!-- Listings Grid -->
-    <section
-        class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 bg-marca-clara"
-    >
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {properties.map((prop) => <FichaAlquiler {...prop} />)}
-        </div>
+  <!-- Listings Grid -->
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 bg-marca-clara">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {properties.map((prop) => <FichaAlquiler {...prop} />)}
+    </div>
 
-        <!-- Pagination Controls -->
-        <div class="flex justify-center items-center gap-4 mt-16">
-            {
-                page.url.prev ? (
-                    <a
-                        href={page.url.prev}
-                        class="px-6 py-3 bg-white border border-slate-200 rounded-full font-semibold text-marca-oscura hover:bg-marca-primaria hover:text-white transition shadow-sm"
-                    >
-                        ← Anterior
-                    </a>
-                ) : (
-                    <span class="px-6 py-3 text-slate-300 border border-slate-100 rounded-full cursor-not-allowed">
-                        ← Anterior
-                    </span>
-                )
-            }
+    <!-- Pagination Controls -->
+    <div class="flex justify-center items-center gap-4 mt-16">
+      {
+        page.url.prev ? (
+          <a
+            href={page.url.prev}
+            class="px-6 py-3 bg-white border border-slate-200 rounded-full font-semibold text-marca-oscura hover:bg-marca-primaria hover:text-white transition shadow-sm"
+          >
+            ← Anterior
+          </a>
+        ) : (
+          <span class="px-6 py-3 text-slate-300 border border-slate-100 rounded-full cursor-not-allowed">
+            ← Anterior
+          </span>
+        )
+      }
 
-            <span class="text-slate-500 font-medium">
-                Página {page.currentPage} de {page.lastPage}
-            </span>
+      <span class="text-slate-500 font-medium">
+        Página {page.currentPage} de {page.lastPage}
+      </span>
 
-            {
-                page.url.next ? (
-                    <a
-                        href={page.url.next}
-                        class="px-6 py-3 bg-white border border-slate-200 rounded-full font-semibold text-marca-oscura hover:bg-marca-primaria hover:text-white transition shadow-sm"
-                    >
-                        Siguiente →
-                    </a>
-                ) : (
-                    <span class="px-6 py-3 text-slate-300 border border-slate-100 rounded-full cursor-not-allowed">
-                        Siguiente →
-                    </span>
-                )
-            }
-        </div>
-    </section>
+      {
+        page.url.next ? (
+          <a
+            href={page.url.next}
+            class="px-6 py-3 bg-white border border-slate-200 rounded-full font-semibold text-marca-oscura hover:bg-marca-primaria hover:text-white transition shadow-sm"
+          >
+            Siguiente →
+          </a>
+        ) : (
+          <span class="px-6 py-3 text-slate-300 border border-slate-100 rounded-full cursor-not-allowed">
+            Siguiente →
+          </span>
+        )
+      }
+    </div>
+  </section>
 </Layout>

@@ -12,6 +12,32 @@ const description =
   descripcion={description}
   breadcrumbs={[{ nombre: "Sobre Nosotros", url: "/nosotros" }]}
 >
+  <!-- Schema.org específico para página de "Sobre Nosotros" (E-E-A-T) -->
+  <script
+    type="application/ld+json"
+    set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "AboutPage",
+      mainEntity: {
+        "@type": "Organization",
+        name: "Alquileres Costa del Sol",
+        foundingDate: "2010",
+        founder: {
+          "@type": "Person",
+          name: "Antonio Capel",
+          jobTitle: "CEO & Founder",
+        },
+        description:
+          "Expertos en alquiler vacacional en Málaga y Costa del Sol desde 2010.",
+        knowsAbout: [
+          "Alquiler Vacacional",
+          "Gestión Inmobiliaria",
+          "Turismo Costa del Sol",
+        ],
+      },
+    })}
+  />
+
   <!-- Hero Section -->
   <section class="relative bg-marca-oscura py-20 px-6">
     <div class="max-w-4xl mx-auto text-center relative z-10">

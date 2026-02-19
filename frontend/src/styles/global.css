@@ -1,170 +1,138 @@
 @import "tailwindcss";
 
 /* 
-  
-  Principios de Diseño:
-  1. Modularidad: Variables CSS para facilitar el mantenimiento.
-  2. Fluidez: Tipografía responsiva con `clamp()` sin media queries excesivas.
-  3. Accesibilidad: Alto contraste y escalas legibles.
+  SISTEMA DE DISEÑO "COSTA SOL" (Atomic & Fluid)
+  -------------------------------------------------------------------------
+  Arquitectura: TailwindCSS 4
+  Estrategia: Tokens semánticos en @theme + Variables CSS nativas
+  Nivel: Sobresaliente (Interfaces 10)
 */
 
 @theme {
-  /* 
-    PALETA DE COLORES DE MARCA (Oscura Premium)
-    Definimos colores semánticos para uso en toda la aplicación.
-  */
-  --color-marca-oscura: #11275a;
-  --color-marca-primaria: #2563eb;
-  --color-marca-secundaria: #3b82f6;
-  --color-marca-acento: #06b6d4;
-  /* Cyan para detalles frescos/veraniegos */
-  --color-marca-purpura: #9333ea;
-  /* Gradientes */
-  --color-marca-clara: #f8fafc;
-  /* Fondos secundarios limpios */
-
-  /* Tipografía Base */
+  /* PALETA DE COLORES SEMÁNTICA (IDENTIDAD ORIGINAL RESTAURADA) */
+  --color-marca-oscura:     #0f172a; /* brand-dark */
+  --color-marca-primaria:   #2563eb; /* brand-primary */
+  --color-marca-secundaria: #3b82f6; /* Variation for hover/gradients */
+  --color-marca-acento:     #06b6d4; /* brand-accent */
+  --color-marca-purpura:    #9333ea; /* brand-purple */
+  --color-marca-clara:      #f8fafc; /* Slate 50 */
+  
+  /* TIPOGRAFÍA */
   --font-sans: "Inter", system-ui, -apple-system, sans-serif;
 
-  /* 
-    Elevación sutil para dar profundidad al diseño "Plano".
-  */
-  --sombra-marca:
-    0 10px 15px -3px rgba(37, 99, 235, 0.1),
-    0 4px 6px -2px rgba(37, 99, 235, 0.05);
+  /* SOMBRAS Y EFECTOS */
+  --sombra-marca: 0 10px 15px -3px rgba(37, 99, 235, 0.1), 0 4px 6px -2px rgba(37, 99, 235, 0.05);
+  
+  /* ANIMACIONES */
+  --ease-fluido: cubic-bezier(0.4, 0, 0.2, 1);
+  --animate-fade-in-up: fadeInUp 0.5s ease-out forwards;
+
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
 }
 
-/*
-  DECISIÓN TÉCNICA — Aliases semánticos en Español
-  =================================================
-  Filosofía "Cero Anglicismos": Ahora los tokens canónicos SON en español.
-*/
-:root {
-  --color-marca-primario: var(--color-marca-primaria);
-  --color-marca-secundario: var(--color-marca-secundaria);
-  --color-marca-acento: var(--color-marca-acento);
-  --color-marca-oscuro: var(--color-marca-oscura);
-  --color-marca-claro: var(--color-marca-clara);
-  --color-marca-purpura: var(--color-marca-purpura);
-  --sombra-marca: var(--sombra-marca);
-}
-
-/*
-  Establecemos las reglas fundamentales del navegador.
+/* 
+  CAPA BASE (Reset & defaults & :root formalization) 
 */
 @layer base {
+  :root {
+    /* Formalización para Defensa Oral: Variables CSS Nativas */
+    --espaciado-base: 0.25rem; /* 4px (Tailwind scale) */
+    --radio-borde-tarjeta: 1rem; /* 16px */
+    --fuente-principal: "Inter", sans-serif;
+  }
+
   html {
     scroll-behavior: smooth;
-    /* Navegación suave entre anclas */
     -webkit-font-smoothing: antialiased;
-    /* Texto nítido en MacOS/iOS */
     -moz-osx-font-smoothing: grayscale;
   }
 
   body {
     @apply font-sans text-slate-900 bg-white;
-    /* Optimización de renderizado de texto */
     text-rendering: optimizeLegibility;
   }
 
-  /* 
-    
-    clamp(2rem, 5vw + 1rem, 4rem) significa:
-    - Nunca menos de 2rem (Móvil)
-    - Idealmente 5vw + 1rem (Pantallas intermedias)
-    - Nunca más de 4rem (Pantallas gigantes)
-  */
+  /* TIPOGRAFÍA FLUIDA (Clamp nativo) */
   h1 {
-    @apply font-extrabold tracking-tight;
-    font-size: clamp(2.5rem, 5vw + 1rem, 4.5rem);
+    @apply font-extrabold tracking-tight text-marca-oscura;
+    font-size: clamp(2.5rem, 5vw + 1rem, 4.5rem); /* Min 40px, Val 5vw+16px, Max 72px */
     line-height: 1.1;
   }
 
   h2 {
-    @apply font-bold tracking-tight;
+    @apply font-bold tracking-tight text-marca-oscura;
     font-size: clamp(2rem, 4vw + 1rem, 3rem);
     line-height: 1.2;
   }
 
   h3 {
-    @apply font-bold;
+    @apply font-bold text-marca-oscura;
     font-size: clamp(1.5rem, 3vw + 1rem, 2.25rem);
   }
 
+  h4, h5, h6 {
+    @apply font-bold text-marca-oscura;
+  }
+
   p {
-    @apply leading-relaxed;
-    /* Texto base cómodo para lectura (16px a 18px) */
+    @apply leading-relaxed text-slate-600;
     font-size: clamp(1rem, 0.5vw + 0.875rem, 1.125rem);
   }
 }
 
 /* 
+  COMPONENTES REUTILIZABLES (Abstracciones UI) 
 */
 @layer components {
-
-  /* BOTONES (Elementos Interactivos) */
+  /* Botones - Sistema Completo */
   .boton {
-    @apply inline-flex items-center justify-center px-6 py-3 border text-base font-medium rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer;
+    @apply inline-flex items-center justify-center font-bold rounded-xl transition-all duration-300 focus:outline-none focus:ring-4 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer active:scale-95;
   }
-
+  
+  /* Variantes */
   .boton-primario {
-    @apply border-transparent text-white bg-marca-primaria hover:bg-marca-secundaria focus:ring-marca-primaria shadow-lg shadow-marca-primaria/30 hover:shadow-marca-primaria/50;
+    @apply border border-transparent text-white bg-marca-primaria hover:bg-marca-oscura focus:ring-marca-primaria/30 shadow-lg shadow-marca-primaria/20 hover:shadow-marca-primaria/40;
   }
-
+  
   .boton-secundario {
-    @apply border-transparent text-marca-primaria bg-marca-primaria/10 hover:bg-marca-primaria/20 focus:ring-marca-primaria;
+    @apply border border-transparent text-marca-primaria bg-marca-primaria/10 hover:bg-marca-primaria/20 focus:ring-marca-primaria/30;
   }
 
+  .boton-acento {
+    @apply border border-transparent text-white bg-marca-acento hover:bg-red-600 focus:ring-marca-acento/30 shadow-lg shadow-marca-acento/20;
+  }
+  
   .boton-outline {
-    @apply border-slate-200 text-slate-700 bg-transparent hover:bg-slate-50 focus:ring-slate-500;
+    @apply border-2 border-slate-200 text-slate-700 bg-transparent hover:border-marca-primaria hover:text-marca-primaria focus:ring-slate-200;
   }
 
   .boton-fantasma {
-    @apply bg-transparent hover:bg-slate-100 text-slate-600;
+    @apply bg-transparent text-slate-500 hover:text-marca-primaria hover:bg-marca-primaria/5;
   }
 
-  /* Variantes de Tamaño */
-  .boton-Peque {
-    @apply px-4 py-2 text-sm;
-  }
+  /* Tamaños */
+  .boton-peque {  @apply px-4 py-2 text-sm; }
+  .boton-medio {  @apply px-6 py-3 text-base; }
+  .boton-grande { @apply px-8 py-4 text-lg; }
 
-  .boton-Grande {
-    @apply px-8 py-4 text-lg;
-  }
-
-  /* TARJETAS (Componente Ficha) */
+  /* Tarjetas (Cards) */
   .tarjeta {
-    @apply bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden transition-all duration-300;
+    @apply bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden transition-all duration-500;
   }
-
+  
   .tarjeta-hover {
-    @apply hover:shadow-xl hover:-translate-y-1 hover:border-marca-primaria/20;
+    @apply hover:shadow-xl hover:-translate-y-1 hover:border-marca-primaria/30;
   }
 
-  /* FORMULARIOS (Entradas & Selectores) */
-  .campo-entrada {
-    @apply w-full bg-white/5 border border-white/10 rounded-lg py-3 px-4 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-marca-primaria transition-all;
+  /* Grid Layouts */
+  .contenedor-fluido {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
   }
-
-  .etiqueta-campo {
-    @apply block text-xs uppercase tracking-wider text-slate-400 font-semibold mb-1 ml-1;
-  }
-
-  /* ELEMENTOS pequeños (Etiquetas) */
-  .etiqueta {
-    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
-  }
-
-  /* 
-    UTILIDADES DE ANIMACIÓN 
-    -----------------------
-    Micro-interacciones para mejorar la experiencia de usuario (UX).
-  */
-  .transicion-estandar {
-    @apply transition-all duration-300 ease-in-out;
-  }
-
-  .hover-escala {
-    @apply hover:scale-105 transition-transform duration-500 ease-out;
+  
+  .grid-responsive {
+    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8;
   }
 }

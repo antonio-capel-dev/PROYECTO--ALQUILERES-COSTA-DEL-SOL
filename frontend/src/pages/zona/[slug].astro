@@ -2,208 +2,170 @@
 import Layout from "../../layouts/Layout.astro";
 import FichaAlquiler from "../../components/FichaAlquiler.astro";
 import Boton from "../../components/ui/Boton.astro";
-import Badge from "../../components/ui/Badge.astro";
+import Breadcrumbs from "../../components/ui/Breadcrumbs.astro";
+import HeroZona from "../../components/HeroZona.astro";
 
-interface Propiedad {
-  slug: string;
-  titulo: string;
-  zona: string;
-  precio: number;
-  capacidad: number;
-  image_url?: string;
-}
-
-/**
- * getStaticPaths(): Consulta todas las ubicaciones de Strapi.
- * Por cada ubicacion genera /zona/[slug] con sus rentals asociados.
- * populate=rentals.image trae la relacion anidada en una sola query.
- */
+// ── 1. GET STATIC PATHS (Build Time) ────────────────────────────────────────
 export async function getStaticPaths() {
   const STRAPI_URL =
     import.meta.env.PUBLIC_STRAPI_URL || "http://localhost:1337";
 
-  let ubicaciones = [];
+  const normalizarSlug = (txt: string) =>
+    txt
+      ?.toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/\s+/g, "-") || "";
+
+  let zonas = [];
+  let propiedades = [];
+
   try {
-    const res = await fetch(
-      `${STRAPI_URL}/api/ubicacions?populate[rentals][populate]=image&populate=imagen`,
-    );
-    const json = await res.json();
-    ubicaciones = json.data || [];
-  } catch (e) {
-    console.error("Error fetching ubicaciones for static paths:", e);
+    const res = await fetch(`${STRAPI_URL}/api/rentals?populate=*`);
+    const data = await res.json();
+    propiedades = data.data || [];
+
+    const zonasMap = new Map();
+
+    propiedades.forEach((p: any) => {
+      const nombreZona = p.ubicacion?.nombre || p.location || "Costa del Sol";
+      const slug = p.ubicacion?.slug || normalizarSlug(nombreZona);
+
+      if (!zonasMap.has(slug)) {
+        zonasMap.set(slug, {
+          slug,
+          nombre: nombreZona,
+          imagen: p.image,
+        });
+      }
+    });
+
+    zonas = Array.from(zonasMap.values());
+  } catch (error) {
+    console.error("❌ Error build-time fetching zones:", error);
+    zonas = [
+      { slug: "marbella", nombre: "Marbella" },
+      { slug: "malaga", nombre: "Málaga" },
+      { slug: "benalmadena", nombre: "Benalmádena" },
+      { slug: "torremolinos", nombre: "Torremolinos" },
+      { slug: "fuengirola", nombre: "Fuengirola" },
+      { slug: "nerja", nombre: "Nerja" },
+    ];
   }
 
-  return ubicaciones.map((ubi: any) => ({
-    params: { slug: ubi.slug },
-    props: { ubicacion: ubi },
-  }));
+  return zonas.map((zona) => {
+    const propsDeZona = propiedades.filter((p: any) => {
+      const pSlug =
+        p.ubicacion?.slug || normalizarSlug(p.ubicacion?.nombre || p.location);
+      return pSlug === zona.slug;
+    });
+
+    return {
+      params: { slug: zona.slug },
+      props: { zona, propiedades: propsDeZona },
+    };
+  });
 }
 
-const { ubicacion } = Astro.props as { ubicacion: any };
-const STRAPI_URL = import.meta.env.PUBLIC_STRAPI_URL || "http://localhost:1337";
+const { zona, propiedades } = Astro.props;
 
-// SEO: campos del CMS con fallback generado
-const seoTitle =
-  ubicacion.metaTitle ||
-  `Alquiler vacacional en ${ubicacion.nombre} | Pisos y Apartamentos`;
-const seoDescription =
-  ubicacion.metaDescription ||
-  `Encuentra los mejores alquileres en ${ubicacion.nombre}, Costa del Sol. Apartamentos, pisos y villas al mejor precio. Reserva directa.`;
+// Fallbacks para propiedades sin foto (Evitar repetición visual)
+const PROPERTY_FALLBACKS = [
+  "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80",
+  "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80",
+  "https://images.unsplash.com/photo-1502005229762-cf1b2da7c5d6?auto=format&fit=crop&w=800&q=80",
+  "https://images.unsplash.com/photo-1493809842364-78817add7ffb?auto=format&fit=crop&w=800&q=80",
+  "https://images.unsplash.com/photo-1484154218962-a1c002085d2f?auto=format&fit=crop&w=800&q=80",
+];
 
-// Imagen hero de la ubicacion
-const heroImage = ubicacion.imagen?.url
-  ? ubicacion.imagen.url.startsWith("http")
-    ? ubicacion.imagen.url
-    : `${STRAPI_URL}${ubicacion.imagen.url}`
-  : undefined;
+const getPropertyImage = (prop: any, index: number) => {
+  if (prop.image?.url) {
+    return prop.image.url.startsWith("http")
+      ? prop.image.url
+      : `${import.meta.env.PUBLIC_STRAPI_URL}${prop.image.url}`;
+  }
+  return PROPERTY_FALLBACKS[index % PROPERTY_FALLBACKS.length];
+};
 
-// Rentals asociados a esta ubicacion (vienen por la relacion populate)
-const rentals = ubicacion.rentals || [];
+const seoTitle = `Alquiler Vacacional en ${zona.nombre} | Costa del Sol`;
+const seoDesc = `Descubre los mejores apartamentos y villas en ${zona.nombre}. Precios verificados. Reserva directa.`;
+
+// Configuration for Breadcrumbs
+const breadcrumbConfig = [
+  { label: "Inicio", href: "/" },
+  { label: "Zonas", href: "/#zonas" },
+  { label: zona.nombre, href: Astro.url.pathname, active: true },
+];
 ---
 
 <Layout
   titulo={seoTitle}
-  descripcion={seoDescription}
-  imagen={heroImage}
-  breadcrumbs={[{ nombre: ubicacion.nombre, url: `/zona/${ubicacion.slug}` }]}
+  descripcion={seoDesc}
+  <Layout
+  titulo={seoTitle}
+  descripcion={seoDesc}
+  breadcrumbs={[
+    { nombre: "Inicio", url: "/" },
+    { nombre: zona.nombre, url: `/zona/${zona.slug}` },
+  ]}
 >
-  <!-- Breadcrumb -->
-  <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-    <ol class="flex items-center gap-2 text-sm text-slate-500">
-      <li>
-        <a href="/" class="hover:text-marca-primaria transition">Inicio</a>
-      </li>
-      <li class="text-slate-300">/</li>
-      <li class="text-marca-oscura font-medium">{ubicacion.nombre}</li>
-    </ol>
-  </nav>
+  {/* NAVEGACIÓN Y HERO */}
+  <Breadcrumbs
+    items={breadcrumbConfig}
+    backLink={{ label: "Volver a todas las zonas", href: "/#zonas" }}
+  />
 
-  <!-- Hero de zona -->
-  <section class="relative bg-marca-oscura py-24 px-6 overflow-hidden">
-    {
-      heroImage && (
-        <img
-          src={heroImage}
-          alt={ubicacion.nombre}
-          class="absolute inset-0 w-full h-full object-cover opacity-30"
-        />
-      )
-    }
+  <HeroZona
+    nombre={zona.nombre}
+    slug={zona.slug}
+    imagen={zona.imagen}
+    propiedadesCount={propiedades.length}
+  />
+
+  {/* LISTADO DE PROPIEDADES */}
+  <section class="contenedor-fluido py-16">
     <div
-      class="absolute inset-0 bg-linear-to-t from-marca-oscura/90 to-marca-oscura/40"
+      class="flex items-center justify-between mb-8 border-b border-slate-100 pb-4"
     >
-    </div>
-
-    <div class="relative z-10 max-w-4xl mx-auto text-center">
-      <Badge variante="acento" clase="mb-6">Costa del Sol</Badge>
-      <h1
-        class="text-5xl md:text-6xl font-extrabold text-white tracking-tight mb-6"
-      >
-        Alquileres en{" "}
-        <span
-          class="text-transparent bg-clip-text bg-linear-to-r from-marca-acento to-marca-secundaria"
-        >
-          {ubicacion.nombre}
-        </span>
-      </h1>
-      <p
-        class="text-xl text-slate-300 max-w-2xl mx-auto font-light leading-relaxed"
-      >
-        {seoDescription}
-      </p>
-    </div>
-  </section>
-
-  <!-- Grid de propiedades -->
-  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 bg-marca-clara">
-    <div
-      class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6"
-    >
-      <div>
-        <h2 class="text-3xl md:text-4xl font-bold text-marca-oscura">
-          Propiedades en {ubicacion.nombre}
-        </h2>
-        <p class="text-slate-500 mt-2 text-lg">
-          {rentals.length}
-          {
-            rentals.length === 1
-              ? "propiedad disponible"
-              : "propiedades disponibles"
-          }
-        </p>
-      </div>
-      <a
-        href="/"
-        class="flex items-center text-marca-primaria font-semibold hover:text-marca-secundaria transition group"
-      >
-        Ver todas las zonas
-        <span class="ml-2 transform group-hover:translate-x-1 transition"
-          >→</span
-        >
-      </a>
+      <h2 class="text-2xl md:text-3xl font-bold text-marca-oscura">
+        Catálogo Disponible
+      </h2>
     </div>
 
     {
-      rentals.length > 0 ? (
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-          {rentals.map((rental: any) => (
+      propiedades.length > 0 ? (
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {propiedades.map((prop: any, index: number) => (
             <FichaAlquiler
-              titulo={rental.title}
-              precio={rental.price}
-              capacidad={rental.detalles?.capacidad || 0}
-              slug={rental.slug || rental.documentId}
-              image_url={
-                rental.image?.url
-                  ? rental.image.url.startsWith("http")
-                    ? rental.image.url
-                    : `${STRAPI_URL}${rental.image.url}`
-                  : undefined
-              }
-              zona={ubicacion.nombre}
+              titulo={prop.title}
+              precio={prop.price}
+              habitaciones={prop.detalles?.habitaciones || 2}
+              capacidad={prop.detalles?.capacidad || 4}
+              banos={prop.detalles?.banos || 1}
+              metros={prop.detalles?.metros}
+              image_url={getPropertyImage(prop, index)}
+              slug={prop.slug}
+              zona={prop.ubicacion?.nombre || prop.location || zona.nombre}
+              tipo={prop.tipo}
+              puntuacion={4.7}
             />
           ))}
         </div>
       ) : (
-        <div class="text-center py-24 bg-white rounded-3xl border-2 border-dashed border-slate-200">
-          <span class="text-6xl mb-6 block">🏖️</span>
-          <h3 class="text-2xl font-bold text-marca-oscura mb-2">
-            Próximamente en {ubicacion.nombre}
+        /* EMPTY STATE SOBRESALIENTE */
+        <div class="text-center py-20 bg-slate-50 rounded-3xl border-2 border-dashed border-slate-200">
+          <div class="animate-bounce mb-4 text-4xl">🏖️</div>
+          <h3 class="text-xl font-bold text-marca-oscura mb-2">
+            Sin disponibilidad en {zona.nombre}
           </h3>
           <p class="text-slate-500 max-w-md mx-auto mb-8">
-            Estamos preparando las mejores propiedades de esta zona. Vuelve
-            pronto o explora otras localidades.
+            Nuestras propiedades en esta zona se han agotado temporalmente.
           </p>
-          <Boton href="/" variante="outline">
-            Ver todas las propiedades
+          <Boton href="/" variante="primario">
+            Explorar otras zonas cercanas
           </Boton>
         </div>
       )
     }
-  </section>
-
-  <!-- Contenido SEO de la zona (richtext desde Strapi) -->
-  {
-    ubicacion.descripcion && (
-      <section class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pb-24">
-        <div class="prose prose-slate lg:prose-lg max-w-none">
-          <Fragment set:html={ubicacion.descripcion} />
-        </div>
-      </section>
-    )
-  }
-
-  <!-- CTA -->
-  <section class="bg-marca-oscura py-16 px-4">
-    <div class="max-w-3xl mx-auto text-center">
-      <h2 class="text-3xl font-bold text-white mb-4">
-        ¿Buscas algo concreto en {ubicacion.nombre}?
-      </h2>
-      <p class="text-slate-300 mb-8">
-        Nuestro equipo local conoce cada rincón. Cuéntanos qué necesitas.
-      </p>
-      <Boton href="/contacto" variante="primario" tamano="grande">
-        Contactar
-      </Boton>
-    </div>
   </section>
 </Layout>

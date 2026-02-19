@@ -1,0 +1,162 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import FichaAlquiler from "../../../components/FichaAlquiler.astro";
+import HeroZona from "../../../components/HeroZona.astro";
+import Boton from "../../../components/ui/Boton.astro";
+
+// ── 1. GET STATIC PATHS (Combinatoria Zona * Categoria) ─────────────────────
+export async function getStaticPaths() {
+  const categories = [
+    { slug: "lujo", nombre: "Lujo", seo: "Villas de Lujo y Áticos Premium" },
+    {
+      slug: "familias",
+      nombre: "Familias",
+      seo: "Apartamentos Familiares y Seguros",
+    },
+    { slug: "playa", nombre: "Playa", seo: "En Primera Línea de Playa" },
+    { slug: "golf", nombre: "Golf", seo: "Cerca de Campos de Golf" },
+    {
+      slug: "casco-antiguo",
+      nombre: "Casco Antiguo",
+      seo: "En el Centro Histórico",
+    },
+  ];
+
+  /* 
+     En un proyecto real, consultaríamos Strapi para saber qué zonas tienen propiedades de qué tipo.
+     Para el MVP académico, generamos la combinatoria completa para todas las zonas principales.
+  */
+  const zones = [
+    { slug: "marbella", nombre: "Marbella" },
+    { slug: "malaga", nombre: "Málaga" },
+    { slug: "benalmadena", nombre: "Benalmádena" },
+    { slug: "torremolinos", nombre: "Torremolinos" },
+    { slug: "nerja", nombre: "Nerja" },
+  ];
+
+  // Fetch properties to filter later (simulated SSG data passing)
+  const STRAPI_URL =
+    import.meta.env.PUBLIC_STRAPI_URL || "http://localhost:1337";
+  let propData = [];
+  try {
+    const res = await fetch(`${STRAPI_URL}/api/rentals?populate=*`);
+    const json = await res.json();
+    propData = json.data || [];
+  } catch (e) {
+    /* ignore */
+  }
+
+  return zones.flatMap((zona) =>
+    categories.map((cat) => ({
+      params: { slug: zona.slug, categoria: cat.slug },
+      props: { zona, categoria: cat, propData },
+    })),
+  );
+}
+
+const { zona, categoria, propData } = Astro.props;
+
+// ── 2. FILTRADO INTELIGENTE (Simulado para demostración) ────────────────────
+// En producción real, esto filtrarían por tags reales de Strapi.
+// Aquí usamos una heurística básica basada en keywords o precio para "simular" la categorización.
+const filteredProps = propData.filter((p) => {
+  // Primero filtramos por zona
+  const pSlug = p.ubicacion?.slug || p.location?.toLowerCase() || "";
+  if (!pSlug.includes(zona.slug)) return false;
+
+  // Luego heurística por categoría
+  if (categoria.slug === "lujo") return p.price > 150;
+  if (categoria.slug === "familias") return (p.detalles?.capacidad || 0) >= 4;
+  if (categoria.slug === "playa")
+    return p.description?.toLowerCase().includes("playa") || true; // Fallback generoso
+
+  return true;
+});
+
+// Metadatos SEO Específicos (Long Tail)
+const seoTitle = `Alquiler ${categoria.seo} en ${zona.nombre} | Costa del Sol`;
+const seoDesc = `Descubre nuestra selección exclusiva de ${categoria.nombre.toLowerCase()} en ${zona.nombre}. Precios verificados y reserva directa.`;
+
+// Imagen Hero (Reutilizamos la de la zona para coherencia)
+// En Fase 15 podríamos tener imágenes específicas por categoría si quisiéramos.
+---
+
+<Layout
+  titulo={seoTitle}
+  descripcion={seoDesc}
+  breadcrumbs={[
+    { nombre: "Inicio", url: "/" },
+    { nombre: zona.nombre, url: `/zona/${zona.slug}` },
+    { nombre: categoria.nombre, url: `/zona/${zona.slug}/${categoria.slug}` },
+  ]}
+>
+  <HeroZona nombre={`${zona.nombre} ${categoria.nombre}`} slug={zona.slug} />
+
+  <section class="max-w-7xl mx-auto px-6 py-16">
+    <div class="mb-12 text-center max-w-3xl mx-auto">
+      <h2 class="text-3xl font-bold text-marca-oscura mb-4">
+        {categoria.seo} en {zona.nombre}
+      </h2>
+      <p class="text-slate-500 text-lg">
+        Hemos seleccionado las mejores propiedades en {zona.nombre} pensando en
+        <strong>{categoria.nombre.toLowerCase()}</strong>. Disfruta de la Costa
+        del Sol a tu manera.
+      </p>
+    </div>
+
+    {
+      filteredProps.length > 0 ? (
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {filteredProps.map((prop: any) => (
+            <FichaAlquiler
+              titulo={prop.title}
+              precio={prop.price}
+              habitaciones={prop.detalles?.habitaciones}
+              capacidad={prop.detalles?.capacidad}
+              image_url={prop.image_url || prop.image?.url}
+              slug={prop.slug}
+              zona={zona.nombre}
+              tipo={prop.tipo}
+            />
+          ))}
+        </div>
+      ) : (
+        <div class="text-center py-20 bg-slate-50 rounded-3xl border-2 border-dashed border-slate-200">
+          <p class="text-slate-500">
+            No encontramos propiedades específicas de tipo "{categoria.nombre}"
+            en este momento para {zona.nombre}.
+            <br />
+            <a
+              href={`/zona/${zona.slug}`}
+              class="text-marca-primaria underline"
+            >
+              Ver todas las propiedades en {zona.nombre}
+            </a>
+          </p>
+        </div>
+      )
+    }
+  </section>
+
+  <section class="bg-marca-clara py-16 text-center">
+    <h3 class="text-2xl font-bold text-marca-oscura mb-6">
+      Explora otras colecciones en {zona.nombre}
+    </h3>
+    <div class="flex flex-wrap justify-center gap-4">
+      {
+        ["lujo", "familias", "playa", "golf"].map(
+          (c) =>
+            c !== categoria.slug && (
+              <Boton
+                href={`/zona/${zona.slug}/${c}`}
+                variante="outline"
+                tamano="peque"
+              >
+                {c.charAt(0).toUpperCase() + c.slice(1)}
+              </Boton>
+            ),
+        )
+      }
+    </div>
+  </section>
+</Layout>
