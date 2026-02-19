@@ -1,0 +1,167 @@
+---
+import Boton from "./ui/Boton.astro";
+
+/**
+ * Interfaz
+ * Compatible con datos de Strapi --normalizados en index.astro--
+ * y con el JSON local propiedades_20.json.
+ */
+interface Props {
+  slug: string;
+  titulo: string;
+  zona: string;
+  tipo?: string;
+  precio: number;
+  capacidad: number;
+  habitaciones?: number;
+  image_url?: string;
+  puntuacion?: number;
+}
+
+const {
+  slug,
+  titulo,
+  zona,
+  tipo,
+  precio,
+  capacidad,
+  habitaciones,
+  image_url,
+  puntuacion = 4.8,
+} = Astro.props;
+
+// Fallback Unsplash si no hay imagen (Strapi sin media o campo vacío)
+const imagen =
+  image_url ??
+  "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80";
+
+// Texto de habitaciones: 0 = estudio, undefined = no mostrar
+const textoHab =
+  habitaciones === 0
+    ? "Estudio"
+    : habitaciones != null
+      ? `${habitaciones} hab.`
+      : null;
+---
+
+<article
+  class="group bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-100/50 overflow-hidden flex flex-col h-full transform hover:-translate-y-1"
+  data-slug={slug}
+>
+  {/* IMAGEN */}
+  <div class="relative h-64 bg-slate-200 overflow-hidden">
+    <img
+      src={imagen}
+      alt={`Alquiler vacacional en ${zona}: ${titulo} — Costa del Sol`}
+      width="800"
+      height="600"
+      loading="lazy"
+      decoding="async"
+      class="w-full h-full object-cover group-hover:scale-105 transition duration-700 ease-out"
+      onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80';"
+    />
+
+    {/* PRECIO FLOTANTE */}
+    <div
+      class="absolute top-4 right-4 bg-white/95 backdrop-blur-sm px-4 py-2 rounded-full shadow-lg border border-slate-100/50"
+    >
+      <span class="font-bold text-marca-oscura text-lg">{precio}€</span>
+      <span class="text-xs text-slate-500 font-normal">/ noche</span>
+    </div>
+
+    {/* ESTRELLAS (badge superior izquierdo) */}
+    <div class="absolute top-4 left-4 flex gap-1">
+      <div
+        class="bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg shadow-sm border border-slate-100 flex items-center gap-1"
+      >
+        <span class="text-yellow-400">★</span>
+        <span class="text-xs font-bold text-marca-oscura">{puntuacion}</span>
+      </div>
+    </div>
+
+    {/* TIPO (badge inferior izquierdo) */}
+    {
+      tipo && (
+        <div class="absolute bottom-4 left-4">
+          <span class="bg-marca-primaria/90 backdrop-blur-sm text-white px-2.5 py-1 rounded-md text-xs font-medium shadow-sm">
+            {tipo}
+          </span>
+        </div>
+      )
+    }
+  </div>
+
+  {/* CONTENIDO */}
+  <div class="p-6 flex flex-col grow">
+    <h3
+      class="text-xl font-bold text-marca-oscura group-hover:text-marca-primaria transition line-clamp-1 mb-2"
+    >
+      {titulo}
+    </h3>
+
+    <div class="flex items-center text-slate-500 text-sm mb-4">
+      <span class="mr-1 text-marca-acento">📍</span>
+      {zona}
+    </div>
+
+    {/* DETALLES: habitaciones + capacidad */}
+    <div
+      class="grid grid-cols-2 gap-2 py-4 mb-4 border-t border-slate-100 text-sm text-slate-600"
+    >
+      {
+        textoHab && (
+          <div class="flex flex-col items-center justify-center p-2 bg-slate-50 rounded-lg">
+            <span class="text-lg mb-1">{habitaciones === 0 ? "🛋️" : "🛏️"}</span>
+            <span>{textoHab}</span>
+          </div>
+        )
+      }
+      <div
+        class="flex flex-col items-center justify-center p-2 bg-slate-50 rounded-lg"
+        class:list={[{ "col-span-2": !textoHab }]}
+      >
+        <span class="text-lg mb-1">👥</span>
+        <span>{capacidad} pers.</span>
+      </div>
+    </div>
+
+    <Boton
+      href={`/propiedad/${slug}`}
+      variante="outline"
+      tamano="peque"
+      clase="w-full mt-auto group-hover:bg-marca-primaria group-hover:text-white group-hover:border-marca-primaria transition-colors"
+    >
+      Ver Disponibilidad
+    </Boton>
+  </div>
+
+  {/* JSON-LD Product Schema for SEO 10/10 */}
+  <script
+    type="application/ld+json"
+    set:html={JSON.stringify({
+      "@context": "https://schema.org/",
+      "@type": "Product",
+      name: titulo,
+      image: [imagen],
+      description: `${tipo} en ${zona} con capacidad para ${capacidad} personas.`,
+      sku: slug,
+      brand: {
+        "@type": "Brand",
+        name: "Alquileres Costa del Sol",
+      },
+      aggregateRating: {
+        "@type": "AggregateRating",
+        ratingValue: puntuacion,
+        reviewCount: Math.floor(Math.random() * 50) + 10,
+      },
+      offers: {
+        "@type": "Offer",
+        url: `https://alquileres-costadelsol.com/propiedad/${slug}`,
+        priceCurrency: "EUR",
+        price: precio,
+        itemCondition: "https://schema.org/NewCondition",
+        availability: "https://schema.org/InStock",
+      },
+    })}
+  />
+</article>

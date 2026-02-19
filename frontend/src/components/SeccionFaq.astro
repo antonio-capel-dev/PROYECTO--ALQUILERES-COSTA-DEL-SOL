@@ -1,0 +1,58 @@
+---
+interface Props {
+    preguntas: { pregunta: string; respuesta: string }[];
+}
+
+const { preguntas } = Astro.props;
+---
+
+<section class="py-24 bg-slate-50">
+    <div class="max-w-4xl mx-auto px-6">
+        <div class="text-center mb-16">
+            <h2 class="text-3xl md:text-5xl font-bold text-marca-oscura mb-4">
+                Preguntas Frecuentes
+            </h2>
+            <p class="text-slate-600 text-lg">
+                Todo lo que necesitas saber sobre tu próximo alquiler en la
+                Costa del Sol.
+            </p>
+        </div>
+
+        <div class="space-y-4">
+            {
+                preguntas.map((item, index) => (
+                    <details class="group bg-white rounded-2xl border border-slate-200 p-6 transition-all duration-300 hover:shadow-md open:shadow-lg">
+                        <summary class="flex justify-between items-center cursor-pointer list-none font-bold text-lg text-marca-oscura">
+                            <span>{item.pregunta}</span>
+                            <span class="text-marca-primaria transition-transform duration-300 group-open:rotate-180">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    class="h-6 w-6"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M19 9l-7 7-7-7"
+                                    />
+                                </svg>
+                            </span>
+                        </summary>
+                        <div class="mt-4 text-slate-600 leading-relaxed prose prose-slate max-w-none">
+                            <p>{item.respuesta}</p>
+                        </div>
+                    </details>
+                ))
+            }
+        </div>
+    </div>
+</section>
+
+<style>
+    details summary::-webkit-details-marker {
+        display: none;
+    }
+</style>

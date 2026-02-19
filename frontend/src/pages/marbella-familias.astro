@@ -35,11 +35,15 @@ const properties = [
 ---
 
 <Layout
-  title="Alquiler vacacional en Marbella para familias: vistas al mar y piscina | Reserva"
-  description="Reserva tu alquiler vacacional ideal en Marbella para familias. Apartamentos y villas con vistas al mar, piscina y todo lo necesario para niños. ¡Mejor precio directo!"
+  titulo="Alquiler vacacional en Marbella para familias: vistas al mar y piscina | Reserva"
+  descripcion="Reserva tu alquiler vacacional ideal en Marbella para familias. Apartamentos y villas con vistas al mar, piscina y todo lo necesario para niños. ¡Mejor precio directo!"
+  breadcrumbs={[
+    { nombre: "Alquiler Marbella", url: "/alquiler-marbella" },
+    { nombre: "Familias", url: "/marbella-familias" },
+  ]}
 >
   <!-- Hero Section específico para Long Tail -->
-  <section class="relative bg-blue-900 text-white py-24 text-center px-4">
+  <section class="relative bg-marca-oscura text-white py-24 text-center px-4">
     <div class="absolute inset-0 overflow-hidden opacity-30">
       <!-- Background pattern placeholder -->
       <img
@@ -50,7 +54,7 @@ const properties = [
     </div>
     <div class="relative z-10 max-w-4xl mx-auto">
       <span
-        class="inline-block bg-blue-500/20 backdrop-blur-md px-4 py-2 rounded-full text-blue-100 font-semibold mb-6 border border-blue-400/30"
+        class="inline-block bg-marca-primaria/20 backdrop-blur-md px-4 py-2 rounded-full text-marca-acento font-semibold mb-6 border border-marca-primaria/30"
       >
         ☀️ Especial Familias 2026
       </span>
@@ -58,15 +62,15 @@ const properties = [
         class="text-4xl md:text-6xl font-extrabold tracking-tight mb-6 leading-tight"
       >
         Marbella en Familia: <br />
-        <span class="text-cyan-400">Piscina + Vistas al Mar</span>
+        <span class="text-marca-acento">Piscina + Vistas al Mar</span>
       </h1>
-      <p class="text-lg md:text-xl text-blue-100 max-w-2xl mx-auto mb-10">
+      <p class="text-lg md:text-xl text-slate-300 max-w-2xl mx-auto mb-10">
         Olvídate de hoteles masificados. Descubre villas y apartamentos
         diseñados para que los niños disfruten y los padres descansen.
       </p>
       <a
         href="#booking"
-        class="bg-yellow-500 text-yellow-900 px-8 py-4 rounded-full font-bold hover:bg-yellow-400 transition shadow-xl transform hover:-translate-y-1"
+        class="bg-marca-secundaria text-white px-8 py-4 rounded-full font-bold hover:bg-marca-primaria transition shadow-xl transform hover:-translate-y-1"
       >
         Ver Disponibilidad Familiar
       </a>
@@ -78,27 +82,29 @@ const properties = [
     <div
       class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-center"
     >
-      <div class="p-6 bg-blue-50 rounded-2xl">
+      <div class="p-6 bg-marca-clara rounded-2xl">
         <div class="text-4xl mb-4">🏊‍♂️</div>
-        <h3 class="text-xl font-bold text-slate-900 mb-2">
+        <h3 class="text-xl font-bold text-marca-oscura mb-2">
           Piscina Garantizada
         </h3>
         <p class="text-slate-600">
           Todas nuestras opciones tienen piscina vigilada o privada.
         </p>
       </div>
-      <div class="p-6 bg-blue-50 rounded-2xl">
+      <div class="p-6 bg-marca-clara rounded-2xl">
         <div class="text-4xl mb-4">🌊</div>
-        <h3 class="text-xl font-bold text-slate-900 mb-2">
+        <h3 class="text-xl font-bold text-marca-oscura mb-2">
           Vistas al Mediterráneo
         </h3>
         <p class="text-slate-600">
           Despierta con la brisa del mar. Ubicaciones privilegiadas.
         </p>
       </div>
-      <div class="p-6 bg-blue-50 rounded-2xl">
+      <div class="p-6 bg-marca-clara rounded-2xl">
         <div class="text-4xl mb-4">👶</div>
-        <h3 class="text-xl font-bold text-slate-900 mb-2">Family Friendly</h3>
+        <h3 class="text-xl font-bold text-marca-oscura mb-2">
+          Family Friendly
+        </h3>
         <p class="text-slate-600">
           Cunas, tronas y espacios seguros para los más pequeños.
         </p>
@@ -107,9 +113,9 @@ const properties = [
   </section>
 
   <!-- Listings -->
-  <section id="booking" class="py-20 bg-slate-50 px-4">
+  <section id="booking" class="py-20 bg-marca-clara px-4">
     <div class="max-w-7xl mx-auto">
-      <h2 class="text-3xl font-bold text-slate-900 mb-12 text-center">
+      <h2 class="text-3xl font-bold text-marca-oscura mb-12 text-center">
         Alojamientos Destacados para Tu Familia
       </h2>
 
@@ -123,7 +129,9 @@ const properties = [
               </div>
               <div class="p-6">
                 <div class="flex justify-between items-start mb-4">
-                  <h3 class="text-xl font-bold text-slate-900">{item.title}</h3>
+                  <h3 class="text-xl font-bold text-marca-oscura">
+                    {item.title}
+                  </h3>
                   <span class="bg-green-100 text-green-700 text-xs font-bold px-2 py-1 rounded">
                     {item.price}€ / noche
                   </span>
@@ -137,7 +145,7 @@ const properties = [
                 </ul>
                 <a
                   href="#"
-                  class="block w-full text-center bg-blue-600 text-white py-2 rounded-lg font-semibold hover:bg-blue-700 transition"
+                  class="block w-full text-center bg-marca-primaria text-white py-2 rounded-lg font-semibold hover:bg-marca-secundaria transition"
                 >
                   Reservar Ahora
                 </a>
@@ -152,7 +160,7 @@ const properties = [
   <!-- FAQ / SEO Content -->
   <section class="py-16 bg-white px-4 border-t border-slate-100">
     <div class="max-w-4xl mx-auto prose prose-blue">
-      <h2 class="text-2xl font-bold text-slate-900 mb-6">
+      <h2 class="text-2xl font-bold text-marca-oscura mb-6">
         ¿Por qué elegir Marbella para tus vacaciones familiares?
       </h2>
       <p class="text-slate-600 mb-4">

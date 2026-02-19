@@ -10,26 +10,26 @@
 
 @theme {
   /* 
-    PALETA DE COLORES DE MARCA (Dark Premium)
+    PALETA DE COLORES DE MARCA (Oscura Premium)
     Definimos colores semánticos para uso en toda la aplicación.
   */
-  --color-brand-dark: #0f172a;
-  --color-brand-primary: #2563eb;
-  --color-brand-secondary: #3b82f6;
-  --color-brand-accent: #06b6d4;
+  --color-marca-oscura: #11275a;
+  --color-marca-primaria: #2563eb;
+  --color-marca-secundaria: #3b82f6;
+  --color-marca-acento: #06b6d4;
   /* Cyan para detalles frescos/veraniegos */
-  --color-brand-purple: #9333ea;
+  --color-marca-purpura: #9333ea;
   /* Gradientes */
-  --color-brand-light: #f8fafc;
+  --color-marca-clara: #f8fafc;
   /* Fondos secundarios limpios */
 
   /* Tipografía Base */
   --font-sans: "Inter", system-ui, -apple-system, sans-serif;
 
   /* 
-    Elevación sutil para dar profundidad al diseño "Flat".
+    Elevación sutil para dar profundidad al diseño "Plano".
   */
-  --shadow-brand:
+  --sombra-marca:
     0 10px 15px -3px rgba(37, 99, 235, 0.1),
     0 4px 6px -2px rgba(37, 99, 235, 0.05);
 }
@@ -37,20 +37,16 @@
 /*
   DECISIÓN TÉCNICA — Aliases semánticos en Español
   =================================================
-  Filosofía "Cero Anglicismos": los tokens canónicos usan nomenclatura inglesa
-  por compatibilidad con las clases de utilidad de Tailwind (bg-brand-*, etc.).
-  Se exponen aquí aliases en español para uso directo en CSS personalizado y
-  para mantener coherencia con el principio declarado en la arquitectura.
-  Los tokens de Tailwind NO se tocan para evitar un refactor masivo.
+  Filosofía "Cero Anglicismos": Ahora los tokens canónicos SON en español.
 */
 :root {
-  --color-marca-primario:   var(--color-brand-primary);
-  --color-marca-secundario: var(--color-brand-secondary);
-  --color-marca-acento:     var(--color-brand-accent);
-  --color-marca-oscuro:     var(--color-brand-dark);
-  --color-marca-claro:      var(--color-brand-light);
-  --color-marca-purpura:    var(--color-brand-purple);
-  --sombra-marca:           var(--shadow-brand);
+  --color-marca-primario: var(--color-marca-primaria);
+  --color-marca-secundario: var(--color-marca-secundaria);
+  --color-marca-acento: var(--color-marca-acento);
+  --color-marca-oscuro: var(--color-marca-oscura);
+  --color-marca-claro: var(--color-marca-clara);
+  --color-marca-purpura: var(--color-marca-purpura);
+  --sombra-marca: var(--sombra-marca);
 }
 
 /*
@@ -106,17 +102,17 @@
 */
 @layer components {
 
-  /* BOTONES (Interactive Elements) */
+  /* BOTONES (Elementos Interactivos) */
   .boton {
     @apply inline-flex items-center justify-center px-6 py-3 border text-base font-medium rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer;
   }
 
   .boton-primario {
-    @apply border-transparent text-white bg-brand-primary hover:bg-brand-secondary focus:ring-brand-primary shadow-lg shadow-brand-primary/30 hover:shadow-brand-primary/50;
+    @apply border-transparent text-white bg-marca-primaria hover:bg-marca-secundaria focus:ring-marca-primaria shadow-lg shadow-marca-primaria/30 hover:shadow-marca-primaria/50;
   }
 
   .boton-secundario {
-    @apply border-transparent text-brand-primary bg-brand-primary/10 hover:bg-brand-primary/20 focus:ring-brand-primary;
+    @apply border-transparent text-marca-primaria bg-marca-primaria/10 hover:bg-marca-primaria/20 focus:ring-marca-primaria;
   }
 
   .boton-outline {
@@ -128,33 +124,33 @@
   }
 
   /* Variantes de Tamaño */
-  .boton-sm {
+  .boton-Peque {
     @apply px-4 py-2 text-sm;
   }
 
-  .boton-lg {
+  .boton-Grande {
     @apply px-8 py-4 text-lg;
   }
 
-  /* TARJETAS (Card Component) */
+  /* TARJETAS (Componente Ficha) */
   .tarjeta {
     @apply bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden transition-all duration-300;
   }
 
   .tarjeta-hover {
-    @apply hover:shadow-xl hover:-translate-y-1 hover:border-brand-primary/20;
+    @apply hover:shadow-xl hover:-translate-y-1 hover:border-marca-primaria/20;
   }
 
-  /* FORMULARIOS (Inputs & Selects) */
+  /* FORMULARIOS (Entradas & Selectores) */
   .campo-entrada {
-    @apply w-full bg-white/5 border border-white/10 rounded-lg py-3 px-4 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-primary transition-all;
+    @apply w-full bg-white/5 border border-white/10 rounded-lg py-3 px-4 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-marca-primaria transition-all;
   }
 
   .etiqueta-campo {
     @apply block text-xs uppercase tracking-wider text-slate-400 font-semibold mb-1 ml-1;
   }
 
-  /* ELEMENTOSpequeños (Badges/Etiquetas) */
+  /* ELEMENTOS pequeños (Etiquetas) */
   .etiqueta {
     @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
   }

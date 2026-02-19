@@ -1,24 +1,32 @@
 ---
 export interface Props {
-  title?: string;
-  description?: string;
-  image?: string;
-  canonicalURL?: string | URL;
+  titulo?: string;
+  descripcion?: string;
+  imagen?: string;
+  urlCanonica?: string | URL;
   robots?: string;
-  type?: "website" | "article";
+  tipo?: "website" | "article";
+  urlPrevia?: string | URL;
+  urlSiguiente?: string | URL;
+  faq?: { pregunta: string; respuesta: string }[];
+  breadcrumbs?: { nombre: string; url: string }[];
 }
 
 const {
-  title = "Alquileres Costa del Sol | Apartamentos y Pisos Vacacionales",
-  description = "Encuentra tu alquiler ideal en la Costa del Sol. Apartamentos en Marbella, pisos en Málaga, y casas vacacionales al mejor precio.",
-  image = "/images/og-default.jpg",
-  canonicalURL = new URL(Astro.url.pathname, Astro.site),
+  titulo = "Alquileres Costa del Sol | Apartamentos y Pisos Vacacionales",
+  descripcion = "Encuentra tu alquiler ideal en la Costa del Sol. Apartamentos en Marbella, pisos en Málaga, y casas vacacionales al mejor precio.",
+  imagen = "/images/og-default.jpg",
+  urlCanonica = new URL(Astro.url.pathname, Astro.site),
   robots = "index, follow",
-  type = "website",
+  tipo = "website",
+  urlPrevia,
+  urlSiguiente,
+  faq = [],
+  breadcrumbs = [],
 } = Astro.props;
 
 const siteName = "Alquileres Costa del Sol";
-const twitterHandle = "@alquileres_costasol"; 
+const twitterHandle = "@alquileres_costasol";
 ---
 
 <!-- Metadatos globales -->
@@ -28,28 +36,30 @@ const twitterHandle = "@alquileres_costasol";
 <meta name="generator" content={Astro.generator} />
 
 <!--url canonical  -->
-<link rel="canonical" href={canonicalURL} />
+<link rel="canonical" href={urlCanonica} />
+{urlPrevia && <link rel="prev" href={urlPrevia} />}
+{urlSiguiente && <link rel="next" href={urlSiguiente} />}
 
-
-<title>{title}</title>
-<meta name="title" content={title} />
-<meta name="description" content={description} />
+<title>{titulo}</title>
+<meta name="title" content={titulo} />
+<meta name="description" content={descripcion} />
+<meta name="author" content="Antonio Capel" />
 <meta name="robots" content={robots} />
 
-<meta property="og:type" content={type} />
+<meta property="og:type" content={tipo} />
 <meta property="og:url" content={Astro.url} />
-<meta property="og:title" content={title} />
-<meta property="og:description" content={description} />
-<meta property="og:image" content={new URL(image, Astro.url)} />
+<meta property="og:title" content={titulo} />
+<meta property="og:description" content={descripcion} />
+<meta property="og:image" content={new URL(imagen, Astro.url)} />
 <meta property="og:site_name" content={siteName} />
 <meta property="og:locale" content="es_ES" />
 
 <!-- Twitter -->
 <meta property="twitter:card" content="summary_large_image" />
 <meta property="twitter:url" content={Astro.url} />
-<meta property="twitter:title" content={title} />
-<meta property="twitter:description" content={description} />
-<meta property="twitter:image" content={new URL(image, Astro.url)} />
+<meta property="twitter:title" content={titulo} />
+<meta property="twitter:description" content={descripcion} />
+<meta property="twitter:image" content={new URL(imagen, Astro.url)} />
 <meta property="twitter:creator" content={twitterHandle} />
 
 <link rel="sitemap" href="/sitemap-index.xml" />
@@ -84,6 +94,33 @@ const twitterHandle = "@alquileres_costasol";
         ],
       },
       {
+        "@type": "LocalBusiness",
+        "@id": "https://alquileres-costadelsol.com/#localbusiness",
+        name: "Alquileres Costa del Sol",
+        image: "https://alquileres-costadelsol.com/favicon.svg",
+        url: "https://alquileres-costadelsol.com",
+        telephone: "+34612345678",
+        priceRange: "$$",
+        address: {
+          "@type": "PostalAddress",
+          streetAddress: "Calle Larios 1",
+          addressLocality: "Málaga",
+          postalCode: "29005",
+          addressCountry: "ES",
+        },
+        geo: {
+          "@type": "GeoCoordinates",
+          latitude: 36.7212,
+          longitude: -4.4217,
+        },
+        openingHoursSpecification: {
+          "@type": "OpeningHoursSpecification",
+          dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+          opens: "09:00",
+          closes: "18:00",
+        },
+      },
+      {
         "@type": "BreadcrumbList",
         itemListElement: [
           {
@@ -92,8 +129,27 @@ const twitterHandle = "@alquileres_costasol";
             name: "Inicio",
             item: "https://alquileres-costadelsol.com",
           },
+          ...breadcrumbs.map((b, i) => ({
+            "@type": "ListItem",
+            position: i + 2,
+            name: b.nombre,
+            item: b.url.startsWith("http")
+              ? b.url
+              : `https://alquileres-costadelsol.com${b.url}`,
+          })),
         ],
       },
-    ],
+      faq.length > 0 && {
+        "@type": "FAQPage",
+        mainEntity: faq.map((f) => ({
+          "@type": "Question",
+          name: f.pregunta,
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: f.respuesta,
+          },
+        })),
+      },
+    ].filter(Boolean),
   })}
 />

@@ -1,102 +1,231 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import Button from "../components/ui/Button.astro";
-import Badge from "../components/ui/Badge.astro";
+import SeccionInfo from "../components/SeccionInfo.astro";
+
+const title = "Sobre Nosotros | Alquileres Costa del Sol";
+const description =
+  "Conoce nuestra historia. Desde 2010 conectando a viajeros con los mejores alquileres vacacionales en Málaga, Marbella y la Costa del Sol. Confianza y trato local.";
 ---
 
 <Layout
-  title="Sobre Nosotros | Expertos en Alquileres Costa del Sol"
-  description="Conoce al equipo detrás de Alquileres Costa del Sol. Más de 10 años gestionando las mejores propiedades con confianza y transparencia."
+  titulo={title}
+  descripcion={description}
+  breadcrumbs={[{ nombre: "Sobre Nosotros", url: "/nosotros" }]}
 >
-  <!-- Hero de Página -->
-  <section
-    class="bg-brand-dark py-32 text-center px-4 relative overflow-hidden"
-  >
-    <div class="absolute inset-0 opacity-10">
-      <div
-        class="absolute top-0 right-0 w-64 h-64 bg-brand-accent rounded-full -mr-32 -mt-32 blur-3xl text-brand-accent"
-      >
-      </div>
-      <div
-        class="absolute bottom-0 left-0 w-64 h-64 bg-brand-primary rounded-full -ml-32 -mb-32 blur-3xl text-brand-primary"
-      >
-      </div>
-    </div>
-    <div class="max-w-3xl mx-auto relative z-10">
-      <Badge variant="accent" class="mb-6">Nuestra Esencia</Badge>
-      <h1
-        class="text-5xl md:text-6xl font-extrabold text-white mb-8 tracking-tight"
-      >
-        Expertos en hacerte <span class="text-brand-accent italic"
-          >sentir en casa</span
+  <!-- Hero Section -->
+  <section class="relative bg-marca-oscura py-20 px-6">
+    <div class="max-w-4xl mx-auto text-center relative z-10">
+      <h1 class="text-4xl md:text-5xl font-bold text-white mb-6">
+        Más que alquileres, creamos <span
+          class="bg-linear-to-r from-marca-primaria to-marca-acento bg-clip-text text-transparent"
+          >experiencias inolvidables</span
         >
       </h1>
-      <p class="text-slate-300 text-xl font-light leading-relaxed">
-        Desde 2010, no solo alquilamos propiedades; creamos el escenario para
-        tus mejores recuerdos en la Costa del Sol.
+      <p class="text-xl text-slate-300 max-w-2xl mx-auto leading-relaxed">
+        Somos tu anfitrión local en la Costa del Sol. Expertos en conectar a
+        propietarios con viajeros exigentes desde hace más de una década.
       </p>
+    </div>
+    <!-- Decorative background pattern -->
+    <div
+      class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"
+    >
     </div>
   </section>
 
-  <!-- Sección Nuestra Misión -->
-  <section class="py-24 bg-white px-4 border-b border-slate-100">
+  <!-- Nuestra Historia & Misión (Experience & Expertise) -->
+  <section class="py-16 md:py-24 px-6 bg-white">
     <div
-      class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20 items-center"
+      class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center"
     >
-      <div class="relative">
+      <div class="order-2 md:order-1 relative group">
         <div
-          class="absolute -top-10 -left-10 w-32 h-32 bg-brand-primary/5 rounded-full blur-2xl"
+          class="absolute -inset-2 bg-linear-to-r from-marca-primaria to-marca-acento rounded-2xl opacity-20 group-hover:opacity-40 transition duration-500 blur-lg"
         >
         </div>
-        <h2 class="text-4xl font-bold text-brand-dark mb-8 leading-tight">
-          Más que una inmobiliaria, <br /><span class="text-brand-primary"
-            >tu equipo local.</span
-          >
-        </h2>
-        <div class="space-y-6 text-slate-600">
-          <p>
-            En el sector inmobiliario de la Costa del Sol, la **transparencia**
-            es nuestro pilar fundamental. No solo gestionamos llaves,
-            gestionamos tus vacaciones.
+        <img
+          src="https://images.unsplash.com/photo-1560518883-ce5a7824c6c9?auto=format&fit=crop&w=800&q=80"
+          alt="Oficina central en Málaga con equipo trabajando"
+          class="relative rounded-2xl shadow-xl w-full h-[500px] object-cover"
+        />
+        <div
+          class="absolute bottom-6 left-6 bg-white/95 backdrop-blur px-6 py-4 rounded-lg shadow-lg max-w-xs"
+        >
+          <p class="text-marca-oscura font-bold text-lg">Fundada en 2010</p>
+          <p class="text-slate-600 text-sm">
+            Más de 15 años de trayectoria en el sector.
           </p>
-          <ul class="space-y-4">
+        </div>
+      </div>
+
+      <div class="order-1 md:order-2">
+        <span
+          class="text-marca-primaria font-bold tracking-wider uppercase text-sm mb-2 block"
+          >Nuestra Historia</span
+        >
+        <h2 class="text-3xl md:text-4xl font-bold text-marca-oscura mb-6">
+          De una pequeña oficina en el Soho a líderes locales
+        </h2>
+        <div class="prose prose-lg text-slate-600 space-y-4">
+          <p>
+            Alquileres Costa del Sol nació en 2010 con una misión simple: <strong
+              >humanizar el alquiler vacacional</strong
+            >. Cansados de las plataformas impersonales, decidimos crear un
+            servicio donde cada propiedad es visitada personalmente y cada
+            huésped es recibido con calidez.
+          </p>
+          <p>
+            Conocemos cada rincón de Málaga, desde las calles vibrantes del
+            centro hasta las calas escondidas de Nerja. No somos un algoritmo;
+            somos un equipo de expertos locales apasionados por nuestra tierra.
+          </p>
+          <ul class="space-y-3 mt-6">
             <li class="flex items-start gap-3">
-              <span class="text-brand-accent font-bold">✓</span>
+              <span class="text-green-500 mt-1">✓</span>
               <span
-                ><strong>Experiencia Real:</strong> Más de 500 familias satisfechas
-                el último año.</span
+                ><strong>Verificación presencial:</strong> Inspeccionamos cada propiedad
+                para garantizar que cumple nuestros estándares de calidad y confort.</span
               >
             </li>
             <li class="flex items-start gap-3">
-              <span class="text-brand-accent font-bold">✓</span>
+              <span class="text-green-500 mt-1">✓</span>
               <span
-                ><strong>Verificación Total:</strong> Todas nuestras propiedades son
-                inspeccionadas físicamente por nuestro equipo.</span
+                ><strong>Soporte 24/7:</strong> Estamos aquí para ti, antes, durante
+                y después de tu estancia.</span
               >
             </li>
             <li class="flex items-start gap-3">
-              <span class="text-brand-accent font-bold">✓</span>
+              <span class="text-green-500 mt-1">✓</span>
               <span
-                ><strong>Soporte Local:</strong> Estamos en Málaga. Si nos necesitas,
-                llegamos en 30 minutos.</span
+                ><strong>Trato directo:</strong> Sin intermediarios innecesarios,
+                conectamos directamente con la mejor oferta local.</span
               >
             </li>
           </ul>
         </div>
-        <div class="mt-10">
-          <Button href="/contacto">Habla con nosotros</Button>
-        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Por qué confiar en nosotros (Trustworthiness) -->
+  <section class="py-16 md:py-24 bg-slate-50 border-t border-slate-200">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <h2 class="text-3xl font-bold text-marca-oscura mb-4">
+          Tu tranquilidad es nuestra prioridad
+        </h2>
+        <p class="text-slate-600 text-lg">
+          La confianza se gana con hechos. Así garantizamos una experiencia
+          segura y satisfactoria para propietarios e inquilinos.
+        </p>
       </div>
 
-      <div
-        class="bg-slate-100 rounded-3xl aspect-square flex items-center justify-center text-slate-400 group overflow-hidden"
-      >
-        {/* Placeholder de imagen de equipo */}
-        <div class="text-center group-hover:scale-110 transition duration-500">
-          <span class="text-8xl">👥</span>
-          <p class="mt-4 font-semibold">Nuestro Equipo en Marbella</p>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Card 1 -->
+        <div
+          class="bg-white p-8 rounded-2xl shadow-sm hover:shadow-md transition border border-slate-100"
+        >
+          <div
+            class="bg-blue-50 w-14 h-14 rounded-full flex items-center justify-center mb-6 text-2xl"
+          >
+            🛡️
+          </div>
+          <h3 class="text-xl font-bold text-marca-oscura mb-3">
+            Garantía de Alquiler Seguro
+          </h3>
+          <p class="text-slate-600 leading-relaxed">
+            Todos nuestros pagos están protegidos. Retenemos el pago al
+            propietario hasta 24 horas después de tu check-in exitoso para
+            garantizar que todo esté correcto.
+          </p>
+        </div>
+
+        <!-- Card 2 -->
+        <div
+          class="bg-white p-8 rounded-2xl shadow-sm hover:shadow-md transition border border-slate-100"
+        >
+          <div
+            class="bg-green-50 w-14 h-14 rounded-full flex items-center justify-center mb-6 text-2xl"
+          >
+            🤝
+          </div>
+          <h3 class="text-xl font-bold text-marca-oscura mb-3">
+            Equipo Local Real
+          </h3>
+          <p class="text-slate-600 leading-relaxed">
+            Nada de centralitas en el extranjero. Nuestras oficinas están en
+            Málaga capital y Marbella. Si nos necesitas, estamos a un paso.
+          </p>
+        </div>
+
+        <!-- Card 3 -->
+        <div
+          class="bg-white p-8 rounded-2xl shadow-sm hover:shadow-md transition border border-slate-100"
+        >
+          <div
+            class="bg-purple-50 w-14 h-14 rounded-full flex items-center justify-center mb-6 text-2xl"
+          >
+            ⭐
+          </div>
+          <h3 class="text-xl font-bold text-marca-oscura mb-3">
+            Calidad Certificada
+          </h3>
+          <p class="text-slate-600 leading-relaxed">
+            Solo publicamos el <strong>top 20%</strong> de las propiedades que evaluamos.
+            Si no nos alojaríamos nosotros, no te lo ofrecemos a ti.
+          </p>
         </div>
       </div>
     </div>
   </section>
+
+  <!-- Nuestro Fundador (Expertise & Authoritativeness) -->
+  <section class="py-16 md:py-24 bg-white">
+    <div class="max-w-7xl mx-auto px-6">
+      <div
+        class="flex flex-col md:flex-row gap-12 items-center bg-slate-50 p-8 md:p-12 rounded-3xl border border-slate-100"
+      >
+        <div
+          class="w-48 h-48 md:w-64 md:h-64 flex-shrink-0 rounded-2xl overflow-hidden shadow-lg transform -rotate-2"
+        >
+          <img
+            src="https://images.unsplash.com/photo-1556157382-97eda2d62296?auto=format&fit=crop&w=800&q=80"
+            alt="Antonio Capel - Fundador de Alquileres Costa del Sol"
+            class="w-full h-full object-cover"
+          />
+        </div>
+        <div>
+          <span
+            class="text-marca-primaria font-bold tracking-wider uppercase text-sm mb-2 block"
+            >Fundador & CEO</span
+          >
+          <h2 class="text-3xl font-bold text-marca-oscura mb-4">
+            Antonio Capel
+          </h2>
+          <p class="text-slate-600 text-lg leading-relaxed mb-6">
+            "Nací y crecí en la Costa del Sol. Después de años trabajando en el
+            sector inmobiliario tradicional, entendí que el futuro del alquiler
+            estaba en la <strong
+              >especialización técnica y el trato humano</strong
+            >. Mi objetivo es que cada persona que use nuestra plataforma sienta
+            la seguridad de que hay un experto local cuidando cada detalle."
+          </p>
+          <div class="flex flex-wrap gap-4">
+            <div
+              class="flex items-center gap-2 text-sm text-slate-500 bg-white px-4 py-2 rounded-full border border-slate-200"
+            >
+              🎓 Especialista en Propiedad Inmobiliaria
+            </div>
+            <div
+              class="flex items-center gap-2 text-sm text-slate-500 bg-white px-4 py-2 rounded-full border border-slate-200"
+            >
+              📍 15+ años en el mercado de Málaga
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <SeccionInfo />
 </Layout>

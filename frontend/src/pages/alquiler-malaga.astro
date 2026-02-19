@@ -7,23 +7,27 @@ const description =
   "Alquila tu piso en Málaga Capital. Zonas universitarias (Teatinos), Centro Histórico y primera línea de playa en La Malagueta.";
 ---
 
-<Layout title={title} description={description} image="/images/malaga-seo.jpg">
-  
-  <section class="relative bg-brand-dark
+<Layout
+  titulo={title}
+  descripcion={description}
+  imagen="/images/malaga-seo.jpg"
+  breadcrumbs={[{ nombre: "Alquiler Málaga", url: "/alquiler-malaga" }]}
+>
+  <section class="relative bg-marca-oscura py-32 px-6 overflow-hidden">
     <div class="absolute inset-0 z-0 opacity-40">
       <div
-        class="absolute inset-0 bg-gradient-to-r from-brand-primary to-brand-purple mix-blend-multiply filter blur-3xl opacity-50 animate-pulse"
+        class="absolute inset-0 bg-linear-to-r from-marca-primaria to-marca-purpura mix-blend-multiply filter blur-3xl opacity-50 animate-pulse"
       >
       </div>
       <div
-        class="absolute -top-24 -left-24 w-96 h-96 bg-brand-accent rounded-full mix-blend-multiply filter blur-3xl opacity-30"
+        class="absolute -top-24 -left-24 w-96 h-96 bg-marca-acento rounded-full mix-blend-multiply filter blur-3xl opacity-30"
       >
       </div>
     </div>
 
     <div class="relative z-10 max-w-5xl mx-auto text-center">
       <div
-        class="inline-block mb-4 px-4 py-1.5 rounded-full bg-brand-primary/10 border border-brand-primary/20 text-brand-accent text-sm font-semibold tracking-wide uppercase backdrop-blur-sm"
+        class="inline-block mb-4 px-4 py-1.5 rounded-full bg-marca-primaria/10 border border-marca-primaria/20 text-marca-acento text-sm font-semibold tracking-wide uppercase backdrop-blur-sm"
       >
         🌆 Cultura y Vida
       </div>
@@ -32,7 +36,7 @@ const description =
       >
         Alquileres en <br />
         <span
-          class="text-transparent bg-clip-text bg-gradient-to-r from-brand-accent to-brand-secondary"
+          class="text-transparent bg-clip-text bg-linear-to-r from-marca-acento to-marca-secundaria"
           >Málaga Capital</span
         >
       </h1>
@@ -47,7 +51,7 @@ const description =
 
   <section class="max-w-7xl mx-auto px-4 py-16">
     <div class="prose lg:prose-xl mx-auto text-slate-600">
-      <h2 class="text-3xl font-bold text-brand-dark mb-6">
+      <h2 class="text-3xl font-bold text-marca-oscura mb-6">
         Málaga: La ciudad de moda en Europa
       </h2>
       <p class="mb-4">
@@ -58,12 +62,11 @@ const description =
       </p>
     </div>
 
-  
     <div
-      class="mt-16 text-center bg-brand-light p-12 rounded-3xl border-2 border-dashed border-brand-primary/20"
+      class="mt-16 text-center bg-marca-clara p-12 rounded-3xl border-2 border-dashed border-marca-primaria/20"
     >
       <div class="text-4xl mb-4">🚀</div>
-      <p class="text-xl text-brand-dark font-bold">
+      <p class="text-xl text-marca-oscura font-bold">
         Cargando propiedades en Málaga...
       </p>
       <p class="text-sm text-slate-400 mt-2">

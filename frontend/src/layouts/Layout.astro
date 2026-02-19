@@ -1,18 +1,41 @@
 ---
 import SeoHead from "../components/SeoHead.astro";
-import Button from "../components/ui/Button.astro";
+import Boton from "../components/ui/Boton.astro";
 import "../styles/global.css";
 
-const { title, description, image } = Astro.props;
+const {
+  titulo,
+  descripcion,
+  imagen,
+  urlPrevia,
+  urlSiguiente,
+  faq,
+  breadcrumbs,
+} = Astro.props;
 ---
 
 <!doctype html>
 <html lang="es">
   <head>
-    <SeoHead title={title} description={description} image={image} />
+    <SeoHead
+      titulo={titulo}
+      descripcion={descripcion}
+      imagen={imagen}
+      urlPrevia={urlPrevia}
+      urlSiguiente={urlSiguiente}
+      faq={faq}
+      breadcrumbs={breadcrumbs}
+    />
+    <!-- Preload critical fonts for LCP -->
+    <link
+      rel="preload"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap"
+      as="style"
+    />
+    <slot name="preload" />
   </head>
   <body
-    class="bg-brand-light flex flex-col min-h-screen font-sans selection:bg-brand-primary/10 selection:text-brand-primary"
+    class="bg-marca-clara flex flex-col min-h-screen font-sans selection:bg-marca-primaria/10 selection:text-marca-primaria"
   >
     <nav
       class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-100"
@@ -24,7 +47,7 @@ const { title, description, image } = Astro.props;
             <span class="text-3xl">☀️</span>
             <a
               href="/"
-              class="text-2xl font-bold bg-gradient-to-r from-brand-primary to-brand-accent bg-clip-text text-transparent hover:opacity-80 transition"
+              class="text-2xl font-bold bg-linear-to-r from-marca-primaria to-marca-acento bg-clip-text text-transparent hover:opacity-80 transition"
             >
               Costa del Sol
             </a>
@@ -33,22 +56,22 @@ const { title, description, image } = Astro.props;
           <div class="hidden md:flex items-center space-x-8">
             <a
               href="/"
-              class="text-slate-600 hover:text-brand-primary font-medium transition duration-150"
+              class="text-slate-600 hover:text-marca-primaria font-medium transition duration-150"
               >Inicio</a
             >
             <a
               href="/nosotros"
-              class="text-slate-600 hover:text-brand-primary font-medium transition duration-150"
+              class="text-slate-600 hover:text-marca-primaria font-medium transition duration-150"
               >Sobre Nosotros</a
             >
             <a
               href="/#rentals"
-              class="text-slate-600 hover:text-brand-primary font-medium transition duration-150"
+              class="text-slate-600 hover:text-marca-primaria font-medium transition duration-150"
               >Alquileres</a
             >
-            <Button href="/contacto" variant="secondary" size="sm">
+            <Boton href="/contacto" variante="secundario" tamano="peque">
               Reservar Ahora
-            </Button>
+            </Boton>
           </div>
         </div>
       </div>
@@ -60,7 +83,7 @@ const { title, description, image } = Astro.props;
     </main>
 
     <!-- Footer -->
-    <footer class="bg-brand-dark text-slate-300 border-t border-slate-800">
+    <footer class="bg-marca-oscura text-slate-300 border-t border-slate-800">
       <div class="max-w-7xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
         <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div class="col-span-1">
@@ -75,17 +98,17 @@ const { title, description, image } = Astro.props;
             <h3 class="text-xl font-bold text-white mb-4">Empresa</h3>
             <ul class="space-y-2 text-slate-300">
               <li>
-                <a href="/nosotros" class="hover:text-brand-accent transition"
+                <a href="/nosotros" class="hover:text-marca-acento transition"
                   >Sobre Nosotros</a
                 >
               </li>
               <li>
-                <a href="/contacto" class="hover:text-brand-accent transition"
+                <a href="/contacto" class="hover:text-marca-acento transition"
                   >Contacto</a
                 >
               </li>
               <li>
-                <a href="#" class="hover:text-brand-accent transition"
+                <a href="#" class="hover:text-marca-acento transition"
                   >Privacidad</a
                 >
               </li>
@@ -98,24 +121,42 @@ const { title, description, image } = Astro.props;
               <li>
                 <a
                   href="/alquiler-marbella"
-                  class="hover:text-brand-accent decoration-brand-accent underline-offset-4 hover:underline transition"
-                  >Alquiler Marbella</a
+                  class="hover:text-marca-acento decoration-marca-acento underline-offset-4 hover:underline transition"
+                  >Alquiler Vacacional Marbella</a
                 >
               </li>
               <li>
                 <a
                   href="/alquiler-malaga"
-                  class="hover:text-brand-accent decoration-brand-accent underline-offset-4 hover:underline transition"
-                  >Alquiler Málaga</a
+                  class="hover:text-marca-acento decoration-marca-acento underline-offset-4 hover:underline transition"
+                  >Alquiler Vacacional Málaga</a
+                >
+              </li>
+              <li>
+                <a
+                  href="/marbella-familias"
+                  class="hover:text-marca-acento decoration-marca-acento underline-offset-4 hover:underline transition"
+                  >Marbella para Familias</a
+                >
+              </li>
+              <li>
+                <a
+                  href="/zona/torreDelMar"
+                  class="hover:text-marca-acento decoration-marca-acento underline-offset-4 hover:underline transition"
+                  >Torre del Mar</a
                 >
               </li>
             </ul>
           </div>
 
           <div>
-            <h3 class="text-xl font-bold text-white mb-4">Contacto</h3>
-            <p class="text-slate-300">info@costadelsol.com</p>
-            <p class="text-slate-300">+34 612 345 678</p>
+            <h3 class="text-xl font-bold text-white mb-4">Contacto Directo</h3>
+            <p class="text-slate-300">📧 info@costadelsol.com</p>
+            <p class="text-slate-300">📞 +34 612 345 678</p>
+            <p class="text-sm text-slate-400 mt-4 italic">
+              📍 Calle Larios 1, 29005 Málaga, España.<br />
+              Oficina registrada: B-12345678
+            </p>
           </div>
         </div>
       </div>

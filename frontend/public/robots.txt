@@ -1,9 +1,4 @@
 User-agent: *
 Allow: /
 
-# Sitemap
 Sitemap: https://alquileres-costadelsol.com/sitemap-index.xml
-
-# Bloquear archivos de sistema o privados si los hubiera en el futuro
-Disallow: /admin
-Disallow: /private

@@ -1,21 +1,22 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import Button from "../components/ui/Button.astro";
+import Boton from "../components/ui/Boton.astro";
 import Badge from "../components/ui/Badge.astro";
 ---
 
 <Layout
-  title="Contacto | Alquileres Costa del Sol"
-  description="¿Tienes alguna duda? Contacta con nuestro equipo para reservar tu estancia o gestionar tu propiedad en Málaga y Marbella."
+  titulo="Contacto | Alquileres Costa del Sol"
+  descripcion="¿Tienes alguna duda? Contacta con nuestro equipo para reservar tu estancia o gestionar tu propiedad en Málaga y Marbella."
+  breadcrumbs={[{ nombre: "Contacto", url: "/contacto" }]}
 >
-  <section class="bg-brand-light py-24 px-4 relative overflow-hidden">
+  <section class="bg-marca-clara py-24 px-4 relative overflow-hidden">
     <!-- fondo -->
     <div
-      class="absolute top-0 right-0 w-96 h-96 bg-brand-primary/5 rounded-full -mr-48 -mt-48 blur-3xl"
+      class="absolute top-0 right-0 w-96 h-96 bg-marca-primaria/5 rounded-full -mr-48 -mt-48 blur-3xl"
     >
     </div>
     <div
-      class="absolute bottom-0 left-0 w-96 h-96 bg-brand-accent/5 rounded-full -ml-48 -mb-48 blur-3xl"
+      class="absolute bottom-0 left-0 w-96 h-96 bg-marca-acento/5 rounded-full -ml-48 -mb-48 blur-3xl"
     >
     </div>
 
@@ -25,9 +26,9 @@ import Badge from "../components/ui/Badge.astro";
         <div>
           <Badge variant="accent" class="mb-6">Estamos aquí para ti</Badge>
           <h1
-            class="text-5xl font-extrabold text-brand-dark mb-8 tracking-tight"
+            class="text-5xl font-extrabold text-marca-oscura mb-8 tracking-tight"
           >
-            ¿Hablamos? Estamos <br /><span class="text-brand-primary"
+            ¿Hablamos? Estamos <br /><span class="text-marca-primaria"
               >a un solo clic</span
             >
           </h1>
@@ -42,14 +43,14 @@ import Badge from "../components/ui/Badge.astro";
               class="flex items-start gap-4 p-6 bg-white rounded-2xl shadow-sm border border-slate-100"
             >
               <div
-                class="w-12 h-12 bg-brand-primary/10 rounded-xl flex items-center justify-center text-brand-primary text-xl"
+                class="w-12 h-12 bg-marca-primaria/10 rounded-xl flex items-center justify-center text-marca-primaria text-xl"
               >
                 📍
               </div>
               <div>
-                <h3 class="font-bold text-brand-dark">Visítanos</h3>
+                <h3 class="font-bold text-marca-oscura">Visítanos</h3>
                 <p class="text-slate-500 text-sm leading-relaxed">
-                  Av. Ricardo Soriano, 42<br />Marbella, 29601
+                  Avenida Andalucía número 42 <br />Málaga, 29002
                 </p>
               </div>
             </div>
@@ -57,14 +58,14 @@ import Badge from "../components/ui/Badge.astro";
               class="flex items-start gap-4 p-6 bg-white rounded-2xl shadow-sm border border-slate-100"
             >
               <div
-                class="w-12 h-12 bg-brand-primary/10 rounded-xl flex items-center justify-center text-brand-primary text-xl"
+                class="w-12 h-12 bg-marca-primaria/10 rounded-xl flex items-center justify-center text-marca-primaria text-xl"
               >
                 📧
               </div>
               <div>
-                <h3 class="font-bold text-brand-dark">Escríbenos</h3>
+                <h3 class="font-bold text-marca-oscura">Escríbenos</h3>
                 <p class="text-slate-500 text-sm leading-relaxed">
-                  hola@costadelsol.com<br />soporte@costadelsol.com
+                  alquilercostadelsol2026@gmail.com
                 </p>
               </div>
             </div>
@@ -74,53 +75,56 @@ import Badge from "../components/ui/Badge.astro";
         <!-- Formulario -->
         <div class="relative">
           <div
-            class="absolute inset-0 bg-brand-primary/5 rounded-[2rem] blur-2xl -rotate-2"
+            class="absolute inset-0 bg-marca-primaria/5 rounded-[2rem] blur-2xl -rotate-2"
           >
           </div>
           <div
             class="relative bg-white p-8 md:p-12 rounded-[2rem] shadow-2xl border border-slate-100"
           >
-            <h2 class="text-2xl font-bold text-brand-dark mb-8">
+            <h2 class="text-2xl font-bold text-marca-oscura mb-8">
               Envíanos un mensaje
             </h2>
-            <form class="space-y-6">
+            <form id="form-contacto" class="space-y-6">
               <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label class="block text-sm font-bold text-brand-dark mb-2"
+                  <label class="block text-sm font-bold text-marca-oscura mb-2"
                     >Nombre Completo</label
                   >
                   <input
                     type="text"
+                    name="nombre"
                     required
-                    class="w-full bg-slate-50 border-transparent focus:border-brand-primary focus:bg-white rounded-xl px-5 py-4 focus:outline-none focus:ring-4 focus:ring-brand-primary/5 transition-all duration-300"
+                    class="w-full bg-slate-50 border-transparent focus:border-marca-primaria focus:bg-white rounded-xl px-5 py-4 focus:outline-none focus:ring-4 focus:ring-marca-primaria/5 transition-all duration-300"
                     placeholder="Ej. Ana García"
                   />
                 </div>
                 <div>
-                  <label class="block text-sm font-bold text-brand-dark mb-2"
+                  <label class="block text-sm font-bold text-marca-oscura mb-2"
                     >Correo Electrónico</label
                   >
                   <input
                     type="email"
+                    name="email"
                     required
-                    class="w-full bg-slate-50 border-transparent focus:border-brand-primary focus:bg-white rounded-xl px-5 py-4 focus:outline-none focus:ring-4 focus:ring-brand-primary/5 transition-all duration-300"
+                    class="w-full bg-slate-50 border-transparent focus:border-marca-primaria focus:bg-white rounded-xl px-5 py-4 focus:outline-none focus:ring-4 focus:ring-marca-primaria/5 transition-all duration-300"
                     placeholder="ana@email.com"
                   />
                 </div>
               </div>
               <div>
-                <label class="block text-sm font-bold text-brand-dark mb-2"
+                <label class="block text-sm font-bold text-marca-oscura mb-2"
                   >¿En qué podemos ayudarte?</label
                 >
                 <textarea
+                  name="mensaje"
                   rows="4"
                   required
-                  class="w-full bg-slate-50 border-transparent focus:border-brand-primary focus:bg-white rounded-xl px-5 py-4 focus:outline-none focus:ring-4 focus:ring-brand-primary/5 transition-all duration-300"
+                  class="w-full bg-slate-50 border-transparent focus:border-marca-primaria focus:bg-white rounded-xl px-5 py-4 focus:outline-none focus:ring-4 focus:ring-marca-primaria/5 transition-all duration-300"
                   placeholder="Cuéntanos más detalles..."></textarea>
               </div>
-              <Button type="submit" class="w-full py-5 shadow-brand">
+              <Boton tipo="submit" clase="w-full py-5 shadow-marca">
                 Enviar Solicitud
-              </Button>
+              </Boton>
               <p class="text-center text-xs text-slate-400 mt-4">
                 Prometemos no enviarte spam. Tus datos están a salvo con
                 nosotros.
@@ -131,4 +135,64 @@ import Badge from "../components/ui/Badge.astro";
       </div>
     </div>
   </section>
+
+  <script is:inline>
+    const form = document.getElementById("form-contacto");
+    const container = form.parentElement;
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const btn = form.querySelector("button");
+      const btnText = btn.innerHTML;
+
+      // Loading State
+      btn.disabled = true;
+      btn.innerHTML =
+        '<span class="flex items-center justify-center gap-2"><svg class="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Enviando...</span>';
+
+      const formData = new FormData(form);
+      const data = {
+        nombre: formData.get("nombre"),
+        email: formData.get("email"),
+        mensaje: formData.get("mensaje"),
+      };
+
+      try {
+        // En producción se cargaría de variables de entorno, aquí usamos el fallback común
+        const STRAPI_URL = "http://localhost:1337";
+        const res = await fetch(`${STRAPI_URL}/api/contactos`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ data }),
+        });
+
+        if (res.ok) {
+          container.innerHTML = `
+            <div class="text-center py-10 animate-fade-in">
+              <div class="text-6xl mb-6">✅</div>
+              <h2 class="text-3xl font-bold text-marca-oscura mb-4">¡Mensaje Recibido!</h2>
+              <p class="text-slate-600 mb-8 max-w-sm mx-auto">Gracias <strong>${data.nombre}</strong>. Hemos guardado tu consulta y te hemos enviado un correo de confirmación a <strong>${data.email}</strong>.</p>
+              <a href="/" class="inline-block bg-marca-primaria text-white px-8 py-4 rounded-xl font-bold shadow-lg hover:shadow-marca transition-all overflow-hidden">
+                Volver al Inicio
+              </a>
+            </div>
+          `;
+        } else {
+          const errorData = await res.json();
+          console.error("Error backend:", errorData);
+          throw new Error("No se pudo procesar el envío");
+        }
+      } catch (error) {
+        console.error("Error fatal:", error);
+        alert(
+          "Lo sentimos, ha ocurrido un error. Asegúrate de que el servidor esté activo y de haber habilitado los permisos públicos en Strapi para 'contactos'.",
+        );
+        btn.disabled = false;
+        btn.innerHTML = btnText;
+      }
+    });
+  </script>
 </Layout>

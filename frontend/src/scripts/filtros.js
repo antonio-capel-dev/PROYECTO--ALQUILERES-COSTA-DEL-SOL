@@ -70,7 +70,7 @@ function aplicarFiltros(data, { zona, precioMax, viajeros }) {
 }
 
 
-// ── 5. RENDER (hide / show por slug) ─────────────────────────────
+// ── 5. RENDER 
 /**
  * Muestra u oculta cada tarjeta según si su slug está en la lista filtrada.
  * Usa Set para búsqueda O(1) en lugar de .includes() O(n).
@@ -88,7 +88,7 @@ function render(listaFiltrada) {
 }
 
 
-// ── 6. CONTADOR ───────────────────────────────────────────────────
+// ── 6. CONTADOR 
 /**
  * Actualiza el span #contador-resultados con el número de resultados.
  * @param {number} n
@@ -101,10 +101,10 @@ function actualizarContador(n) {
 }
 
 
-// ── 7. INICIALIZACIÓN ─────────────────────────────────────────────
+// ── 7. INICIALIZACIÓN 
 /**
  * Punto de entrada. Importado por index.astro vía <script> bundled.
- * Astro difiere los scripts de módulo → DOM garantizado al ejecutar.
+ * Astro difiere los scripts de módulo
  */
 export default function inicializarFiltros() {
   const data = obtenerDataset();
@@ -118,7 +118,7 @@ export default function inicializarFiltros() {
     return;
   }
 
-  // Lee los tres controles y muta el estado central
+  
   const actualizar = () => {
     filtros.zona     = document.getElementById('filtro-ciudad')?.value    ?? '';
     filtros.viajeros = parseInt(document.getElementById('filtro-viajeros')?.value) || 0;

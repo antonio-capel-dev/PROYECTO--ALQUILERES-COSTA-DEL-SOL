@@ -1,0 +1,45 @@
+---
+interface Props {
+  href?: string;
+  variante?: "primario" | "secundario" | "outline" | "fantasma";
+  tamano?: "peque" | "medio" | "grande";
+  clase?: string;
+  tipo?: "button" | "submit" | "reset";
+}
+
+const {
+  href,
+  variante = "primario",
+  tamano = "medio",
+  clase = "",
+  tipo = "button",
+} = Astro.props;
+
+// Diccionario de estilos según la variante (Sincronizado con @theme en global.css)
+const variantes = {
+  primario: "boton-primario",
+  secundario: "boton-secundario",
+  outline: "boton-outline",
+  fantasma: "boton-fantasma hover:bg-slate-100 text-slate-600",
+};
+
+const tamanos = {
+  peque: "boton-Peque",
+  medio: "", // Tamaño por defecto
+  grande: "boton-Grande",
+};
+
+const estilos = `boton ${variantes[variante]} ${tamanos[tamano]} ${clase}`;
+---
+
+{
+  href ? (
+    <a href={href} class={estilos}>
+      <slot />
+    </a>
+  ) : (
+    <button type={tipo} class={estilos}>
+      <slot />
+    </button>
+  )
+}

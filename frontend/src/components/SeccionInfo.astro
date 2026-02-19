@@ -1,9 +1,9 @@
 ---
-import Button from "./ui/Button.astro";
+import Boton from "./ui/Boton.astro";
 
 // Imagen de Unsplash de alta calidad (Málaga/Costa del Sol style)
 const IMAGE_URL =
-    "https://images.unsplash.com/photo-1561568284-8cb31b8160dc?auto=format&fit=crop&w=1000&q=80";
+    "https://images.unsplash.com/photo-1565538563750-2591e8455e98?auto=format&fit=crop&w=1000&q=80";
 ---
 
 <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 bg-white">
@@ -11,46 +11,52 @@ const IMAGE_URL =
         <!-- Texto (Izquierda) -->
         <div>
             <div
-                class="inline-block mb-4 px-3 py-1 rounded-full bg-brand-primary/10 text-brand-primary text-sm font-semibold tracking-wide uppercase"
+                class="inline-block mb-4 px-3 py-1 rounded-full bg-marca-primaria/10 text-marca-primaria text-sm font-semibold tracking-wide uppercase"
             >
                 Experiencia Premium
             </div>
             <h2
-                class="text-4xl md:text-5xl font-extrabold text-brand-dark leading-tight mb-6"
+                class="text-4xl md:text-5xl font-extrabold text-marca-oscura leading-tight mb-6"
             >
                 Disfruta <span
-                    class="text-transparent bg-clip-text bg-gradient-to-r from-brand-primary to-brand-accent"
+                    class="text-transparent bg-clip-text bg-linear-to-r from-marca-primaria to-marca-acento"
                     >Málaga</span
                 >
                 <br />
                 <span class="text-3xl font-bold text-slate-400"
-                    >Reserva tu estancia con nosotros</span
+                    >Tu experto local en la Costa del Sol</span
                 >
             </h2>
 
             <div class="space-y-4 text-slate-600 text-lg leading-relaxed">
                 <p>
-                    En la actualidad, contamos con más de <strong
-                        class="text-brand-dark"
-                        >35 apartamentos exclusivos</strong
-                    > situados en las zonas más privilegiadas: Málaga Centro, La Malagueta,
-                    Marbella y Benalmádena.
+                    Con más de <strong class="text-marca-oscura"
+                        >15 años de experiencia</strong
+                    >, gestionamos una cartera exclusiva de propiedades en <strong
+                        class="text-marca-oscura"
+                        >Málaga Centro, La Malagueta, Marbella y Benalmádena</strong
+                    >.
                 </p>
                 <p>
-                    Todos nuestros alojamientos están diseñados para ofrecerte
-                    el máximo confort: conexión WiFi de alta velocidad, piscinas
-                    cristalinas y ubicaciones a pocos pasos del mar
-                    Mediterráneo.
+                    Nuestra especialidad es el <strong
+                        >alquiler de larga temporada</strong
+                    > para nómadas digitales y <strong
+                        >estancias vacacionales premium</strong
+                    >. Cada vivienda ha sido verificada presencialmente por
+                    nuestros expertos locales para garantizar fibra óptica de
+                    alta velocidad y el máximo confort.
                 </p>
                 <p>
-                    No somos solo un alquiler, somos tus anfitriones en la Costa
-                    del Sol.
+                    No somos solo una plataforma; somos tus anfitriones
+                    oficiales registrados en la <strong
+                        >Junta de Andalucía</strong
+                    >.
                 </p>
             </div>
 
             <div class="mt-8 flex gap-4">
-                <Button href="/nosotros" variant="outline"
-                    >Conócenos mejor</Button
+                <Boton href="/nosotros" variante="outline"
+                    >Conócenos mejor</Boton
                 >
             </div>
         </div>
@@ -59,15 +65,15 @@ const IMAGE_URL =
         <div class="relative group">
             <!-- Efecto de sombra/marco decorativo -->
             <div
-                class="absolute -inset-4 bg-gradient-to-r from-brand-primary to-brand-accent rounded-3xl opacity-20 group-hover:opacity-30 blur-lg transition duration-500"
+                class="absolute -inset-4 bg-linear-to-r from-marca-primaria to-marca-acento rounded-3xl opacity-20 group-hover:opacity-30 blur-lg transition duration-500"
             >
             </div>
             <div
-                class="relative rounded-3xl overflow-hidden shadow-2xl aspect-[4/3]"
+                class="relative rounded-3xl overflow-hidden shadow-2xl aspect-4/3"
             >
                 <img
                     src={IMAGE_URL}
-                    alt="Salón de lujo en Málaga"
+                    alt="Alquiler vacacional premium en la Costa del Sol - Salón de lujo con diseño moderno"
                     class="w-full h-full object-cover transform group-hover:scale-105 transition duration-700 ease-in-out"
                 />
                 <!-- Badge flotante -->
@@ -86,7 +92,7 @@ const IMAGE_URL =
                             >
                                 Garantía
                             </p>
-                            <p class="text-brand-dark font-bold">
+                            <p class="text-marca-oscura font-bold">
                                 Calidad Verificada
                             </p>
                         </div>

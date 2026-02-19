@@ -2,7 +2,7 @@
   {
     "id": 1,
     "slug": "atico-marbella-vista-mar-2h-4p",
-    "titulo": "Ático con terraza y vistas al mar en Marbella",
+    "titulo": "Alquiler vacacional: Ático con terraza y vistas al mar en Marbella, Costa del Sol",
     "zona": "Marbella",
     "tipo": "Ático",
     "precio": 210,
@@ -11,13 +11,18 @@
     "banos": 2,
     "metros": 95,
     "descripcionCorta": "Ático luminoso con terraza amplia a 10 min de la playa. Ideal para parejas o familias.",
-    "image_url": "https://images.unsplash.com/photo-1600566753151-384129cf4d3a?auto=format&fit=crop&w=1200&q=80",
-    "amenities": ["terraza", "aire acondicionado", "wifi", "piscina comunitaria"]
+    "image_url": "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80",
+    "amenities": [
+      "terraza",
+      "aire acondicionado",
+      "wifi",
+      "piscina comunitaria"
+    ]
   },
   {
     "id": 2,
     "slug": "apartamento-marbella-golden-mile-1h-2p",
-    "titulo": "Apartamento moderno en la Milla de Oro de Marbella",
+    "titulo": "Apartamento moderno en la Milla de Oro de Marbella - Alquiler Vacacional",
     "zona": "Marbella",
     "tipo": "Apartamento",
     "precio": 145,
@@ -26,13 +31,18 @@
     "banos": 1,
     "metros": 55,
     "descripcionCorta": "Diseño contemporáneo con cocina equipada y parking. Perfecto para escapada de fin de semana.",
-    "image_url": "https://images.unsplash.com/photo-1502673530728-f79b4cab31b1?auto=format&fit=crop&w=1200&q=80",
-    "amenities": ["parking", "cocina equipada", "wifi", "ascensor"]
+    "image_url": "https://unsplash.com/es/fotos/edificio-de-hormigon-blanco-con-piscina-y3_AHHrxUBY",
+    "amenities": [
+      "parking",
+      "cocina equipada",
+      "wifi",
+      "ascensor"
+    ]
   },
   {
     "id": 3,
     "slug": "villa-marbella-piscina-4h-8p",
-    "titulo": "Villa privada con piscina cerca de Marbella",
+    "titulo": "Villa privada con piscina cerca de Marbella, Costa del Sol",
     "zona": "Marbella",
     "tipo": "Villa",
     "precio": 420,
@@ -42,7 +52,12 @@
     "metros": 210,
     "descripcionCorta": "Villa para grupos con piscina, jardín y zona de barbacoa. Privacidad total.",
     "image_url": "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=1200&q=80",
-    "amenities": ["piscina privada", "jardin", "barbacoa", "parking"]
+    "amenities": [
+      "piscina privada",
+      "jardin",
+      "barbacoa",
+      "parking"
+    ]
   },
   {
     "id": 4,
@@ -57,7 +72,11 @@
     "metros": 32,
     "descripcionCorta": "Ubicación céntrica, ideal para teletrabajo y escapadas. A pasos de restaurantes.",
     "image_url": "https://images.unsplash.com/photo-1493809842364-78817add7ffb?auto=format&fit=crop&w=1200&q=80",
-    "amenities": ["wifi", "cocina", "lavadora"]
+    "amenities": [
+      "wifi",
+      "cocina",
+      "lavadora"
+    ]
   },
   {
     "id": 5,
@@ -72,7 +91,12 @@
     "metros": 120,
     "descripcionCorta": "Dúplex amplio con zona de trabajo y terraza. Cerca de supermercados y playas.",
     "image_url": "https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=1200&q=80",
-    "amenities": ["terraza", "aire acondicionado", "wifi", "parking"]
+    "amenities": [
+      "terraza",
+      "aire acondicionado",
+      "wifi",
+      "parking"
+    ]
   },
   {
     "id": 6,
@@ -87,7 +111,12 @@
     "metros": 80,
     "descripcionCorta": "A pocos minutos del puerto. Ideal para disfrutar de ocio y playa con comodidad.",
     "image_url": "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=1200&q=80",
-    "amenities": ["piscina comunitaria", "wifi", "ascensor", "aire acondicionado"]
+    "amenities": [
+      "piscina comunitaria",
+      "wifi",
+      "ascensor",
+      "aire acondicionado"
+    ]
   },
   {
     "id": 7,
@@ -102,12 +131,16 @@
     "metros": 48,
     "descripcionCorta": "Cerca de museos y restaurantes. Perfecto para escapadas culturales.",
     "image_url": "https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=1200&q=80",
-    "amenities": ["wifi", "cocina equipada", "aire acondicionado"]
+    "amenities": [
+      "wifi",
+      "cocina equipada",
+      "aire acondicionado"
+    ]
   },
   {
     "id": 8,
     "slug": "atico-malaga-terraza-2h-4p",
-    "titulo": "Ático con terraza en Málaga",
+    "titulo": "Ático con terraza en Málaga Centro - Alquiler Vacacional",
     "zona": "Málaga",
     "tipo": "Ático",
     "precio": 175,
@@ -116,8 +149,13 @@
     "banos": 2,
     "metros": 88,
     "descripcionCorta": "Ático con luz natural y zona exterior. Muy bien comunicado con transporte público.",
-    "image_url": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80",
-    "amenities": ["terraza", "wifi", "calefaccion", "ascensor"]
+    "image_url": "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80",
+    "amenities": [
+      "terraza",
+      "wifi",
+      "calefaccion",
+      "ascensor"
+    ]
   },
   {
     "id": 9,
@@ -132,7 +170,11 @@
     "metros": 28,
     "descripcionCorta": "Estudio compacto y funcional. Ideal para estancias cortas o teletrabajo.",
     "image_url": "https://images.unsplash.com/photo-1554995207-c18c203602cb?auto=format&fit=crop&w=1200&q=80",
-    "amenities": ["wifi", "cocina", "lavadora"]
+    "amenities": [
+      "wifi",
+      "cocina",
+      "lavadora"
+    ]
   },
   {
     "id": 10,
@@ -146,8 +188,12 @@
     "banos": 1,
     "metros": 70,
     "descripcionCorta": "Zona tranquila y familiar a pocos pasos del paseo marítimo.",
-    "image_url": "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1200&q=80",
-    "amenities": ["wifi", "aire acondicionado", "cocina equipada"]
+    "image_url": "https://unsplash.com/es/fotos/un-edificio-blanco-con-muchas-ventanas-y-balcones-V7LOdZC4Wdk",
+    "amenities": [
+      "wifi",
+      "aire acondicionado",
+      "cocina equipada"
+    ]
   },
   {
     "id": 11,
@@ -161,13 +207,18 @@
     "banos": 2,
     "metros": 130,
     "descripcionCorta": "Casa cómoda para familias, con patio y buena conexión a universidades y centros comerciales.",
-    "image_url": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=1200&q=80",
-    "amenities": ["patio", "parking", "wifi", "aire acondicionado"]
+    "image_url": "https://images.unsplash.com/photo-1600596542815-e32c8ec23fc9?auto=format&fit=crop&w=1200&q=80",
+    "amenities": [
+      "patio",
+      "parking",
+      "wifi",
+      "aire acondicionado"
+    ]
   },
   {
     "id": 12,
     "slug": "apartamento-benalmadena-puerto-marina-1h-3p",
-    "titulo": "Apartamento en Puerto Marina (Benalmádena)",
+    "titulo": "Apartamento en Puerto Marina (Benalmádena, Costa del Sol)",
     "zona": "Benalmádena",
     "tipo": "Apartamento",
     "precio": 115,
@@ -177,7 +228,11 @@
     "metros": 52,
     "descripcionCorta": "A dos minutos del puerto. Perfecto para disfrutar de ocio y playa.",
     "image_url": "https://images.unsplash.com/photo-1507089947368-19c1da9775ae?auto=format&fit=crop&w=1200&q=80",
-    "amenities": ["wifi", "ascensor", "aire acondicionado"]
+    "amenities": [
+      "wifi",
+      "ascensor",
+      "aire acondicionado"
+    ]
   },
   {
     "id": 13,
@@ -191,8 +246,12 @@
     "banos": 1,
     "metros": 78,
     "descripcionCorta": "Terraza y vistas despejadas. Urbanización con piscina.",
-    "image_url": "https://images.unsplash.com/photo-1602343168117-bb8a12d7c180?auto=format&fit=crop&w=1200&q=80",
-    "amenities": ["terraza", "piscina comunitaria", "wifi"]
+    "image_url": "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80",
+    "amenities": [
+      "terraza",
+      "piscina comunitaria",
+      "wifi"
+    ]
   },
   {
     "id": 14,
@@ -207,7 +266,12 @@
     "metros": 180,
     "descripcionCorta": "Villa privada para grupos con piscina. Ideal para vacaciones en familia.",
     "image_url": "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=1200&q=80",
-    "amenities": ["piscina privada", "jardin", "barbacoa", "parking"]
+    "amenities": [
+      "piscina privada",
+      "jardin",
+      "barbacoa",
+      "parking"
+    ]
   },
   {
     "id": 15,
@@ -222,7 +286,10 @@
     "metros": 25,
     "descripcionCorta": "Cerca de tren y comercios. Ideal para presupuesto ajustado.",
     "image_url": "https://images.unsplash.com/photo-1502005229762-cf1b2da7c5d6?auto=format&fit=crop&w=1200&q=80",
-    "amenities": ["wifi", "cocina"]
+    "amenities": [
+      "wifi",
+      "cocina"
+    ]
   },
   {
     "id": 16,
@@ -237,7 +304,11 @@
     "metros": 68,
     "descripcionCorta": "A 5 min de la playa. Equipado y cómodo para familias.",
     "image_url": "https://images.unsplash.com/photo-1449247709967-d4461a6a6103?auto=format&fit=crop&w=1200&q=80",
-    "amenities": ["wifi", "aire acondicionado", "cocina equipada"]
+    "amenities": [
+      "wifi",
+      "aire acondicionado",
+      "cocina equipada"
+    ]
   },
   {
     "id": 17,
@@ -252,7 +323,11 @@
     "metros": 50,
     "descripcionCorta": "Terraza privada y ambiente tranquilo. Perfecto para parejas.",
     "image_url": "https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1200&q=80",
-    "amenities": ["terraza", "wifi", "aire acondicionado"]
+    "amenities": [
+      "terraza",
+      "wifi",
+      "aire acondicionado"
+    ]
   },
   {
     "id": 18,
@@ -267,7 +342,12 @@
     "metros": 85,
     "descripcionCorta": "Primera línea con balcón. Excelente para vacaciones de verano.",
     "image_url": "https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1200&q=80",
-    "amenities": ["balcon", "ascensor", "wifi", "aire acondicionado"]
+    "amenities": [
+      "balcon",
+      "ascensor",
+      "wifi",
+      "aire acondicionado"
+    ]
   },
   {
     "id": 19,
@@ -282,13 +362,17 @@
     "metros": 140,
     "descripcionCorta": "Espaciosa, con patio y zona de comedor exterior. Ideal para familias.",
     "image_url": "https://images.unsplash.com/photo-1568605114967-8130f3a36994?auto=format&fit=crop&w=1200&q=80",
-    "amenities": ["patio", "parking", "wifi"]
+    "amenities": [
+      "patio",
+      "parking",
+      "wifi"
+    ]
   },
   {
     "id": 20,
     "slug": "villa-estepona-piscina-3h-6p",
-    "titulo": "Villa tranquila con piscina en Estepona",
-    "zona": "Estepona",
+    "titulo": "Villa tranquila con piscina en Torre del Mar",
+    "zona": "Torre del Mar",
     "tipo": "Villa",
     "precio": 320,
     "capacidad": 6,
@@ -297,6 +381,11 @@
     "metros": 170,
     "descripcionCorta": "Vacaciones relajadas con piscina privada y jardín. A pocos minutos del mar.",
     "image_url": "https://images.unsplash.com/photo-1613977257363-707ba9348227?auto=format&fit=crop&w=1200&q=80",
-    "amenities": ["piscina privada", "jardin", "barbacoa", "wifi"]
+    "amenities": [
+      "piscina privada",
+      "jardin",
+      "barbacoa",
+      "wifi"
+    ]
   }
 ]

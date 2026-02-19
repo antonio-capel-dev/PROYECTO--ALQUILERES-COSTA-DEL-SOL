@@ -1,26 +1,26 @@
 ---
 interface Props {
-  variant?: "accent" | "primary" | "dark" | "success";
-  class?: string;
+  variante?: "acento" | "primario" | "oscuro" | "exito";
+  clase?: string;
 }
 
-const { variant = "accent", class: className = "" } = Astro.props;
+const { variante = "acento", clase = "" } = Astro.props;
 
-const variants = {
-  accent: "bg-brand-accent/10 text-brand-accent border-brand-accent/20",
-  primary: "bg-brand-primary/10 text-brand-primary border-brand-primary/20",
-  dark: "bg-brand-dark/10 text-brand-dark border-brand-dark/20",
-  success: "bg-green-100 text-green-700 border-green-200",
+const variantes = {
+  acento: "bg-marca-acento/10 text-marca-acento border-marca-acento/20",
+  primario: "bg-marca-primaria/10 text-marca-primaria border-marca-primaria/20",
+  oscuro: "bg-marca-oscura/10 text-marca-oscura border-marca-oscura/20",
+  exito: "bg-green-100 text-green-700 border-green-200",
 };
 
-const styles = `
+const estilos = `
   inline-block px-3 py-1 rounded-full text-xs font-semibold tracking-wide 
   uppercase border backdrop-blur-sm
-  ${variants[variant]}
-  ${className}
+  ${variantes[variante]}
+  ${clase}
 `;
 ---
 
-<span class={styles}>
+<span class={estilos}>
   <slot />
 </span>

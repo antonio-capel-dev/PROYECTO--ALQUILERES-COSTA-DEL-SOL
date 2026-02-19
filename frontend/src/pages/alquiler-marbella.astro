@@ -8,27 +8,28 @@ const description =
 ---
 
 <Layout
-  title={title}
-  description={description}
-  image="/images/marbella-seo.jpg"
+  titulo={title}
+  descripcion={description}
+  imagen="/images/marbella-seo.jpg"
+  breadcrumbs={[{ nombre: "Alquiler Marbella", url: "/alquiler-marbella" }]}
 >
   <!-- Hero Section Brand Identity -->
-  <section class="relative bg-brand-dark py-32 px-6 overflow-hidden">
+  <section class="relative bg-marca-oscura py-32 px-6 overflow-hidden">
     <!-- Background Gradient/Pattern -->
     <div class="absolute inset-0 z-0 opacity-40">
       <div
-        class="absolute inset-0 bg-gradient-to-r from-brand-primary to-brand-purple mix-blend-multiply filter blur-3xl opacity-50 animate-pulse"
+        class="absolute inset-0 bg-linear-to-r from-marca-primaria filter blur-3xl opacity-50 animate-pulse"
       >
       </div>
       <div
-        class="absolute -top-24 -left-24 w-96 h-96 bg-brand-accent rounded-full mix-blend-multiply filter blur-3xl opacity-30"
+        class="absolute -top-24 -left-24 w-96 h-96 bg-marca-acento rounded-full mix-blend-multiply filter blur-3xl opacity-30"
       >
       </div>
     </div>
 
     <div class="relative z-10 max-w-5xl mx-auto text-center">
       <div
-        class="inline-block mb-4 px-4 py-1.5 rounded-full bg-brand-primary/10 border border-brand-primary/20 text-brand-accent text-sm font-semibold tracking-wide uppercase backdrop-blur-sm"
+        class="inline-block mb-4 px-4 py-1.5 rounded-full bg-marca-primaria/10 border border-marca-primaria/20 text-marca-acento text-sm font-semibold tracking-wide uppercase backdrop-blur-sm"
       >
         🌟 Destino Exclusivo
       </div>
@@ -37,7 +38,7 @@ const description =
       >
         Alquileres en <br />
         <span
-          class="text-transparent bg-clip-text bg-gradient-to-r from-brand-accent to-brand-secondary"
+          class="text-transparent bg-clip-text bg-linear-to-r from-marca-acento to-marca-secundaria"
           >Marbella</span
         >
       </h1>
@@ -52,7 +53,7 @@ const description =
 
   <section class="max-w-7xl mx-auto px-4 py-16">
     <div class="prose lg:prose-xl mx-auto text-slate-600">
-      <h2 class="text-3xl font-bold text-brand-dark mb-6">
+      <h2 class="text-3xl font-bold text-marca-oscura mb-6">
         Vivir en Marbella: El sueño de la Costa del Sol
       </h2>
       <p class="mb-4">
@@ -60,14 +61,14 @@ const description =
         opciones para alquilar.
       </p>
 
-      <h3 class="text-2xl font-bold text-brand-dark mt-8 mb-4">
+      <h3 class="text-2xl font-bold text-marca-oscura mt-8 mb-4">
         Zonas destacadas
       </h3>
       <ul class="grid grid-cols-1 md:grid-cols-2 gap-4 not-prose">
         <li
           class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition"
         >
-          <strong class="text-brand-primary block mb-2 text-lg"
+          <strong class="text-marca-primaria block mb-2 text-lg"
             >Puerto Banús</strong
           >
           <span class="text-slate-500"
@@ -77,7 +78,7 @@ const description =
         <li
           class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition"
         >
-          <strong class="text-brand-primary block mb-2 text-lg"
+          <strong class="text-marca-primaria block mb-2 text-lg"
             >Nueva Andalucía</strong
           >
           <span class="text-slate-500"
@@ -89,10 +90,10 @@ const description =
 
     <!-- Placeholder para listado dinámico -->
     <div
-      class="mt-16 text-center bg-brand-light p-12 rounded-3xl border-2 border-dashed border-brand-primary/20"
+      class="mt-16 text-center bg-marca-clara p-12 rounded-3xl border-2 border-dashed border-marca-primaria/20"
     >
       <div class="text-4xl mb-4">💎</div>
-      <p class="text-xl text-brand-dark font-bold">
+      <p class="text-xl text-marca-oscura font-bold">
         Cargando propiedades de lujo en Marbella...
       </p>
       <p class="text-sm text-slate-400 mt-2">

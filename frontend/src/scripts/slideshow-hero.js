@@ -15,18 +15,22 @@
 /**
  * ── ARRAY DE IMÁGENES ────────────────────────────────────────────
  * Reemplaza estas URLs por las tuyas antes de la entrega.
- * Formato recomendado: Unsplash → ?auto=format&fit=crop&w=1920&q=80
+ * Formato recomendado: Unsplash → ?auto=format&fit=crop&w=1920&q=70
  */
 const IMAGENES = [
-  'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1920&q=80',
-  'https://images.unsplash.com/photo-1516483638261-f4dbaf036963?auto=format&fit=crop&w=1920&q=80',
-  'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=1920&q=80',
-  'https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=1920&q=80',
-  'https://images.unsplash.com/photo-1530538987395-032d1800fdd4?auto=format&fit=crop&w=1920&q=80',
-  'https://images.unsplash.com/photo-1534430480872-3498386e7856?auto=format&fit=crop&w=1920&q=80',
+  // 1. Mar / Playa (Nerja) - PETICIÓN: Slide del mar (LOCAL)
+  '/assets/hero-nerja.webp',
+  // 2. Típica Málaga (Catedral / La Manquita) - PETICIÓN: Foto típica de Málaga
+  'https://images.unsplash.com/photo-1565538563750-2591e8455e98?auto=format&fit=crop&w=1920&q=70',
+  // 3. Puerto Banús / Lujo
+  'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=1920&q=70',
+  // 4. Pueblo Blanco / Mijas
+  'https://images.unsplash.com/photo-1543884391-499596636737?auto=format&fit=crop&w=1920&q=70',
+  // 5. Relax Piscina Infinity
+  'https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?auto=format&fit=crop&w=1920&q=70',
 ];
 
-const INTERVALO_MS = 6000; // 6 segundos entre cada imagen
+const INTERVALO_MS = 1000; // 6 segundos entre cada imagen
 
 /**
  * Pre-carga la imagen en el índice dado para que el navegador la tenga
@@ -42,7 +46,7 @@ function precargar(idx) {
  * Punto de entrada. Importado por index.astro vía <script> bundled.
  * Astro difiere los módulos → DOM garantizado al ejecutar.
  */
-export default function initHeroSlideshow() {
+export default function inicializarSlideshowHero() {
   const bgA = document.getElementById('hero-bg-a');
   const bgB = document.getElementById('hero-bg-b');
 
@@ -61,7 +65,7 @@ export default function initHeroSlideshow() {
 
   // ── Inicialización: primera imagen en bgA ─────────────────────
   let indiceActual = 0;
-  let activo       = 'a'; // 'a' → bgA visible | 'b' → bgB visible
+  let activo = 'a'; // 'a' → bgA visible | 'b' → bgB visible
 
   bgA.style.backgroundImage = `url('${IMAGENES[0]}')`;
   // bgA ya tiene opacity-100 desde las clases Tailwind; bgB tiene opacity-0
