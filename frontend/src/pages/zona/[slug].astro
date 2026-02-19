@@ -4,6 +4,11 @@ import FichaAlquiler from "../../components/FichaAlquiler.astro";
 import Boton from "../../components/ui/Boton.astro";
 import Breadcrumbs from "../../components/ui/Breadcrumbs.astro";
 import HeroZona from "../../components/HeroZona.astro";
+import SeccionFaq from "../../components/SeccionFaq.astro";
+import ZoneCard from "../../components/ZoneCard.astro";
+import { FALLBACKS_PROPIEDAD, IMAGENES_ZONA } from "../../config/zonas";
+import { ZONAS_CONTENIDO, ZONAS_PRINCIPALES } from "../../data/zonas-contenido";
+import propiedades20 from "../../data/propiedades_20.json";
 
 // ── 1. GET STATIC PATHS (Build Time) ────────────────────────────────────────
 export async function getStaticPaths() {
@@ -17,46 +22,73 @@ export async function getStaticPaths() {
       .replace(/[\u0300-\u036f]/g, "")
       .replace(/\s+/g, "-") || "";
 
-  let zonas = [];
+  // Zonas mínimas garantizadas — siempre se generan aunque Strapi esté caído o devuelva datos parciales.
+  // Esto evita 404 al navegar desde Home a cualquiera de estas zonas.
+  const ZONAS_MINIMAS = [
+    { slug: "marbella", nombre: "Marbella" },
+    { slug: "malaga", nombre: "Málaga" },
+    { slug: "benalmadena", nombre: "Benalmádena" },
+    { slug: "torremolinos", nombre: "Torremolinos" },
+    { slug: "fuengirola", nombre: "Fuengirola" },
+    { slug: "nerja", nombre: "Nerja" },
+    { slug: "torre-del-mar", nombre: "Torre del Mar" },
+  ];
+
   let propiedades = [];
+  // Inicializamos el mapa con las zonas mínimas para garantizar que siempre existan
+  const zonasMap = new Map(ZONAS_MINIMAS.map((z) => [z.slug, z]));
 
   try {
     const res = await fetch(`${STRAPI_URL}/api/rentals?populate=*`);
     const data = await res.json();
     propiedades = data.data || [];
 
-    const zonasMap = new Map();
-
+    // Enriquecemos el mapa con los datos reales de Strapi (añade zonas extra o imagen real)
     propiedades.forEach((p: any) => {
       const nombreZona = p.ubicacion?.nombre || p.location || "Costa del Sol";
       const slug = p.ubicacion?.slug || normalizarSlug(nombreZona);
 
       if (!zonasMap.has(slug)) {
+        // Zona nueva no contemplada en ZONAS_MINIMAS → la añadimos
         zonasMap.set(slug, {
           slug,
           nombre: nombreZona,
-          imagen: p.image,
+          imagen: p.ubicacion?.imagen ?? undefined,
         });
+      } else if (p.ubicacion?.imagen) {
+        // Zona ya existente pero Strapi aporta imagen real → actualizamos
+        const existing = zonasMap.get(slug);
+        zonasMap.set(slug, { ...existing, imagen: p.ubicacion.imagen });
       }
     });
-
-    zonas = Array.from(zonasMap.values());
   } catch (error) {
     console.error("❌ Error build-time fetching zones:", error);
-    zonas = [
-      { slug: "marbella", nombre: "Marbella" },
-      { slug: "malaga", nombre: "Málaga" },
-      { slug: "benalmadena", nombre: "Benalmádena" },
-      { slug: "torremolinos", nombre: "Torremolinos" },
-      { slug: "fuengirola", nombre: "Fuengirola" },
-      { slug: "nerja", nombre: "Nerja" },
-    ];
+    // zonasMap ya contiene ZONAS_MINIMAS → se continúa con ellas.
+    // Usamos propiedades_20.json como fallback, normalizadas al formato del template.
+    propiedades = (propiedades20 as any[]).map((p) => ({
+      slug: p.slug,
+      title: p.titulo,
+      price: p.precio,
+      location: p.zona,
+      tipo: p.tipo,
+      image_url: p.image_url,
+      detalles: {
+        habitaciones: p.habitaciones,
+        capacidad: p.capacidad,
+        banos: p.banos,
+        metros: p.metros,
+      },
+    }));
   }
+
+  const zonas = Array.from(zonasMap.values());
 
   return zonas.map((zona) => {
     const propsDeZona = propiedades.filter((p: any) => {
+      // Compatible con Strapi (ubicacion.slug / ubicacion.nombre) y JSON local (location = "Marbella")
       const pSlug =
-        p.ubicacion?.slug || normalizarSlug(p.ubicacion?.nombre || p.location);
+        p.ubicacion?.slug ||
+        normalizarSlug(p.ubicacion?.nombre || p.location || "");
       return pSlug === zona.slug;
     });
 
@@ -69,26 +101,30 @@ export async function getStaticPaths() {
 
 const { zona, propiedades } = Astro.props;
 
-// Fallbacks para propiedades sin foto (Evitar repetición visual)
-const PROPERTY_FALLBACKS = [
-  "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80",
-  "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80",
-  "https://images.unsplash.com/photo-1502005229762-cf1b2da7c5d6?auto=format&fit=crop&w=800&q=80",
-  "https://images.unsplash.com/photo-1493809842364-78817add7ffb?auto=format&fit=crop&w=800&q=80",
-  "https://images.unsplash.com/photo-1484154218962-a1c002085d2f?auto=format&fit=crop&w=800&q=80",
-];
-
-const getPropertyImage = (prop: any, index: number) => {
+// Función de imagen de propiedad — compatible con Strapi y con JSON local
+const getPropertyImage = (prop: any, index: number): string => {
   if (prop.image?.url) {
-    return prop.image.url.startsWith("http")
-      ? prop.image.url
-      : `${import.meta.env.PUBLIC_STRAPI_URL}${prop.image.url}`;
+    const base = import.meta.env.PUBLIC_STRAPI_URL || "http://localhost:1337";
+    return prop.image.url.startsWith("http") ? prop.image.url : `${base}${prop.image.url}`;
   }
-  return PROPERTY_FALLBACKS[index % PROPERTY_FALLBACKS.length];
+  // JSON local usa image_url como campo de primer nivel
+  if (prop.image_url) return prop.image_url;
+  return FALLBACKS_PROPIEDAD[index % FALLBACKS_PROPIEDAD.length];
 };
 
-const seoTitle = `Alquiler Vacacional en ${zona.nombre} | Costa del Sol`;
-const seoDesc = `Descubre los mejores apartamentos y villas en ${zona.nombre}. Precios verificados. Reserva directa.`;
+// Contenido SEO enriquecido para esta zona (declarado antes de usarlo en seoTitle)
+const contenidoZona = ZONAS_CONTENIDO[zona.slug];
+const zonaFaqs = contenidoZona?.faqs ?? [];
+
+// Precio mínimo dinámico de las propiedades de esta zona (para CTR)
+const precioMin = propiedades.length > 0
+  ? Math.min(...propiedades.map((p: any) => Number(p.price) || 9999).filter((n) => n < 9999))
+  : contenidoZona?.precioDesde ?? null;
+
+const seoTitle = precioMin
+  ? `Alquiler vacacional en ${zona.nombre} desde ${precioMin}€/noche – Apartamentos y villas`
+  : `Alquiler vacacional en ${zona.nombre} – Apartamentos y villas en la Costa del Sol`;
+const seoDesc = `Reserva tu alquiler en ${zona.nombre}: apartamentos, villas y casas con vistas al mar. ${propiedades.length > 0 ? `${propiedades.length} propiedades disponibles. ` : ""}Precios verificados y reserva directa sin intermediarios.`;
 
 // Configuration for Breadcrumbs
 const breadcrumbConfig = [
@@ -96,18 +132,21 @@ const breadcrumbConfig = [
   { label: "Zonas", href: "/#zonas" },
   { label: zona.nombre, href: Astro.url.pathname, active: true },
 ];
+
+// Otras zonas para el widget de enlazado interno (excluye la actual)
+const otrasZonas = ZONAS_PRINCIPALES.filter((z) => z.slug !== zona.slug).slice(0, 5);
 ---
 
 <Layout
   titulo={seoTitle}
   descripcion={seoDesc}
-  <Layout
-  titulo={seoTitle}
-  descripcion={seoDesc}
+  urlCanonica={`/zona/${zona.slug}`}
+  imagen={IMAGENES_ZONA[zona.slug]}
   breadcrumbs={[
     { nombre: "Inicio", url: "/" },
     { nombre: zona.nombre, url: `/zona/${zona.slug}` },
   ]}
+  faq={zonaFaqs}
 >
   {/* NAVEGACIÓN Y HERO */}
   <Breadcrumbs
@@ -168,4 +207,105 @@ const breadcrumbConfig = [
       )
     }
   </section>
+
+  {/* SECCIÓN "SOBRE LA ZONA" — Contenido SEO enriquecido */}
+  {contenidoZona && (
+    <section class="bg-white py-20">
+      <div class="max-w-4xl mx-auto px-6">
+        <h2 class="text-3xl md:text-4xl font-bold text-marca-oscura mb-8">
+          Alquiler vacacional en {zona.nombre}: Guía completa
+        </h2>
+
+        <div class="prose prose-slate lg:prose-lg max-w-none text-slate-600">
+          <p class="text-lg leading-relaxed mb-6">{contenidoZona.descripcion.intro}</p>
+          <p class="leading-relaxed mb-6">{contenidoZona.descripcion.cuerpo}</p>
+          <p class="leading-relaxed mb-6">{contenidoZona.descripcion.cierre}</p>
+
+          {contenidoZona.verTambien.length > 0 && (
+            <p class="leading-relaxed mb-10 text-slate-500 border-l-4 border-marca-primaria/30 pl-4">
+              <strong class="text-slate-600">Ver también:</strong>{" "}
+              {contenidoZona.verTambien.map((link, i) => (
+                <>
+                  <a href={link.href} class="text-marca-primaria hover:underline underline-offset-2">{link.texto}</a>
+                  {i < contenidoZona.verTambien.length - 1 ? " · " : "."}
+                </>
+              ))}
+            </p>
+          )}
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-10">
+          {/* Playas */}
+          <div class="bg-slate-50 rounded-2xl p-6 border border-slate-100">
+            <h3 class="text-lg font-bold text-marca-oscura mb-4 flex items-center gap-2">
+              <span>🏖️</span> Playas principales
+            </h3>
+            <ul class="space-y-2">
+              {contenidoZona.datos.playas.map((playa) => (
+                <li class="flex items-center gap-2 text-slate-600">
+                  <span class="w-1.5 h-1.5 rounded-full bg-marca-primaria flex-shrink-0"></span>
+                  {playa}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Ventajas */}
+          <div class="bg-slate-50 rounded-2xl p-6 border border-slate-100">
+            <h3 class="text-lg font-bold text-marca-oscura mb-4 flex items-center gap-2">
+              <span>✅</span> Por qué elegir {zona.nombre}
+            </h3>
+            <ul class="space-y-2">
+              {contenidoZona.datos.ventajas.map((v) => (
+                <li class="flex items-center gap-2 text-slate-600">
+                  <span class="w-1.5 h-1.5 rounded-full bg-green-500 flex-shrink-0"></span>
+                  {v}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        {/* Transporte */}
+        <div class="mt-6 bg-blue-50 rounded-2xl p-6 border border-blue-100">
+          <h3 class="text-lg font-bold text-marca-oscura mb-2 flex items-center gap-2">
+            <span>🚌</span> Transporte y accesos
+          </h3>
+          <p class="text-slate-600">{contenidoZona.datos.transporte}</p>
+        </div>
+      </div>
+    </section>
+  )}
+
+  {/* SECCIÓN FAQs POR ZONA */}
+  {zonaFaqs.length > 0 && (
+    <SeccionFaq preguntas={zonaFaqs} />
+  )}
+
+  {/* SECCIÓN "OTRAS ZONAS" — Enlazado interno estratégico */}
+  {otrasZonas.length > 0 && (
+    <section class="bg-slate-50 py-20">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl md:text-4xl font-bold text-marca-oscura mb-4">
+            Otras zonas de la Costa del Sol
+          </h2>
+          <p class="text-slate-600 text-lg max-w-2xl mx-auto">
+            Explora más destinos y encuentra el alquiler perfecto en el litoral malagueño.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+          {otrasZonas.map((otraZona) => (
+            <ZoneCard
+              nombre={otraZona.nombre}
+              slug={otraZona.slug}
+              imagen={IMAGENES_ZONA[otraZona.slug]}
+              descripcion={`Alquileres en ${otraZona.nombre}`}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
 </Layout>

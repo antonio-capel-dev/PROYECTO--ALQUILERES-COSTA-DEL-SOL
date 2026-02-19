@@ -57,12 +57,17 @@ export async function getStaticPaths() {
 const { rental } = Astro.props as { rental: Rental };
 const STRAPI_URL = import.meta.env.PUBLIC_STRAPI_URL || "http://localhost:1337";
 
+// Componentes de Strapi (declarados antes de usarlos en seoDescription)
+const detalles = rental.detalles;
+const servicios = rental.Servicios;
+const ubicacion = rental.ubicacion;
+
 const seoTitle =
   rental.metaTitle ||
   `${rental.title} desde ${rental.price}€ | Alquileres Costa del Sol`;
 const seoDescription =
   rental.metaDescription ||
-  `Reserva ${rental.title} en ${rental.ubicacion?.nombre || "Costa del Sol"}. Alojamiento premium con capacidad para ${detalles?.capacidad || 4} personas. ¡Mejor precio garantizado!`;
+  `Reserva ${rental.title} en ${ubicacion?.nombre || "Costa del Sol"}. Alojamiento premium con capacidad para ${detalles?.capacidad || 4} personas. ¡Mejor precio garantizado!`;
 
 // Imagen: URL absoluta o relativa al Strapi
 const imageUrl = rental.image?.url
@@ -70,13 +75,6 @@ const imageUrl = rental.image?.url
     ? rental.image.url
     : `${STRAPI_URL}${rental.image.url}`
   : undefined;
-
-// Componentes de Strapi
-const detalles = rental.detalles;
-const servicios = rental.Servicios;
-
-// Ubicacion
-const ubicacion = rental.ubicacion;
 ---
 
 <Layout
@@ -317,6 +315,34 @@ const ubicacion = rental.ubicacion;
         </section>
       )
     }
+
+    <!-- Propiedades similares en la misma zona -->
+    {ubicacion && (
+      <section class="mb-16">
+        <div class="flex items-center justify-between mb-6">
+          <h2 class="text-2xl font-bold text-marca-oscura">
+            Más propiedades en {ubicacion.nombre}
+          </h2>
+          <a
+            href={`/zona/${ubicacion.slug}`}
+            class="text-marca-primaria font-semibold hover:underline underline-offset-2 text-sm flex items-center gap-1"
+          >
+            Ver todas →
+          </a>
+        </div>
+        <div class="bg-marca-clara rounded-2xl p-8 flex flex-col sm:flex-row items-center justify-between gap-6 border border-slate-100">
+          <div>
+            <p class="text-slate-600 leading-relaxed max-w-lg">
+              Explora el catálogo completo de apartamentos, villas y casas disponibles en{" "}
+              <strong>{ubicacion.nombre}</strong>. Precios verificados y reserva directa sin intermediarios.
+            </p>
+          </div>
+          <Boton href={`/zona/${ubicacion.slug}`} variante="primario">
+            Ver alojamientos en {ubicacion.nombre}
+          </Boton>
+        </div>
+      </section>
+    )}
 
     <!-- cta final -->
     <section class="bg-marca-oscura rounded-3xl p-12 text-center">

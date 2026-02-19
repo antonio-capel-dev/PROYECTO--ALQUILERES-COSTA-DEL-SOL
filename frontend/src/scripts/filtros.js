@@ -157,10 +157,6 @@ const render = (state, dataset) => {
   // Nota: El empty state visual lo manejamos mostrando/ocultando un div específico o por CSS.
   // Aquí delegamos en la lógica visual simple del contador + display:none.
 
-  // Debug para Defensa:
-  console.log(
-    `[MVI] Estado: ${state.status}, Resultados: ${resultados.length}`,
-  );
 };
 
 // ── INTENT (Event Handling) ─────────────────────────────────────────────────

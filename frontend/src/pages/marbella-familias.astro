@@ -1,5 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import Breadcrumbs from "../components/ui/Breadcrumbs.astro";
+import { IMAGENES_ZONA } from "../config/zonas";
 
 // Datos simulados para esta landing específica
 const properties = [
@@ -37,21 +39,34 @@ const properties = [
 <Layout
   titulo="Alquiler vacacional en Marbella para familias: vistas al mar y piscina | Reserva"
   descripcion="Reserva tu alquiler vacacional ideal en Marbella para familias. Apartamentos y villas con vistas al mar, piscina y todo lo necesario para niños. ¡Mejor precio directo!"
+  urlCanonica="/marbella-familias"
   breadcrumbs={[
     { nombre: "Alquiler Marbella", url: "/alquiler-marbella" },
     { nombre: "Familias", url: "/marbella-familias" },
   ]}
 >
+  <Breadcrumbs
+    items={[
+      { label: "Inicio", href: "/" },
+      { label: "Marbella", href: "/zona/marbella" },
+      { label: "Marbella para Familias", href: "/marbella-familias", active: true },
+    ]}
+    backLink={{ label: "Volver a todas las zonas", href: "/#zonas" }}
+  />
+
   <!-- Hero Section específico para Long Tail -->
   <section class="relative bg-marca-oscura text-white py-24 text-center px-4">
-    <div class="absolute inset-0 overflow-hidden opacity-30">
-      <!-- Background pattern placeholder -->
+    <div class="absolute inset-0 overflow-hidden opacity-40">
+      <!-- Foto del silo de Marbella (coherente con Home y /zona/marbella) -->
       <img
-        src="https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?q=80&w=2049&auto=format&fit=crop"
-        alt="Marbella Piscina"
+        src={IMAGENES_ZONA["marbella"]}
+        alt="Marbella Costa del Sol"
         class="w-full h-full object-cover"
+        width="1920"
+        height="600"
       />
     </div>
+    <div class="absolute inset-0 bg-marca-oscura/50"></div>
     <div class="relative z-10 max-w-4xl mx-auto">
       <span
         class="inline-block bg-marca-primaria/20 backdrop-blur-md px-4 py-2 rounded-full text-marca-acento font-semibold mb-6 border border-marca-primaria/30"

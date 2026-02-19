@@ -1,29 +1,44 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import Breadcrumbs from "../components/ui/Breadcrumbs.astro";
+import { IMAGENES_ZONA } from "../config/zonas";
 
 const title =
   "Alquiler en Málaga Capital | Pisos en Centro, Teatinos y Malagueta";
 const description =
   "Alquila tu piso en Málaga Capital. Zonas universitarias (Teatinos), Centro Histórico y primera línea de playa en La Malagueta.";
+
+const imagenHero = IMAGENES_ZONA["malaga"];
 ---
 
 <Layout
   titulo={title}
   descripcion={description}
-  imagen="/images/malaga-seo.jpg"
+  urlCanonica="/alquiler-malaga"
   breadcrumbs={[{ nombre: "Alquiler Málaga", url: "/alquiler-malaga" }]}
 >
+  <Breadcrumbs
+    items={[
+      { label: "Inicio", href: "/" },
+      { label: "Málaga", href: "/zona/malaga" },
+      { label: "Alquiler Málaga", href: "/alquiler-malaga", active: true },
+    ]}
+    backLink={{ label: "Volver a todas las zonas", href: "/#zonas" }}
+  />
+
+  <!-- Hero Section con imagen del silo de Málaga -->
   <section class="relative bg-marca-oscura py-32 px-6 overflow-hidden">
-    <div class="absolute inset-0 z-0 opacity-40">
-      <div
-        class="absolute inset-0 bg-linear-to-r from-marca-primaria to-marca-purpura mix-blend-multiply filter blur-3xl opacity-50 animate-pulse"
-      >
-      </div>
-      <div
-        class="absolute -top-24 -left-24 w-96 h-96 bg-marca-acento rounded-full mix-blend-multiply filter blur-3xl opacity-30"
-      >
-      </div>
-    </div>
+    <!-- Foto real del silo (idéntica a la tarjeta de Málaga en Home) -->
+    <img
+      src={imagenHero}
+      alt="Málaga Capital Costa del Sol"
+      class="absolute inset-0 w-full h-full object-cover opacity-40"
+      loading="eager"
+      width="1920"
+      height="600"
+    />
+    <!-- Overlay de legibilidad -->
+    <div class="absolute inset-0 bg-marca-oscura/50 z-0"></div>
 
     <div class="relative z-10 max-w-5xl mx-auto text-center">
       <div
