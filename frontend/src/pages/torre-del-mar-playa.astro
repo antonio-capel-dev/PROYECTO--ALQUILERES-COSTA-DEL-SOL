@@ -1,0 +1,329 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Seccion from "../components/ui/Seccion.astro";
+import Contenedor from "../components/ui/Contenedor.astro";
+import Boton from "../components/ui/Boton.astro";
+import FichaAlquiler from "../components/FichaAlquiler.astro";
+import SeccionFaq from "../components/SeccionFaq.astro";
+
+// Meta tags SEO
+const seoTitle =
+    "Alquiler Vacacional en la Playa en Torre del Mar | Costa del Sol";
+const seoDesc =
+    "Apartamentos en primera línea de playa en Torre del Mar. Alquiler vacacional con vistas al mar, cerca del paseo marítimo en la Costa del Sol. ¡Reserva hoy!";
+
+// Falsos datos inyectados para la landing (Simulando 3 destacados)
+const propiedadesLanding = [
+    {
+        slug: "apartamento-faro-torre-del-mar",
+        titulo: "Apartamento Frontal al Mar junto al Faro",
+        zona: "Paseo Marítimo, Torre del Mar",
+        tipo: "Apartamento",
+        precio: 110,
+        capacidad: 4,
+        habitaciones: 2,
+        image_url:
+            "https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?auto=format&fit=crop&w=800&q=80",
+    },
+    {
+        slug: "estudio-playa-levante-vistas",
+        titulo: "Estudio Romántico en Playa de Levante",
+        zona: "Playa de Levante",
+        tipo: "Estudio",
+        precio: 75,
+        capacidad: 2,
+        habitaciones: 1,
+        image_url:
+            "https://images.unsplash.com/photo-1542361345-89e58247f2d5?auto=format&fit=crop&w=800&q=80",
+    },
+    {
+        slug: "duplex-paseo-larios-torre-del-mar",
+        titulo: "Dúplex Familiar a 50m de la Arena",
+        zona: "Paseo de Larios / Playa",
+        tipo: "Dúplex",
+        precio: 130,
+        capacidad: 6,
+        habitaciones: 3,
+        image_url:
+            "https://images.unsplash.com/photo-1484154218962-a1c002085d2f?auto=format&fit=crop&w=800&q=80",
+    },
+];
+
+const faqs = [
+    {
+        pregunta: "¿Qué distancia real hay entre los apartamentos y la playa?",
+        respuesta:
+            "Todas las propiedades etiquetadas en esta categoría se encuentran en primera o segunda línea de playa en Torre del Mar, es decir, a un máximo de 100 metros caminando de la arena, sin necesidad de cruzar autovías o usar coche.",
+    },
+    {
+        pregunta:
+            "¿Los apartamentos en primera línea de Torre del Mar tienen aire acondicionado?",
+        respuesta:
+            "Absolutamente. Aunque la brisa marina del Mediterráneo refresca el ambiente, el 100% de nuestros alquileres vacacionales frente al mar disponen de aire acondicionado centralizado o unidades split para los meses de julio y agosto.",
+    },
+    {
+        pregunta: "¿Es fácil aparcar cerca de la playa en Torre del Mar?",
+        respuesta:
+            "Durante el verano el aparcamiento público puede ser escaso. Por eso, gran parte de nuestros apartamentos vacacionales cerca del paseo marítimo incluyen plaza de parking privada subterránea en el precio.",
+    },
+    {
+        pregunta: "¿Las terrazas tienen vistas frontales o laterales al mar?",
+        respuesta:
+            "Ofrecemos ambas opciones. En la descripción de cada propiedad especificamos claramente si las vistas de la terraza son frontales (directas al Mediterráneo) o laterales, para que no haya sorpresas a tu llegada.",
+    },
+    {
+        pregunta:
+            "¿Están permitidas las mascotas en los alquileres cerca de la playa?",
+        respuesta:
+            "Torre del Mar cuenta con una fantástica playa canina (Playa del Morche). Por ello, disponemos de una selección específica de apartamentos pet-friendly. Te sugerimos usar nuestro filtro de 'Admite Mascotas' al explorar el catálogo.",
+    },
+];
+---
+
+<Layout
+    titulo={seoTitle}
+    descripcion={seoDesc}
+    breadcrumbs={[
+        { nombre: "Inicio", url: "/" },
+        { nombre: "Zonas", url: "/#zonas" },
+        { nombre: "Torre del Mar Playa", url: "/torre-del-mar-playa" },
+    ]}
+>
+    <Seccion
+        padding="grande"
+        className="bg-marca-oscura text-white text-center relative overflow-hidden"
+    >
+        <div class="absolute inset-0 z-0 opacity-20">
+            <img
+                src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1920&q=80"
+                alt="Playa de Torre del Mar"
+                class="w-full h-full object-cover"
+            />
+        </div>
+        <div class="relative z-10 max-w-4xl mx-auto">
+            <span
+                class="inline-block bg-marca-primaria/20 px-4 py-2 rounded-full text-marca-acento font-semibold mb-6 border border-marca-acento/30"
+            >
+                🌊 Primera y Segunda Línea de Playa
+            </span>
+            <h1 class="text-4xl md:text-5xl lg:text-6xl mb-6">
+                Alquiler Vacacional Cerca de la Playa en Torre del Mar
+            </h1>
+            <p
+                class="text-lg md:text-xl text-slate-300 max-w-3xl mx-auto mb-10 leading-relaxed"
+            >
+                Despierta cada mañana con el sonido de las olas y la brisa del
+                Mediterráneo. Explora nuestra selección premium de alquileres
+                vacacionales situados a escasos pasos de la arena en Torre del
+                Mar. Olvídate del coche durante toda tu estancia: disfruta de
+                apartamentos con espectaculares terrazas orientadas al mar,
+                acceso directo al mejor paseo marítimo de la Costa del Sol y la
+                comodidad de tener los mejores chiringuitos de pescado fresco
+                justo debajo de tu ventana.
+            </p>
+            <Boton href="#alojamientos" variante="primario" tamano="grande">
+                Ver Apartamentos en la Playa
+            </Boton>
+        </div>
+    </Seccion>
+
+    <Seccion padding="normal" className="bg-white">
+        <Contenedor>
+            <div
+                class="prose prose-lg max-w-4xl mx-auto"
+                style="color: var(--color-texto-principal)"
+            >
+                <h2>
+                    ¿Por qué elegir Torre del Mar para unas vacaciones en la
+                    playa?
+                </h2>
+                <p>
+                    Torre del Mar alberga uno de los paseos marítimos más
+                    extensos y cuidados de toda Europa, con más de 3 kilómetros
+                    de recorrido peatonal ininterrumpido. Alquilar un
+                    apartamento cerca de la playa aquí significa huir de la
+                    masificación extrema de otras zonas de la Costa del Sol,
+                    disfrutando de un ambiente puramente andaluz, precios de
+                    restauración más competitivos y unas playas de arena oscura
+                    que destacan por su amplitud, limpieza y aguas cálidas.
+                </p>
+
+                <h2>Mejores zonas dentro de Torre del Mar cerca del mar</h2>
+                <p>
+                    Si tu prioridad absoluta es la proximidad al agua, estas son
+                    las ubicaciones estrella:
+                </p>
+                <ul>
+                    <li>
+                        <strong>Paseo Marítimo de Poniente:</strong> La zona más tranquila
+                        y ancha de la playa. Aquí encontrarás urbanizaciones más residenciales,
+                        ideales para quienes buscan dormir sin ruidos exteriores y
+                        bajar a la arena en chanclas.
+                    </li>
+                    <li>
+                        <strong>Entorno de El Faro:</strong> El corazón neurálgico
+                        del turismo local. Estarás a 10 metros de la playa central
+                        y rodeado de los heladerías, restaurantes modernos y el famoso
+                        mercadillo nocturno de verano.
+                    </li>
+                    <li>
+                        <strong>Playa canina y alrededores:</strong> Si viajas con
+                        tu mascota, las propiedades situadas en el extremo hacia el
+                        río Vélez te situarán a 5 minutos andando del acceso oficial
+                        para perros.
+                    </li>
+                </ul>
+
+                <h2>Tipos de alojamiento disponibles</h2>
+                <p>
+                    La oferta de alojamiento costero en Torre del Mar se compone
+                    principalmente de majestuosos <strong
+                        >apartamentos frontales de 2 a 3 dormitorios</strong
+                    > perfectos para grupos, que destacan por sus enormes terrazas
+                    acristaladas o abiertas. Para parejas, los <strong
+                        >estudios en plantas altas</strong
+                    > ofrecen vistas panorámicas inigualables a un coste muy atractivo.
+                    La gran mayoría de los edificios en primera línea fueron construidos
+                    pensando en el confort estival, contando con ascensor, rampas
+                    de acceso y duchas a la entrada para quitarse la arena.
+                </p>
+
+                <h2>Ideal para…</h2>
+                <p>
+                    Nuestra oferta a pie de playa es el paraíso para <strong
+                        >parejas buscando una escapada romántica</strong
+                    > junto al mar, <strong
+                        >jubilados o huéspedes de larga estancia en invierno
+                        (snowbirds)</strong
+                    > que valoran un terreno llano sin cuestas para pasear diariamente,
+                    y <strong>familias prácticas</strong> que quieren evitar los interminables
+                    viajes en coche llenos de sombrillas y sillas, priorizando cruzar
+                    la calle y pisar la arena al instante.
+                </p>
+            </div>
+        </Contenedor>
+    </Seccion>
+
+    <Seccion id="alojamientos" padding="normal" fondoMutado={true}>
+        <Contenedor>
+            <h2 class="text-center mb-10">
+                Apartamentos Recomendados a un paso de la Arena
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {propiedadesLanding.map((prop) => <FichaAlquiler {...prop} />)}
+            </div>
+            <div class="text-center mt-12">
+                <Boton
+                    href="/zona/torre-del-mar"
+                    variante="outline"
+                    tamano="grande"
+                >
+                    Ver todas las opciones en Torre del Mar →
+                </Boton>
+            </div>
+        </Contenedor>
+    </Seccion>
+
+    <SeccionFaq preguntas={faqs} />
+
+    {/* INTERLINKING ESTRATÉGICO SEO (FASE 3) */}
+    <section
+        class="bg-slate-50 border-t py-16"
+        style="border-color: var(--color-borde)"
+    >
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2
+                class="text-2xl font-bold mb-8 text-center"
+                style="color: var(--color-texto-principal)"
+            >
+                Sigue explorando la Costa del Sol
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+                <div
+                    class="p-6 bg-white rounded-xl shadow-sm border"
+                    style="border-color: var(--color-borde)"
+                >
+                    <h3
+                        class="text-lg font-bold mb-3"
+                        style="color: var(--color-texto-principal)"
+                    >
+                        Otras Zonas Destacadas
+                    </h3>
+                    <ul class="space-y-4">
+                        <li>
+                            <a
+                                href="/zona/torremolinos"
+                                class="text-marca-primaria hover:underline font-medium"
+                                >Alquiler vacacional en Torremolinos</a
+                            >
+                        </li>
+                        <li>
+                            <a
+                                href="/marbella-familias"
+                                class="text-marca-primaria hover:underline font-medium"
+                                >Alquiler vacacional familiar en Marbella</a
+                            >
+                        </li>
+                        <li>
+                            <a
+                                href="/malaga-teletrabajo"
+                                class="text-marca-primaria hover:underline font-medium"
+                                >Alojamientos para teletrabajo en Málaga</a
+                            >
+                        </li>
+                    </ul>
+                </div>
+
+                <div
+                    class="p-6 bg-white rounded-xl shadow-sm border"
+                    style="border-color: var(--color-borde)"
+                >
+                    <h3
+                        class="text-lg font-bold mb-3"
+                        style="color: var(--color-texto-principal)"
+                    >
+                        Catálogo Completo
+                    </h3>
+                    <p
+                        class="mb-4 text-sm"
+                        style="color: var(--color-texto-secundario)"
+                    >
+                        Descubre toda nuestra oferta de alojamientos verificados
+                        a lo largo de la costa.
+                    </p>
+                    <a
+                        href="/#rentals"
+                        class="inline-block bg-marca-primaria text-white px-6 py-2 rounded-lg font-medium hover:bg-marca-secundaria transition"
+                    >
+                        Ver Alquiler Vacacional Global
+                    </a>
+                </div>
+
+                <div
+                    class="p-6 bg-white rounded-xl shadow-sm border"
+                    style="border-color: var(--color-borde)"
+                >
+                    <h3
+                        class="text-lg font-bold mb-3"
+                        style="color: var(--color-texto-principal)"
+                    >
+                        Atención al Cliente local
+                    </h3>
+                    <p
+                        class="mb-4 text-sm"
+                        style="color: var(--color-texto-secundario)"
+                    >
+                        Consulta la disponibilidad real de apartamentos
+                        frontales al mar sin compromiso.
+                    </p>
+                    <a
+                        href="/contacto"
+                        class="inline-block bg-marca-oscura text-white px-6 py-2 rounded-lg font-medium hover:bg-marca-primaria transition"
+                    >
+                        Contactar con asesores
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+</Layout>

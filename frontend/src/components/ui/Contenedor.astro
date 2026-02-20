@@ -1,0 +1,15 @@
+---
+// Contenedor.astro - Componente estructural del sistema de diseño
+// Garantiza que la retícula sea consistente sin inyectar márgenes arbitrarios
+
+interface Props {
+    className?: string;
+    as?: "div" | "section" | "main" | "header" | "footer";
+}
+
+const { className = "", as: Tag = "div" } = Astro.props;
+---
+
+<Tag class={`w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ${className}`}>
+    <slot />
+</Tag>

@@ -4,18 +4,20 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Identidad de Marca "Alquileres Costa del Sol" (Extracted from Homepage)
-        brand: {
-          dark: "#0f172a", // slate-900 (Fondos Hero / Footer)
-          primary: "#2563eb", // blue-600 (Botones / Gradient Start)
-          secondary: "#3b82f6", // blue-500 (Gradient End / Hover)
-          accent: "#06b6d4", // cyan-500 (Glows / Destacados / Gradient Text)
-          purple: "#9333ea", // purple-600 (Hero Gradient Overlay)
-          light: "#f8fafc", // slate-50 (Fondos Sección)
+        // Redirigiendo Identidad a Variables CSS puras del sistema
+        marca: {
+          oscura: "var(--color-texto-principal)",
+          primaria: "var(--color-principal)",
+          secundaria: "var(--color-secundario)",
+          acento: "var(--color-acento)",
+          purpura: "var(--color-purpura)",
+          clara: "var(--color-fondo)",
+          superficie: "var(--color-superficie)",
+          borde: "var(--color-borde)",
         },
       },
       fontFamily: {
-        // Tipografía legible y moderna
+        // Tipografía legible y moderna garantizada
         sans: ["Inter", "system-ui", "sans-serif"],
       },
     },

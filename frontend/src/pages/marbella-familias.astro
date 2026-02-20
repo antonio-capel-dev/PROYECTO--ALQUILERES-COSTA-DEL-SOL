@@ -1,180 +1,303 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import Seccion from "../components/ui/Seccion.astro";
+import Contenedor from "../components/ui/Contenedor.astro";
+import Boton from "../components/ui/Boton.astro";
+import FichaAlquiler from "../components/FichaAlquiler.astro";
+import SeccionFaq from "../components/SeccionFaq.astro";
 
-// Datos simulados para esta landing específica
-const properties = [
+// Meta tags SEO
+const seoTitle =
+  "Alquiler Vacacional en Marbella para Familias | Costa del Sol";
+const seoDesc =
+  "Encuentra el mejor alquiler vacacional en Marbella para familias. Villas y apartamentos con piscina, seguros y cerca de la playa en la Costa del Sol. Reserva hoy.";
+
+// Falsos datos inyectados para la landing (Simulando 3 destacados)
+const propiedadesLanding = [
   {
-    title: "Villa Familiar 'El Oasis'",
-    price: "150",
-    features: ["Piscina Privada", "Vistas al Mar", "3 Habitaciones", "Jardín"],
-    image: "/images/villa-oasis.jpg", // Placeholder
+    slug: "villa-marisma-marbella",
+    titulo: "Villa Familiar La Marisma con Piscina Privada",
+    zona: "Marbella Este",
+    tipo: "Villa",
+    precio: 250,
+    capacidad: 8,
+    habitaciones: 4,
+    image_url:
+      "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80",
   },
   {
-    title: "Apartamento 'Horizonte Blue'",
-    price: "120",
-    features: [
-      "Piscina Comunitaria",
-      "Primera Línea",
-      "2 Habitaciones",
-      "WiFi",
-    ],
-    image: "/images/apt-horizonte.jpg", // Placeholder
+    slug: "apartamento-costabella-familiar",
+    titulo: "Amplio Apartamento en Costabella a pie de playa",
+    zona: "Costabella, Marbella",
+    tipo: "Apartamento",
+    precio: 140,
+    capacidad: 5,
+    habitaciones: 2,
+    image_url:
+      "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80",
   },
   {
-    title: "Casa Adosada 'Los Naranjos'",
-    price: "135",
-    features: [
-      "Piscina Infantil",
-      "Cerca de Playa",
-      "3 Habitaciones",
-      "Parking",
-    ],
-    image: "/images/casa-naranjos.jpg", // Placeholder
+    slug: "adosado-nueva-andalucia-kids",
+    titulo: "Adosado en Nueva Andalucía ideal con niños",
+    zona: "Nueva Andalucía",
+    tipo: "Adosado",
+    precio: 180,
+    capacidad: 6,
+    habitaciones: 3,
+    image_url:
+      "https://images.unsplash.com/photo-1502005229762-cf1b2da7c5d6?auto=format&fit=crop&w=800&q=80",
+  },
+];
+
+const faqs = [
+  {
+    pregunta: "¿Cuál es la mejor zona de Marbella para ir con niños?",
+    respuesta:
+      "Las zonas de Marbella Este, como Elviria o Las Chapas, son excelentes por sus playas de arena fina y aguas poco profundas, ideales para la seguridad de los más pequeños.",
+  },
+  {
+    pregunta: "¿Un alquiler vacacional en Marbella es más barato que un hotel?",
+    respuesta:
+      "Sí, especialmente para familias de más de 3 miembros. Un apartamento o villa permite ahorrar en comidas gracias a la cocina completa y ofrece mucho más espacio por un precio por noche más competitivo.",
+  },
+  {
+    pregunta: "¿Las propiedades incluyen cuna y trona?",
+    respuesta:
+      "La mayoría de nuestros alojamientos familiares en Marbella ofrecen pack bebé bajo petición sin coste adicional. Asegúrate de seleccionarlo durante el proceso de reserva.",
+  },
+  {
+    pregunta: "¿Hay alquileres con piscina vallada para seguridad infantil?",
+    respuesta:
+      "Disponemos de villas específicas que cuentan con vallas de seguridad alrededor de la piscina, garantizando la tranquilidad de los padres durante toda la estancia en la Costa del Sol.",
+  },
+  {
+    pregunta: "¿Qué actividades familiares hay cerca de los alojamientos?",
+    respuesta:
+      "Marbella ofrece desde el parque de aventuras Aventura Amazonia en Elviria, hasta paseos en barco desde Puerto Banús o visitas a los grandes parques de la Costa del Sol como Selwo Aventura.",
   },
 ];
 ---
 
 <Layout
-  titulo="Alquiler vacacional en Marbella para familias: vistas al mar y piscina | Reserva"
-  descripcion="Reserva tu alquiler vacacional ideal en Marbella para familias. Apartamentos y villas con vistas al mar, piscina y todo lo necesario para niños. ¡Mejor precio directo!"
+  titulo={seoTitle}
+  descripcion={seoDesc}
   breadcrumbs={[
-    { nombre: "Alquiler Marbella", url: "/alquiler-marbella" },
-    { nombre: "Familias", url: "/marbella-familias" },
+    { nombre: "Inicio", url: "/" },
+    { nombre: "Zonas", url: "/#zonas" },
+    { nombre: "Marbella Familias", url: "/marbella-familias" },
   ]}
 >
-  <!-- Hero Section específico para Long Tail -->
-  <section class="relative bg-marca-oscura text-white py-24 text-center px-4">
-    <div class="absolute inset-0 overflow-hidden opacity-30">
-      <!-- Background pattern placeholder -->
+  <Seccion
+    padding="grande"
+    className="bg-marca-oscura text-white text-center relative overflow-hidden"
+  >
+    <div class="absolute inset-0 z-0 opacity-20">
       <img
-        src="https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?q=80&w=2049&auto=format&fit=crop"
-        alt="Marbella Piscina"
+        src="https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?auto=format&fit=crop&w=1920&q=80"
+        alt="Familia disfrutando en Marbella"
         class="w-full h-full object-cover"
       />
     </div>
     <div class="relative z-10 max-w-4xl mx-auto">
       <span
-        class="inline-block bg-marca-primaria/20 backdrop-blur-md px-4 py-2 rounded-full text-marca-acento font-semibold mb-6 border border-marca-primaria/30"
+        class="inline-block bg-marca-primaria/20 px-4 py-2 rounded-full text-marca-acento font-semibold mb-6 border border-marca-acento/30"
       >
-        ☀️ Especial Familias 2026
+        🌞 Vacaciones Inolvidables en Familia
       </span>
-      <h1
-        class="text-4xl md:text-6xl font-extrabold tracking-tight mb-6 leading-tight"
-      >
-        Marbella en Familia: <br />
-        <span class="text-marca-acento">Piscina + Vistas al Mar</span>
+      <h1 class="text-4xl md:text-5xl lg:text-6xl mb-6">
+        Alquiler Vacacional en Marbella para Familias
       </h1>
-      <p class="text-lg md:text-xl text-slate-300 max-w-2xl mx-auto mb-10">
-        Olvídate de hoteles masificados. Descubre villas y apartamentos
-        diseñados para que los niños disfruten y los padres descansen.
-      </p>
-      <a
-        href="#booking"
-        class="bg-marca-secundaria text-white px-8 py-4 rounded-full font-bold hover:bg-marca-primaria transition shadow-xl transform hover:-translate-y-1"
+      <p
+        class="text-lg md:text-xl text-slate-300 max-w-3xl mx-auto mb-10 leading-relaxed"
       >
-        Ver Disponibilidad Familiar
-      </a>
+        Planificar unas vacaciones con niños requiere espacio, seguridad y
+        comodidad. Descubre nuestra selección exclusiva de alojamientos en la
+        Costa del Sol diseñados específicamente para el confort familiar. Desde
+        amplias villas con jardines vallados hasta apartamentos a pie de playa
+        con piscinas infantiles, te ofrecemos el rincón perfecto para que los
+        adultos descansen y los más pequeños creen recuerdos inolvidables junto
+        al mar Mediterráneo.
+      </p>
+      <Boton href="#alojamientos" variante="primario" tamano="grande">
+        Ver Alojamientos Familiares
+      </Boton>
     </div>
-  </section>
+  </Seccion>
 
-  <!-- Value Proposition (Why Families?) -->
-  <section class="py-16 bg-white px-4">
-    <div
-      class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-center"
-    >
-      <div class="p-6 bg-marca-clara rounded-2xl">
-        <div class="text-4xl mb-4">🏊‍♂️</div>
-        <h3 class="text-xl font-bold text-marca-oscura mb-2">
-          Piscina Garantizada
-        </h3>
-        <p class="text-slate-600">
-          Todas nuestras opciones tienen piscina vigilada o privada.
+  <Seccion padding="normal" className="bg-white">
+    <Contenedor>
+      <div
+        class="prose prose-lg max-w-4xl mx-auto"
+        style="color: var(--color-texto-principal)"
+      >
+        <h2>¿Por qué elegir Marbella para tus vacaciones en familia?</h2>
+        <p>
+          Marbella se ha posicionado como uno de los destinos más completos de
+          la Costa del Sol, desmintiendo el mito de que es solo para turismo de
+          lujo adulto. Su microclima excepcional garantiza días soleados
+          perfectos para disfrutar de parques al aire libre, amplios paseos
+          marítimos seguros para carritos de bebé y kilómetros de playas
+          galardonadas con Bandera Azul, que aseguran servicios de socorrismo,
+          limpieza y aguas tranquilas.
+        </p>
+
+        <h2>Mejores zonas familiares dentro de Marbella</h2>
+        <p>
+          Si viajas con niños, la ubicación de tu alquiler vacacional es
+          crítica:
+        </p>
+        <ul>
+          <li>
+            <strong>Marbella Este (Elviria y Las Chapas):</strong> Conocida por tener
+            las mejores playas, de arena fina y dunas naturales. Es una zona residencial
+            muy tranquila.
+          </li>
+          <li>
+            <strong>San Pedro de Alcántara:</strong> Cuenta con un espectacular boulevard
+            lleno de parques infantiles modernos, restaurantes accesibles y un paseo
+            marítimo llano ideal para bicicletas.
+          </li>
+          <li>
+            <strong>Nueva Andalucía:</strong> El valle del golf ofrece villas amplias
+            con recintos cerrados. Perfecto si buscas privacidad total y grandes jardines
+            privados para jugar.
+          </li>
+        </ul>
+
+        <h2>Tipos de alojamiento disponibles</h2>
+        <p>
+          El catálogo de alquiler vacacional en Marbella abarca opciones para
+          todos los tamaños de familia. Los <strong
+            >apartamentos en planta baja</strong
+          > con salida directa a los jardines comunitarios son los favoritos de familias
+          con niños pequeños. Por otro lado, las <strong>villas privadas</strong
+          > ofrecen máxima independencia, cocinas totalmente equipadas para preparar
+          biberones o potitos, y lavaderos integrados que salvan la vida en vacaciones
+          largas. Para familias numerosas, contamos con <strong
+            >adosados de tres a cinco habitaciones</strong
+          > que aseguran que cada miembro tenga su propio espacio.
+        </p>
+
+        <h2>Ideal para…</h2>
+        <p>
+          Nuestras propiedades destacadas en Marbella son perfectas para <strong
+            >familias con niños pequeños y bebés</strong
+          >, gracias a las facilidades de cunas y tronas. También son el destino
+          preferido de <strong>familias multigeneracionales</strong> (abuelos, padres
+          y nietos) que buscan una gran casa de vacaciones donde reunir a toda la
+          familia bajo el mismo techo sin renunciar a la privacidad y al espacio personal.
         </p>
       </div>
-      <div class="p-6 bg-marca-clara rounded-2xl">
-        <div class="text-4xl mb-4">🌊</div>
-        <h3 class="text-xl font-bold text-marca-oscura mb-2">
-          Vistas al Mediterráneo
-        </h3>
-        <p class="text-slate-600">
-          Despierta con la brisa del mar. Ubicaciones privilegiadas.
-        </p>
-      </div>
-      <div class="p-6 bg-marca-clara rounded-2xl">
-        <div class="text-4xl mb-4">👶</div>
-        <h3 class="text-xl font-bold text-marca-oscura mb-2">
-          Family Friendly
-        </h3>
-        <p class="text-slate-600">
-          Cunas, tronas y espacios seguros para los más pequeños.
-        </p>
-      </div>
-    </div>
-  </section>
+    </Contenedor>
+  </Seccion>
 
-  <!-- Listings -->
-  <section id="booking" class="py-20 bg-marca-clara px-4">
-    <div class="max-w-7xl mx-auto">
-      <h2 class="text-3xl font-bold text-marca-oscura mb-12 text-center">
-        Alojamientos Destacados para Tu Familia
-      </h2>
-
+  <Seccion id="alojamientos" padding="normal" fondoMutado={true}>
+    <Contenedor>
+      <h2 class="text-center mb-10">Propiedades Destacadas para Familias</h2>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        {
-          properties.map((item) => (
-            <article class="bg-white rounded-xl shadow-sm hover:shadow-lg transition border border-slate-100 overflow-hidden">
-              <div class="h-48 bg-slate-200 flex items-center justify-center text-slate-400">
-                {/* Placeholder Image */}
-                <span class="text-4xl">🏡</span>
-              </div>
-              <div class="p-6">
-                <div class="flex justify-between items-start mb-4">
-                  <h3 class="text-xl font-bold text-marca-oscura">
-                    {item.title}
-                  </h3>
-                  <span class="bg-green-100 text-green-700 text-xs font-bold px-2 py-1 rounded">
-                    {item.price}€ / noche
-                  </span>
-                </div>
-                <ul class="flex flex-wrap gap-2 mb-6">
-                  {item.features.map((feat) => (
-                    <li class="text-xs bg-slate-100 text-slate-600 px-2 py-1 rounded">
-                      {feat}
-                    </li>
-                  ))}
-                </ul>
-                <a
-                  href="#"
-                  class="block w-full text-center bg-marca-primaria text-white py-2 rounded-lg font-semibold hover:bg-marca-secundaria transition"
-                >
-                  Reservar Ahora
-                </a>
-              </div>
-            </article>
-          ))
-        }
+        {propiedadesLanding.map((prop) => <FichaAlquiler {...prop} />)}
       </div>
-    </div>
-  </section>
+      <div class="text-center mt-12">
+        <Boton href="/zona/marbella" variante="outline" tamano="grande">
+          Ver todas las opciones en Marbella →
+        </Boton>
+      </div>
+    </Contenedor>
+  </Seccion>
 
-  <!-- FAQ / SEO Content -->
-  <section class="py-16 bg-white px-4 border-t border-slate-100">
-    <div class="max-w-4xl mx-auto prose prose-blue">
-      <h2 class="text-2xl font-bold text-marca-oscura mb-6">
-        ¿Por qué elegir Marbella para tus vacaciones familiares?
+  <SeccionFaq preguntas={faqs} />
+
+  {/* INTERLINKING ESTRATÉGICO SEO (FASE 3) */}
+  <section
+    class="bg-slate-50 border-t py-16"
+    style="border-color: var(--color-borde)"
+  >
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2
+        class="text-2xl font-bold mb-8 text-center"
+        style="color: var(--color-texto-principal)"
+      >
+        Sigue explorando la Costa del Sol
       </h2>
-      <p class="text-slate-600 mb-4">
-        Marbella no es solo lujo y fiesta. Es uno de los destinos más seguros y
-        amigables para familias en la Costa del Sol. Nuestros <strong
-          >alquileres vacacionales en Marbella con vistas al mar</strong
-        > están situados en zonas tranquilas como Elviria o Los Monteros, lejos del
-        ruido pero cerca de la playa.
-      </p>
-      <p class="text-slate-600 mb-4">
-        Además, contar con <strong>piscina privada o comunitaria</strong> es esencial
-        para esos días en los que el mar está agitado o simplemente quieres relajarte
-        mientras los niños juegan seguros.
-      </p>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+        <div
+          class="p-6 bg-white rounded-xl shadow-sm border"
+          style="border-color: var(--color-borde)"
+        >
+          <h3
+            class="text-lg font-bold mb-3"
+            style="color: var(--color-texto-principal)"
+          >
+            Otras Zonas Destacadas
+          </h3>
+          <ul class="space-y-4">
+            <li>
+              <a
+                href="/zona/malaga"
+                class="text-marca-primaria hover:underline font-medium"
+                >Alquiler vacacional en Málaga Centro</a
+              >
+            </li>
+            <li>
+              <a
+                href="/malaga-teletrabajo"
+                class="text-marca-primaria hover:underline font-medium"
+                >Alojamientos para teletrabajo en Málaga</a
+              >
+            </li>
+            <li>
+              <a
+                href="/torre-del-mar-playa"
+                class="text-marca-primaria hover:underline font-medium"
+                >Apartamentos en la playa en Torre del Mar</a
+              >
+            </li>
+          </ul>
+        </div>
+
+        <div
+          class="p-6 bg-white rounded-xl shadow-sm border"
+          style="border-color: var(--color-borde)"
+        >
+          <h3
+            class="text-lg font-bold mb-3"
+            style="color: var(--color-texto-principal)"
+          >
+            Catálogo Completo
+          </h3>
+          <p class="mb-4 text-sm" style="color: var(--color-texto-secundario)">
+            Descubre toda nuestra oferta de alojamientos verificados.
+          </p>
+          <a
+            href="/#rentals"
+            class="inline-block bg-marca-primaria text-white px-6 py-2 rounded-lg font-medium hover:bg-marca-secundaria transition"
+          >
+            Ver Alquiler Vacacional Global
+          </a>
+        </div>
+
+        <div
+          class="p-6 bg-white rounded-xl shadow-sm border"
+          style="border-color: var(--color-borde)"
+        >
+          <h3
+            class="text-lg font-bold mb-3"
+            style="color: var(--color-texto-principal)"
+          >
+            ¿Necesitas ayuda?
+          </h3>
+          <p class="mb-4 text-sm" style="color: var(--color-texto-secundario)">
+            Nuestro equipo te asesora para encontrar tu propiedad familiar
+            ideal.
+          </p>
+          <a
+            href="/contacto"
+            class="inline-block bg-marca-oscura text-white px-6 py-2 rounded-lg font-medium hover:bg-marca-primaria transition"
+          >
+            Contactar con asesores
+          </a>
+        </div>
+      </div>
     </div>
   </section>
 </Layout>

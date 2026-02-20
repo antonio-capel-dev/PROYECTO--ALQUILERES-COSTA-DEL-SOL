@@ -54,14 +54,13 @@ import Badge from "../components/ui/Badge.astro";
         <!-- contacto -->
         <div>
           <Badge variant="accent" class="mb-6">Estamos aquí para ti</Badge>
-          <h1
-            class="text-5xl font-extrabold text-marca-oscura mb-8 tracking-tight"
+          <h1 class="mb-8"
           >
             ¿Hablamos? Estamos <br /><span class="text-marca-primaria"
               >a un solo clic</span
             >
           </h1>
-          <p class="text-slate-600 mb-12 text-xl leading-relaxed font-light">
+          <p class="mb-12 text-xl">
             ¿Tienes dudas sobre una propiedad o quieres que gestionemos tu
             alquiler? Cuéntanos qué necesitas y nuestro equipo local te
             responderá en menos de 24 horas.
@@ -77,8 +76,8 @@ import Badge from "../components/ui/Badge.astro";
                 📍
               </div>
               <div>
-                <h3 class="font-bold text-marca-oscura">Visítanos</h3>
-                <p class="text-slate-500 text-sm leading-relaxed">
+                <h3>Visítanos</h3>
+                <p class="text-sm">
                   Avenida Andalucía número 42 <br />Málaga, 29002
                 </p>
               </div>
@@ -92,8 +91,8 @@ import Badge from "../components/ui/Badge.astro";
                 📧
               </div>
               <div>
-                <h3 class="font-bold text-marca-oscura">Escríbenos</h3>
-                <p class="text-slate-500 text-sm leading-relaxed">
+                <h3>Escríbenos</h3>
+                <p class="text-sm">
                   alquilercostadelsol2026@gmail.com
                 </p>
               </div>
@@ -110,7 +109,7 @@ import Badge from "../components/ui/Badge.astro";
           <div
             class="relative bg-white p-8 md:p-12 rounded-[2rem] shadow-2xl border border-slate-100"
           >
-            <h2 class="text-2xl font-bold text-marca-oscura mb-8">
+            <h2 class="mb-8">
               Envíanos un mensaje
             </h2>
             <form id="form-contacto" class="space-y-6">
@@ -154,7 +153,7 @@ import Badge from "../components/ui/Badge.astro";
               <Boton tipo="submit" clase="w-full py-5 shadow-marca">
                 ¡Solicitar Información Ahora!
               </Boton>
-              <p class="text-center text-xs text-slate-400 mt-4">
+              <p class="text-center text-xs mt-4">
                 Prometemos no enviarte spam. Tus datos están a salvo con
                 nosotros.
               </p>
@@ -202,8 +201,8 @@ import Badge from "../components/ui/Badge.astro";
           container.innerHTML = `
             <div class="text-center py-10 animate-fade-in">
               <div class="text-6xl mb-6">✅</div>
-              <h2 class="text-3xl font-bold text-marca-oscura mb-4">¡Mensaje Recibido!</h2>
-              <p class="text-slate-600 mb-8 max-w-sm mx-auto">Gracias <strong>${data.nombre}</strong>. Hemos guardado tu consulta y te hemos enviado un correo de confirmación a <strong>${data.email}</strong>.</p>
+              <h2 class="mb-4">¡Mensaje Recibido!</h2>
+              <p class="mb-8 max-w-sm mx-auto">Gracias <strong>${data.nombre}</strong>. Hemos guardado tu consulta y te hemos enviado un correo de confirmación a <strong>${data.email}</strong>.</p>
               <a href="/" class="inline-block bg-marca-primaria text-white px-8 py-4 rounded-xl font-bold shadow-lg hover:shadow-marca transition-all overflow-hidden">
                 Volver al Inicio
               </a>

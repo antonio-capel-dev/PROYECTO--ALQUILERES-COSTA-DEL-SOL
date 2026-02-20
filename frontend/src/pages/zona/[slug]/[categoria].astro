@@ -94,10 +94,10 @@ const seoDesc = `Descubre nuestra selección exclusiva de ${categoria.nombre.toL
 
   <section class="max-w-7xl mx-auto px-6 py-16">
     <div class="mb-12 text-center max-w-3xl mx-auto">
-      <h2 class="text-3xl font-bold text-marca-oscura mb-4">
+      <h2 class="mb-4">
         {categoria.seo} en {zona.nombre}
       </h2>
-      <p class="text-slate-500 text-lg">
+      <p class="text-lg">
         Hemos seleccionado las mejores propiedades en {zona.nombre} pensando en
         <strong>{categoria.nombre.toLowerCase()}</strong>. Disfruta de la Costa
         del Sol a tu manera.
@@ -122,7 +122,7 @@ const seoDesc = `Descubre nuestra selección exclusiva de ${categoria.nombre.toL
         </div>
       ) : (
         <div class="text-center py-20 bg-slate-50 rounded-3xl border-2 border-dashed border-slate-200">
-          <p class="text-slate-500">
+          <p>
             No encontramos propiedades específicas de tipo "{categoria.nombre}"
             en este momento para {zona.nombre}.
             <br />
@@ -139,7 +139,7 @@ const seoDesc = `Descubre nuestra selección exclusiva de ${categoria.nombre.toL
   </section>
 
   <section class="bg-marca-clara py-16 text-center">
-    <h3 class="text-2xl font-bold text-marca-oscura mb-6">
+    <h3 class="mb-6">
       Explora otras colecciones en {zona.nombre}
     </h3>
     <div class="flex flex-wrap justify-center gap-4">

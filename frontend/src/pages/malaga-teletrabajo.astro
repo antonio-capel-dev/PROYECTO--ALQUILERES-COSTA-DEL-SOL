@@ -1,0 +1,323 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Seccion from "../components/ui/Seccion.astro";
+import Contenedor from "../components/ui/Contenedor.astro";
+import Boton from "../components/ui/Boton.astro";
+import FichaAlquiler from "../components/FichaAlquiler.astro";
+import SeccionFaq from "../components/SeccionFaq.astro";
+
+// Meta tags SEO
+const seoTitle =
+    "Alojamientos para Teletrabajar en Málaga Centro | Costa del Sol";
+const seoDesc =
+    "Encuentra tu apartamento ideal para teletrabajar en Málaga Centro. WiFi de alta velocidad, despachos luminosos y alquiler vacacional adaptado a nómadas digitales.";
+
+// Falsos datos inyectados para la landing (Simulando 3 destacados)
+const propiedadesLanding = [
+    {
+        slug: "loft-soho-malaga-wifi",
+        titulo: "Loft en el Soho con Fibra de 1GB",
+        zona: "Soho, Málaga",
+        tipo: "Loft",
+        precio: 95,
+        capacidad: 2,
+        habitaciones: 1,
+        image_url:
+            "https://images.unsplash.com/photo-1493809842364-78817add7ffb?auto=format&fit=crop&w=800&q=80",
+    },
+    {
+        slug: "apartamento-centro-historico-luz",
+        titulo: "Ático luminoso junto a Calle Larios",
+        zona: "Centro Histórico, Málaga",
+        tipo: "Ático",
+        precio: 120,
+        capacidad: 3,
+        habitaciones: 2,
+        image_url:
+            "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80",
+    },
+    {
+        slug: "estudio-malagueta-coworking",
+        titulo: "Estudio Premium cerca de La Malagueta",
+        zona: "La Malagueta",
+        tipo: "Estudio",
+        precio: 85,
+        capacidad: 2,
+        habitaciones: 1,
+        image_url:
+            "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80",
+    },
+];
+
+const faqs = [
+    {
+        pregunta:
+            "¿Qué velocidad de internet ofrecen los apartamentos en Málaga Centro?",
+        respuesta:
+            "Nuestros alojamientos enfocados a teletrabajadores en el centro de Málaga cuentan con fibra óptica simétrica, garantizando velocidades de entre 600Mbps y 1Gbps, perfectas para videollamadas fluidas.",
+    },
+    {
+        pregunta: "¿Es ruidoso el Centro Histórico para trabajar?",
+        respuesta:
+            "Aunque Málaga tiene mucha vida, seleccionamos propiedades con ventanas de doble acristalamiento (climalit) o ubicadas en calles peatonales secundarias, asegurando un ambiente de trabajo silencioso.",
+    },
+    {
+        pregunta:
+            "¿Los alquileres vacacionales tienen un espacio de escritorio dedicado?",
+        respuesta:
+            "Sí, todos los apartamentos de esta selección incluyen al menos una zona de trabajo dedicada con escritorio, silla ergonómica y buena iluminación natural.",
+    },
+    {
+        pregunta: "¿Hay buenas cafeterías de especialidad o coworkings cerca?",
+        respuesta:
+            "El Soho y el Centro Histórico de Málaga están repletos de coworkings de clase mundial y cafeterías de especialidad adaptadas para nómadas digitales, todas a menos de 5 minutos a pie de nuestros alojamientos.",
+    },
+    {
+        pregunta: "¿Hacen descuentos para estancias de un mes o más?",
+        respuesta:
+            "Ofrecemos tarifas adaptadas para mid-term rentals (medias estancias) ideales para nómadas digitales que buscan pasar varias semanas o meses teletrabajando en la Costa del Sol. Contáctenos para tarifas especiales.",
+    },
+];
+---
+
+<Layout
+    titulo={seoTitle}
+    descripcion={seoDesc}
+    breadcrumbs={[
+        { nombre: "Inicio", url: "/" },
+        { nombre: "Zonas", url: "/#zonas" },
+        { nombre: "Málaga Teletrabajo", url: "/malaga-teletrabajo" },
+    ]}
+>
+    <Seccion
+        padding="grande"
+        className="bg-marca-oscura text-white text-center relative overflow-hidden"
+    >
+        <div class="absolute inset-0 z-0 opacity-20">
+            <img
+                src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1920&q=80"
+                alt="Teletrabajando en Málaga Centro"
+                class="w-full h-full object-cover"
+            />
+        </div>
+        <div class="relative z-10 max-w-4xl mx-auto">
+            <span
+                class="inline-block bg-marca-primaria/20 px-4 py-2 rounded-full text-marca-acento font-semibold mb-6 border border-marca-acento/30"
+            >
+                💻 Nómadas Digitales y Remote Workers
+            </span>
+            <h1 class="text-4xl md:text-5xl lg:text-6xl mb-6">
+                Alquiler Vacacional en Málaga Centro para Teletrabajo
+            </h1>
+            <p
+                class="text-lg md:text-xl text-slate-300 max-w-3xl mx-auto mb-10 leading-relaxed"
+            >
+                Convierte la capital de la Costa del Sol en tu nueva oficina.
+                Descubre nuestra selección de alquileres vacacionales en Málaga
+                Centro diseñados para el nómada digital moderno: conexiones de
+                fibra simétrica ultrarrápida, luz natural, zonas de escritorio
+                ergonómico y a solo unos pasos de los mejores hubs tecnológicos,
+                coworkings y la vibrante vida cultural mediterránea.
+            </p>
+            <Boton href="#alojamientos" variante="primario" tamano="grande">
+                Ver Alojamientos para Teletrabajar
+            </Boton>
+        </div>
+    </Seccion>
+
+    <Seccion padding="normal" className="bg-white">
+        <Contenedor>
+            <div
+                class="prose prose-lg max-w-4xl mx-auto"
+                style="color: var(--color-texto-principal)"
+            >
+                <h2>¿Por qué elegir Málaga Centro para teletrabajar?</h2>
+                <p>
+                    Málaga ha trascendido su etiqueta de destino puramente
+                    vacacional para convertirse en el epicentro tecnológico del
+                    sur de Europa. Al optar por un alquiler vacacional en el
+                    centro de Málaga para teletrabajar, no solo obtienes más de
+                    300 días de sol al año, sino también acceso inmediato a una
+                    comunidad vibrante de <em>remote workers</em>, una
+                    infraestructura de transporte inmejorable (AVE y aeropuerto
+                    internacional a 15 minutos) y un ritmo de vida que equilibra
+                    perfectamente la productividad profesional con el tardeo
+                    mediterráneo.
+                </p>
+
+                <h2>Mejores zonas dentro de Málaga para el nómada digital</h2>
+                <p>
+                    Dependiendo de tu estilo de trabajo, te recomendamos tres
+                    micro-zonas clave:
+                </p>
+                <ul>
+                    <li>
+                        <strong>El Soho (Barrio de las Artes):</strong> La zona de
+                        moda. Repleta de estudios creativos, cafeterías de especialidad
+                        y arte urbano. Ideal para perfiles tech y creativos que buscan
+                        networking.
+                    </li>
+                    <li>
+                        <strong
+                            >Centro Histórico (Alrededores de Thyssen /
+                            Carretería):</strong
+                        > Para quienes quieren sumergirse en la vida local andaluza.
+                        Calles peatonales, cercanía absoluta a museos y una oferta
+                        gastronómica inagotable al cerrar el portátil.
+                    </li>
+                    <li>
+                        <strong>La Malagueta:</strong> Si tu rutina de trabajo exige
+                        pausas para mirar el mar Mediterráneo o trotar por el paseo
+                        marítimo (Muelle Uno) al terminar tu jornada laboral.
+                    </li>
+                </ul>
+
+                <h2>Tipos de alojamiento disponibles</h2>
+                <p>
+                    Para mantener la máxima concentración, nuestro catálogo de
+                    alquiler vacacional prioriza inmuebles específicos: <strong
+                        >lofts diáfanos</strong
+                    > de diseño moderno con grandes ventanales que maximizan la luz
+                    natural, <strong>apartamentos de un dormitorio</strong> que separan
+                    físicamente la zona de descanso del área de trabajo, y <strong
+                        >áticos urbanos</strong
+                    > con terrazas privadas donde puedes responder emails disfrutando
+                    del clima malagueño. Todos verificados con tests reales de velocidad
+                    de fibra óptica.
+                </p>
+
+                <h2>Ideal para…</h2>
+                <p>
+                    Este tipo de alquileres está diseñado a medida para <strong
+                        >nómadas digitales independientes</strong
+                    >, <strong
+                        >profesionales IT en modalidad remoto remoto</strong
+                    > que buscan <em>workations</em> (vacaciones y trabajo), y <strong
+                        >parejas <em>techies</em></strong
+                    > que necesitan una conexión fiable y dos espacios separados para
+                    videollamadas simultáneas sin sacrificar su estancia en la Costa
+                    del Sol.
+                </p>
+            </div>
+        </Contenedor>
+    </Seccion>
+
+    <Seccion id="alojamientos" padding="normal" fondoMutado={true}>
+        <Contenedor>
+            <h2 class="text-center mb-10">
+                Apartamentos Recomendados para Remote Workers
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {propiedadesLanding.map((prop) => <FichaAlquiler {...prop} />)}
+            </div>
+            <div class="text-center mt-12">
+                <Boton href="/zona/malaga" variante="outline" tamano="grande">
+                    Ver todas las opciones en Málaga Centro →
+                </Boton>
+            </div>
+        </Contenedor>
+    </Seccion>
+
+    <SeccionFaq preguntas={faqs} />
+
+    {/* INTERLINKING ESTRATÉGICO SEO (FASE 3) */}
+    <section
+        class="bg-slate-50 border-t py-16"
+        style="border-color: var(--color-borde)"
+    >
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2
+                class="text-2xl font-bold mb-8 text-center"
+                style="color: var(--color-texto-principal)"
+            >
+                Sigue explorando la Costa del Sol
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+                <div
+                    class="p-6 bg-white rounded-xl shadow-sm border"
+                    style="border-color: var(--color-borde)"
+                >
+                    <h3
+                        class="text-lg font-bold mb-3"
+                        style="color: var(--color-texto-principal)"
+                    >
+                        Otras Zonas Destacadas
+                    </h3>
+                    <ul class="space-y-4">
+                        <li>
+                            <a
+                                href="/zona/torre-del-mar"
+                                class="text-marca-primaria hover:underline font-medium"
+                                >Alquiler vacacional en Torre del Mar</a
+                            >
+                        </li>
+                        <li>
+                            <a
+                                href="/marbella-familias"
+                                class="text-marca-primaria hover:underline font-medium"
+                                >Alquiler vacacional familiar en Marbella</a
+                            >
+                        </li>
+                        <li>
+                            <a
+                                href="/torre-del-mar-playa"
+                                class="text-marca-primaria hover:underline font-medium"
+                                >Apartamentos en la playa en Torre del Mar</a
+                            >
+                        </li>
+                    </ul>
+                </div>
+
+                <div
+                    class="p-6 bg-white rounded-xl shadow-sm border"
+                    style="border-color: var(--color-borde)"
+                >
+                    <h3
+                        class="text-lg font-bold mb-3"
+                        style="color: var(--color-texto-principal)"
+                    >
+                        Catálogo Completo
+                    </h3>
+                    <p
+                        class="mb-4 text-sm"
+                        style="color: var(--color-texto-secundario)"
+                    >
+                        Descubre toda nuestra oferta de alojamientos
+                        verificados.
+                    </p>
+                    <a
+                        href="/#rentals"
+                        class="inline-block bg-marca-primaria text-white px-6 py-2 rounded-lg font-medium hover:bg-marca-secundaria transition"
+                    >
+                        Ver Alquiler Vacacional Global
+                    </a>
+                </div>
+
+                <div
+                    class="p-6 bg-white rounded-xl shadow-sm border"
+                    style="border-color: var(--color-borde)"
+                >
+                    <h3
+                        class="text-lg font-bold mb-3"
+                        style="color: var(--color-texto-principal)"
+                    >
+                        ¿Necesitas ayuda online?
+                    </h3>
+                    <p
+                        class="mb-4 text-sm"
+                        style="color: var(--color-texto-secundario)"
+                    >
+                        Contacta para asegurar las velocidades de WiFi exactas
+                        antes de reservar.
+                    </p>
+                    <a
+                        href="/contacto"
+                        class="inline-block bg-marca-oscura text-white px-6 py-2 rounded-lg font-medium hover:bg-marca-primaria transition"
+                    >
+                        Contactar con asesores
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+</Layout>

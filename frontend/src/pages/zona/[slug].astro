@@ -5,6 +5,8 @@ import Boton from "../../components/ui/Boton.astro";
 import Breadcrumbs from "../../components/ui/Breadcrumbs.astro";
 import HeroZona from "../../components/HeroZona.astro";
 
+import propiedadesLocal from "../../data/propiedades_20.json";
+
 // ── 1. GET STATIC PATHS (Build Time) ────────────────────────────────────────
 export async function getStaticPaths() {
   const STRAPI_URL =
@@ -17,13 +19,40 @@ export async function getStaticPaths() {
       .replace(/[\u0300-\u036f]/g, "")
       .replace(/\s+/g, "-") || "";
 
+  // Normalizar datos locales para que coincidan con la estructura esperada
+  const datosLocalesNormalizados = (propiedadesLocal as any[]).map((p) => ({
+    title: p.titulo,
+    price: p.precio,
+    slug: p.slug,
+    ubicacion: {
+      nombre: p.zona,
+      slug: normalizarSlug(p.zona),
+    },
+    location: p.zona,
+    tipo: p.tipo,
+    image: {
+      url: p.image_url,
+    },
+    detalles: {
+      habitaciones: p.habitaciones,
+      capacidad: p.capacidad,
+      banos: p.banos,
+      metros: p.metros,
+    },
+  }));
+
   let zonas = [];
   let propiedades = [];
 
   try {
     const res = await fetch(`${STRAPI_URL}/api/rentals?populate=*`);
     const data = await res.json();
-    propiedades = data.data || [];
+
+    if (data.data && data.data.length > 0) {
+      propiedades = data.data;
+    } else {
+      throw new Error("Strapi returned empty data");
+    }
 
     const zonasMap = new Map();
 
@@ -42,15 +71,26 @@ export async function getStaticPaths() {
 
     zonas = Array.from(zonasMap.values());
   } catch (error) {
-    console.error("❌ Error build-time fetching zones:", error);
-    zonas = [
-      { slug: "marbella", nombre: "Marbella" },
-      { slug: "malaga", nombre: "Málaga" },
-      { slug: "benalmadena", nombre: "Benalmádena" },
-      { slug: "torremolinos", nombre: "Torremolinos" },
-      { slug: "fuengirola", nombre: "Fuengirola" },
-      { slug: "nerja", nombre: "Nerja" },
-    ];
+    console.warn("⚠️ Usando datos locales (Fallback):", error);
+
+    // Usar datos locales si Strapi falla
+    propiedades = datosLocalesNormalizados;
+
+    // Generar zonas desde datos locales
+    const zonasMap = new Map();
+    propiedades.forEach((p: any) => {
+      const nombreZona = p.location || "Costa del Sol";
+      const slug = p.ubicacion?.slug || normalizarSlug(nombreZona);
+
+      if (!zonasMap.has(slug)) {
+        zonasMap.set(slug, {
+          slug,
+          nombre: nombreZona,
+          imagen: p.image, // URL directa en local
+        });
+      }
+    });
+    zonas = Array.from(zonasMap.values());
   }
 
   return zonas.map((zona) => {
@@ -101,9 +141,6 @@ const breadcrumbConfig = [
 <Layout
   titulo={seoTitle}
   descripcion={seoDesc}
-  <Layout
-  titulo={seoTitle}
-  descripcion={seoDesc}
   breadcrumbs={[
     { nombre: "Inicio", url: "/" },
     { nombre: zona.nombre, url: `/zona/${zona.slug}` },
@@ -127,9 +164,7 @@ const breadcrumbConfig = [
     <div
       class="flex items-center justify-between mb-8 border-b border-slate-100 pb-4"
     >
-      <h2 class="text-2xl md:text-3xl font-bold text-marca-oscura">
-        Catálogo Disponible
-      </h2>
+      <h2>Catálogo Disponible</h2>
     </div>
 
     {
@@ -141,8 +176,6 @@ const breadcrumbConfig = [
               precio={prop.price}
               habitaciones={prop.detalles?.habitaciones || 2}
               capacidad={prop.detalles?.capacidad || 4}
-              banos={prop.detalles?.banos || 1}
-              metros={prop.detalles?.metros}
               image_url={getPropertyImage(prop, index)}
               slug={prop.slug}
               zona={prop.ubicacion?.nombre || prop.location || zona.nombre}
@@ -155,10 +188,8 @@ const breadcrumbConfig = [
         /* EMPTY STATE SOBRESALIENTE */
         <div class="text-center py-20 bg-slate-50 rounded-3xl border-2 border-dashed border-slate-200">
           <div class="animate-bounce mb-4 text-4xl">🏖️</div>
-          <h3 class="text-xl font-bold text-marca-oscura mb-2">
-            Sin disponibilidad en {zona.nombre}
-          </h3>
-          <p class="text-slate-500 max-w-md mx-auto mb-8">
+          <h3 class="text-xl mb-2">Sin disponibilidad en {zona.nombre}</h3>
+          <p class="max-w-md mx-auto mb-8">
             Nuestras propiedades en esta zona se han agotado temporalmente.
           </p>
           <Boton href="/" variante="primario">
@@ -167,5 +198,100 @@ const breadcrumbConfig = [
         </div>
       )
     }
+  </section>
+
+  {/* INTERLINKING ESTRATÉGICO SEO (FASE 3) */}
+  <section
+    class="bg-slate-50 border-t py-16"
+    style="border-color: var(--color-borde)"
+  >
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2
+        class="text-2xl font-bold mb-8 text-center"
+        style="color: var(--color-texto-principal)"
+      >
+        Sigue explorando la Costa del Sol
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+        <div
+          class="p-6 bg-white rounded-xl shadow-sm border"
+          style="border-color: var(--color-borde)"
+        >
+          <h3
+            class="text-lg font-bold mb-3"
+            style="color: var(--color-texto-principal)"
+          >
+            Otras Zonas Destacadas
+          </h3>
+          <ul class="space-y-4">
+            <li>
+              <a
+                href="/zona/marbella"
+                class="text-marca-primaria hover:underline font-medium"
+                >Alquiler vacacional en Marbella</a
+              >
+            </li>
+            <li>
+              <a
+                href="/zona/malaga"
+                class="text-marca-primaria hover:underline font-medium"
+                >Alquiler vacacional en Málaga Centro</a
+              >
+            </li>
+            <li>
+              <a
+                href="/zona/torre-del-mar"
+                class="text-marca-primaria hover:underline font-medium"
+                >Alquiler vacacional en Torre del Mar</a
+              >
+            </li>
+          </ul>
+        </div>
+
+        <div
+          class="p-6 bg-white rounded-xl shadow-sm border"
+          style="border-color: var(--color-borde)"
+        >
+          <h3
+            class="text-lg font-bold mb-3"
+            style="color: var(--color-texto-principal)"
+          >
+            Catálogo Completo
+          </h3>
+          <p class="mb-4 text-sm" style="color: var(--color-texto-secundario)">
+            Descubre toda nuestra oferta de alojamientos verificados a lo largo
+            del litoral malagueño.
+          </p>
+          <a
+            href="/#rentals"
+            class="inline-block bg-marca-primaria text-white px-6 py-2 rounded-lg font-medium hover:bg-marca-secundaria transition"
+          >
+            Ver Alquiler Vacacional Global
+          </a>
+        </div>
+
+        <div
+          class="p-6 bg-white rounded-xl shadow-sm border"
+          style="border-color: var(--color-borde)"
+        >
+          <h3
+            class="text-lg font-bold mb-3"
+            style="color: var(--color-texto-principal)"
+          >
+            ¿Necesitas ayuda?
+          </h3>
+          <p class="mb-4 text-sm" style="color: var(--color-texto-secundario)">
+            Nuestro equipo local te asesora para encontrar la propiedad perfecta
+            para tu estancia.
+          </p>
+          <a
+            href="/contacto"
+            class="inline-block bg-marca-oscura text-white px-6 py-2 rounded-lg font-medium hover:bg-marca-primaria transition"
+          >
+            Contactar con asesores
+          </a>
+        </div>
+      </div>
+    </div>
   </section>
 </Layout>

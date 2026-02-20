@@ -1,6 +1,8 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import Boton from "../components/ui/Boton.astro";
+import Seccion from "../components/ui/Seccion.astro";
+import Contenedor from "../components/ui/Contenedor.astro";
 import FichaAlquiler from "../components/FichaAlquiler.astro";
 import ZoneCard from "../components/ZoneCard.astro";
 import BarraBusqueda from "../components/BarraBusqueda.astro";
@@ -136,8 +138,7 @@ const faqs = [
       >
         ✨ TU EXPERTO LOCAL EN LA COSTA DEL SOL
       </div>
-      <h1
-        class="text-5xl md:text-7xl font-extrabold text-white tracking-tight mb-8 leading-tight"
+      <h1 class="mb-8"
       >
         Alquiler Vacacional en Costa del Sol
         <br />
@@ -146,8 +147,7 @@ const faqs = [
           >Tu Ventana al Mediterráneo</span
         >
       </h1>
-      <p
-        class="text-xl text-slate-300 max-w-2xl mx-auto mb-10 font-light leading-relaxed"
+      <p class="text-xl max-w-2xl mx-auto mb-10"
       >
         Desde áticos exclusivos en Málaga hasta villas escondidas en Nerja. Tu
         historia inolvidable empieza con una llave.
@@ -159,124 +159,123 @@ const faqs = [
   <BarraBusqueda />
 
   <!-- Top Destinos: SEO Silos (Linking Strategy) -->
-  <section class="py-16 bg-white border-b border-slate-100">
-    <div class="max-w-7xl mx-auto px-6">
-      <div
-        class="flex flex-col md:flex-row justify-between items-end mb-10 gap-6"
+  <Seccion
+    padding="normal"
+    className="bg-white border-b"
+    style="border-color: var(--color-borde)"
+  >
+    <div
+      class="flex flex-col md:flex-row justify-between items-end mb-10 gap-6"
+    >
+      <div>
+        <h2 class="mb-2">
+          {t("destinations.title")}
+        </h2>
+        <p>
+          {t("destinations.desc")}
+        </p>
+      </div>
+      <a
+        href="/#rentals"
+        class="text-marca-primaria font-bold hover:underline flex items-center gap-1"
       >
-        <div>
-          <h2 class="text-3xl font-bold text-marca-oscura mb-2">
-            {t("destinations.title")}
-          </h2>
-          <p class="text-slate-500">
-            {t("destinations.desc")}
-          </p>
-        </div>
-        <a
-          href="/#rentals"
-          class="text-marca-primaria font-bold hover:underline flex items-center gap-1"
-        >
-          {t("destinations.viewAll")} →
-        </a>
-      </div>
-
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {
-          (() => {
-            // ── ESTRATEGIA: Derivar zonas reales de las propiedades (SSG) ──
-            // Evitamos mostrar zonas vacías o con fotos rotas hardcodeadas.
-            const zonasMap = new Map();
-
-            data.forEach((p) => {
-              const nombre = p.zona || "Costa del Sol";
-              // Normalización robusta idéntica a [slug].astro
-              const slug = p.zona
-                ? p.zona
-                    .toLowerCase()
-                    .normalize("NFD")
-                    .replace(/[\u0300-\u036f]/g, "")
-                    .replace(/\s+/g, "-")
-                : "costa-del-sol";
-
-              if (!zonasMap.has(slug)) {
-                zonasMap.set(slug, {
-                  nombre,
-                  slug,
-                  // Usamos la foto de la primera propiedad encontrada como cover
-                  img: p.image_url,
-                  cantidad: 1,
-                });
-              } else {
-                const z = zonasMap.get(slug);
-                z.cantidad++;
-              }
-            });
-
-            // Zonas Fallback por si Strapi está vacío (Defensa Oral: "Empty States")
-            const zonasFallback = [
-              {
-                nombre: "Málaga Centro",
-                slug: "malaga",
-                img: "https://images.unsplash.com/photo-1570698473651-b2de99bae12f?auto=format&fit=crop&w=400&q=80",
-                cantidad: 0,
-              },
-              {
-                nombre: "Marbella",
-                slug: "marbella",
-                img: "https://images.unsplash.com/photo-1565538563750-2591e8455e98?auto=format&fit=crop&w=400&q=80",
-                cantidad: 0,
-              },
-              {
-                nombre: "Benalmádena",
-                slug: "benalmadena",
-                img: "https://images.unsplash.com/photo-1595245842277-c990ee428236?auto=format&fit=crop&w=400&q=80",
-                cantidad: 0,
-              },
-              {
-                nombre: "Torre del Mar",
-                slug: "torre-del-mar",
-                img: "https://images.unsplash.com/photo-1596400501869-7c458a1f81df?auto=format&fit=crop&w=400&q=80",
-                cantidad: 0,
-              },
-            ];
-
-            const listadoZonas =
-              zonasMap.size > 0 ? Array.from(zonasMap.values()) : zonasFallback;
-
-            return listadoZonas.map((zona) => (
-              <ZoneCard
-                nombre={zona.nombre}
-                slug={zona.slug}
-                imagen={zona.img}
-                cantidad={zona.cantidad}
-                descripcion="Destino destacado"
-              />
-            ));
-          })()
-        }
-      </div>
+        {t("destinations.viewAll")} →
+      </a>
     </div>
-  </section>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      {
+        (() => {
+          // ── ESTRATEGIA: Derivar zonas reales de las propiedades (SSG) ──
+          // Evitamos mostrar zonas vacías o con fotos rotas hardcodeadas.
+          const zonasMap = new Map();
+
+          data.forEach((p) => {
+            const nombre = p.zona || "Costa del Sol";
+            // Normalización robusta idéntica a [slug].astro
+            const slug = p.zona
+              ? p.zona
+                  .toLowerCase()
+                  .normalize("NFD")
+                  .replace(/[\u0300-\u036f]/g, "")
+                  .replace(/\s+/g, "-")
+              : "costa-del-sol";
+
+            if (!zonasMap.has(slug)) {
+              zonasMap.set(slug, {
+                nombre,
+                slug,
+                // Usamos la foto de la primera propiedad encontrada como cover
+                img: p.image_url,
+                cantidad: 1,
+              });
+            } else {
+              const z = zonasMap.get(slug);
+              z.cantidad++;
+            }
+          });
+
+          // Zonas Fallback por si Strapi está vacío (Defensa Oral: "Empty States")
+          const zonasFallback = [
+            {
+              nombre: "Málaga Centro",
+              slug: "malaga",
+              img: "https://images.unsplash.com/photo-1570698473651-b2de99bae12f?auto=format&fit=crop&w=400&q=80",
+              cantidad: 0,
+            },
+            {
+              nombre: "Marbella",
+              slug: "marbella",
+              img: "https://images.unsplash.com/photo-1565538563750-2591e8455e98?auto=format&fit=crop&w=400&q=80",
+              cantidad: 0,
+            },
+            {
+              nombre: "Benalmádena",
+              slug: "benalmadena",
+              img: "https://images.unsplash.com/photo-1595245842277-c990ee428236?auto=format&fit=crop&w=400&q=80",
+              cantidad: 0,
+            },
+            {
+              nombre: "Torre del Mar",
+              slug: "torre-del-mar",
+              img: "https://images.unsplash.com/photo-1596400501869-7c458a1f81df?auto=format&fit=crop&w=400&q=80",
+              cantidad: 0,
+            },
+          ];
+
+          const listadoZonas =
+            zonasMap.size > 0 ? Array.from(zonasMap.values()) : zonasFallback;
+
+          return listadoZonas.map((zona) => (
+            <ZoneCard
+              nombre={zona.nombre}
+              slug={zona.slug}
+              imagen={zona.img}
+              cantidad={zona.cantidad}
+              descripcion="Destino destacado"
+            />
+          ));
+        })()
+      }
+    </div>
+  </Seccion>
 
   <!-- Info Section (Marketing) -->
   <SeccionInfo />
 
   <!-- Listings Grid -->
-  <section
-    id="rentals"
-    class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 bg-marca-clara"
-  >
+  <Seccion id="rentals" padding="grande" fondoMutado={true}>
     <div
       class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6"
     >
       <div>
-        <h2 class="text-3xl md:text-4xl font-bold text-marca-oscura">
+        <h2>
           {t("listings.title")}
         </h2>
-        <p class="text-slate-500 mt-2 text-lg">
+        <p class="mt-2 text-lg">
           {t("listings.subtitle")}
         </p>
-        <p class="text-sm text-marca-primaria font-semibold mt-1">
+        <p class="text-sm mt-1">
           <span id="contador-resultados"
             >{data.length}
             {
@@ -352,12 +351,13 @@ const faqs = [
     {/* Empty State Rediseñado */}
     {
       data.length === 0 && (
-        <div class="text-center py-32 bg-white rounded-3xl border-2 border-dashed border-slate-200">
+        <div
+          class="text-center py-32 bg-white rounded-3xl border-2 border-dashed"
+          style="border-color: var(--color-borde)"
+        >
           <div class="text-6xl mb-6">🏝️</div>
-          <h3 class="text-2xl font-bold text-marca-oscura mb-2">
-            No hay propiedades visibles
-          </h3>
-          <p class="text-slate-500 max-w-md mx-auto mb-8">
+          <h3 class="mb-2">No hay propiedades visibles</h3>
+          <p class="max-w-md mx-auto mb-8">
             Parece que Strapi no está enviando datos o la colección está vacía.
             ¡Añade tu primer piso en el panel de control!
           </p>
@@ -367,7 +367,7 @@ const faqs = [
         </div>
       )
     }
-  </section>
+  </Seccion>
 
   {/* ── Mapa de ubicaciones ──────────────────────────────────────── */}
   {
@@ -390,23 +390,25 @@ const faqs = [
   <script is:inline src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
   ></script>
 
-  <section
+  <Seccion
+    padding="normal"
+    fondoMutado={true}
     aria-label="Mapa de propiedades disponibles"
-    class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 bg-marca-clara"
   >
-    <h2 class="text-2xl md:text-3xl font-bold text-marca-oscura mb-2">
+    <h2 class="mb-2">
       {t("map.title")}
     </h2>
-    <p class="text-slate-500 mb-6 text-base">
+    <p class="mb-6 text-base">
       {t("map.desc")}
     </p>
     <div
       id="mapa-propiedades"
-      class="w-full rounded-2xl overflow-hidden border border-slate-200 shadow-sm"
+      class="w-full rounded-2xl overflow-hidden border shadow-sm"
+      style="border-color: var(--color-borde)"
     >
       {/* Leaflet monta el mapa aquí — altura definida en <style> */}
     </div>
-  </section>
+  </Seccion>
 
   <!-- Testimonios de Clientes (Reviews) -->
   <SeccionTestimonios />

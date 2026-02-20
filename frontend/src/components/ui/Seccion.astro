@@ -1,0 +1,42 @@
+---
+// Seccion.astro - Estructura semántica vertical del proyecto
+import Contenedor from "./Contenedor.astro";
+
+interface Props {
+    id?: string;
+    className?: string;
+    fondoOscuro?: boolean;
+    fondoMutado?: boolean;
+    padding?: "normal" | "grande" | "pequeño" | "ninguno";
+}
+
+const {
+    id,
+    className = "",
+    fondoOscuro = false,
+    fondoMutado = false,
+    padding = "normal",
+} = Astro.props;
+
+// Diccionario de paddings estructurales para unificar espaciado (Tribunal)
+const espaciados = {
+    normal: "py-16 md:py-24",
+    grande: "py-24 md:py-32",
+    pequeño: "py-8 md:py-12",
+    ninguno: "",
+};
+
+const paddingClass = espaciados[padding];
+
+const fondoClass = fondoOscuro
+    ? "bg-marca-oscura text-marca-clara"
+    : fondoMutado
+      ? "bg-marca-clara"
+      : "bg-marca-superficie";
+---
+
+<section id={id} class={`${paddingClass} ${fondoClass} ${className}`}>
+    <Contenedor>
+        <slot />
+    </Contenedor>
+</section>

@@ -25,6 +25,18 @@ const {
   breadcrumbs = [],
 } = Astro.props;
 
+import { languages, defaultLang } from "../i18n/ui";
+import { getLangFromUrl } from "../i18n/utils";
+
+const currentLang = getLangFromUrl(Astro.url);
+
+// Limpiar prefijo de idioma actual para obtener la ruta "base"
+const pathSinIdioma = Astro.url.pathname.startsWith(`/${currentLang}/`)
+  ? Astro.url.pathname.slice(currentLang.length + 1)
+  : Astro.url.pathname === `/${currentLang}`
+    ? "/"
+    : Astro.url.pathname;
+
 const siteName = "Alquileres Costa del Sol";
 const twitterHandle = "@alquileres_costasol";
 ---
@@ -39,6 +51,23 @@ const twitterHandle = "@alquileres_costasol";
 <link rel="canonical" href={urlCanonica} />
 {urlPrevia && <link rel="prev" href={urlPrevia} />}
 {urlSiguiente && <link rel="next" href={urlSiguiente} />}
+
+<!-- Etiquetas i18n SEO (Hreflang) -->
+{
+  Object.keys(languages).map((l) => {
+    const isDefault = l === defaultLang;
+    const hrefLangPath = isDefault
+      ? pathSinIdioma
+      : `/${l}${pathSinIdioma === "/" ? "" : pathSinIdioma}`;
+    const absoluteUrl = new URL(hrefLangPath, Astro.url.origin).toString();
+    return <link rel="alternate" hreflang={l} href={absoluteUrl} />;
+  })
+}
+<link
+  rel="alternate"
+  hreflang="x-default"
+  href={new URL(pathSinIdioma, Astro.url.origin).toString()}
+/>
 
 <title>{titulo}</title>
 <meta name="title" content={titulo} />

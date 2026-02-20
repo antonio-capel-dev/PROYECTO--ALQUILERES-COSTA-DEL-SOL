@@ -29,10 +29,12 @@
       "required": false
     },
     "metaTitle": {
-      "type": "string"
+      "type": "string",
+      "description": "SEO Field - Mantenido en el nivel raíz por consistencia del MVP y rendimiento de consultas."
     },
     "metaDescription": {
-      "type": "text"
+      "type": "text",
+      "description": "SEO Field - Mantenido en el nivel raíz por consistencia del MVP y rendimiento de consultas."
     },
     "rentals": {
       "type": "relation",

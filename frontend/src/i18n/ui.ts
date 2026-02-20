@@ -10,7 +10,8 @@ export const ui = {
   es: {
     'nav.home': 'Inicio',
     'nav.about': 'Sobre Nosotros',
-    'nav.rentals': 'Alquileres',
+    'nav.rentals': 'Alquiler Vacacional',
+    'nav.zonas': 'Zonas',
     'nav.reserve': 'Reservar Ahora',
     'hero.expert': '✨ Tu Experto Local en la Costa del Sol',
     'hero.title': 'Alquiler Vacacional en Málaga y Marbella',
@@ -39,7 +40,8 @@ export const ui = {
   en: {
     'nav.home': 'Home',
     'nav.about': 'About Us',
-    'nav.rentals': 'Rentals',
+    'nav.rentals': 'Vacation Rentals',
+    'nav.zonas': 'Areas',
     'nav.reserve': 'Book Now',
     'hero.expert': '✨ Your Local Expert in Costa del Sol',
     'hero.title': 'Vacation Rentals in Malaga & Marbella',
@@ -68,7 +70,8 @@ export const ui = {
   fr: {
     'nav.home': 'Accueil',
     'nav.about': 'À Propos',
-    'nav.rentals': 'Locations',
+    'nav.rentals': 'Location de Vacances',
+    'nav.zonas': 'Zones',
     'nav.reserve': 'Réserver',
     'hero.expert': '✨ Votre Expert Local sur la Costa del Sol',
     'hero.title': 'Locations de Vacances à Malaga et Marbella',

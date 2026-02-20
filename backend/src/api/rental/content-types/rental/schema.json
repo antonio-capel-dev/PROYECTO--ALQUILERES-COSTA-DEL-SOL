@@ -26,8 +26,14 @@
       "type": "decimal",
       "required": true
     },
+    "precio_centimos": {
+      "type": "integer",
+      "description": "Ready for payments (e.g., Stripe integration)"
+    },
     "city": {
-      "type": "string"
+      "type": "string",
+      "private": false,
+      "description": "@deprecated - Single Source of Truth es la relación 'ubicacion'. Este campo es mantenido para fallbacks de frontend."
     },
     "slug": {
       "type": "uid",
@@ -44,6 +50,7 @@
     },
     "metaTitle": {
       "type": "string",
+      "description": "SEO Field - Mantenido en el nivel raíz por consistencia del MVP y rendimiento en queries REST/GraphQL.",
       "pluginOptions": {
         "i18n": {
           "localized": true
@@ -52,6 +59,7 @@
     },
     "metaDescription": {
       "type": "text",
+      "description": "SEO Field - Mantenido en el nivel raíz por consistencia del MVP y rendimiento en queries REST/GraphQL.",
       "pluginOptions": {
         "i18n": {
           "localized": true

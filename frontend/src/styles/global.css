@@ -4,44 +4,59 @@
   SISTEMA DE DISEÑO "COSTA SOL" (Atomic & Fluid)
   -------------------------------------------------------------------------
   Arquitectura: TailwindCSS 4
-  Estrategia: Tokens semánticos en @theme + Variables CSS nativas
+  Estrategia: Tokens semánticos en :root (Defensa Oral)
   Nivel: Sobresaliente (Interfaces 10)
 */
 
 @theme {
-  /* PALETA DE COLORES SEMÁNTICA (IDENTIDAD ORIGINAL RESTAURADA) */
-  --color-marca-oscura:     #0f172a; /* brand-dark */
-  --color-marca-primaria:   #2563eb; /* brand-primary */
-  --color-marca-secundaria: #3b82f6; /* Variation for hover/gradients */
-  --color-marca-acento:     #06b6d4; /* brand-accent */
-  --color-marca-purpura:    #9333ea; /* brand-purple */
-  --color-marca-clara:      #f8fafc; /* Slate 50 */
-  
   /* TIPOGRAFÍA */
   --font-sans: "Inter", system-ui, -apple-system, sans-serif;
 
-  /* SOMBRAS Y EFECTOS */
-  --sombra-marca: 0 10px 15px -3px rgba(37, 99, 235, 0.1), 0 4px 6px -2px rgba(37, 99, 235, 0.05);
-  
   /* ANIMACIONES */
   --ease-fluido: cubic-bezier(0.4, 0, 0.2, 1);
   --animate-fade-in-up: fadeInUp 0.5s ease-out forwards;
 
   @keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 }
 
 /* 
-  CAPA BASE (Reset & defaults & :root formalization) 
+  CAPA BASE: TOKEN REGISTRY GLOBAL & RESETS 
 */
 @layer base {
   :root {
-    /* Formalización para Defensa Oral: Variables CSS Nativas */
-    --espaciado-base: 0.25rem; /* 4px (Tailwind scale) */
-    --radio-borde-tarjeta: 1rem; /* 16px */
-    --fuente-principal: "Inter", sans-serif;
+    /* --- SISTEMA DE COLOR (Token Registry Strict) --- */
+    --color-principal: #2563eb;
+    --color-secundario: #3b82f6;
+    --color-acento: #06b6d4;
+    --color-purpura: #9333ea;
+    --color-fondo: #f8fafc;
+    --color-superficie: #ffffff;
+
+    --color-texto-principal: #0f172a;
+    --color-texto-secundario: #475569;
+    --color-texto-mutado: #94a3b8;
+
+    --color-borde: #e2e8f0;
+    --color-error: #ef4444;
+    --color-exito: #22c55e;
+
+    /* --- SISTEMA DE ESCALA Y ESPACIADO --- */
+    --espaciado-base: 0.25rem;
+    --radio-borde-tarjeta: 1rem;
+    --radio-borde-boton: 0.75rem;
+
+    /* --- SOMBRAS GLOBALES --- */
+    --sombra-marca: 0 10px 15px -3px rgba(37, 99, 235, 0.1), 0 4px 6px -2px rgba(37, 99, 235, 0.05);
   }
 
   html {
@@ -51,34 +66,39 @@
   }
 
   body {
-    @apply font-sans text-slate-900 bg-white;
+    @apply font-sans;
+    background-color: var(--color-superficie);
+    color: var(--color-texto-principal);
     text-rendering: optimizeLegibility;
   }
 
-  /* TIPOGRAFÍA FLUIDA (Clamp nativo) */
+  /* TIPOGRAFÍA FLUIDA (Clamp nativo interconectado a Config) */
   h1 {
-    @apply font-extrabold tracking-tight text-marca-oscura;
-    font-size: clamp(2.5rem, 5vw + 1rem, 4.5rem); /* Min 40px, Val 5vw+16px, Max 72px */
+    @apply font-extrabold tracking-tight;
+    font-size: clamp(2.5rem, 5vw + 1rem, 4.5rem);
     line-height: 1.1;
   }
 
   h2 {
-    @apply font-bold tracking-tight text-marca-oscura;
+    @apply font-bold tracking-tight;
     font-size: clamp(2rem, 4vw + 1rem, 3rem);
     line-height: 1.2;
   }
 
   h3 {
-    @apply font-bold text-marca-oscura;
+    @apply font-bold;
     font-size: clamp(1.5rem, 3vw + 1rem, 2.25rem);
   }
 
-  h4, h5, h6 {
-    @apply font-bold text-marca-oscura;
+  h4,
+  h5,
+  h6 {
+    @apply font-bold;
   }
 
   p {
-    @apply leading-relaxed text-slate-600;
+    @apply leading-relaxed;
+    color: var(--color-texto-secundario);
     font-size: clamp(1rem, 0.5vw + 0.875rem, 1.125rem);
   }
 }
@@ -87,51 +107,98 @@
   COMPONENTES REUTILIZABLES (Abstracciones UI) 
 */
 @layer components {
+
   /* Botones - Sistema Completo */
   .boton {
-    @apply inline-flex items-center justify-center font-bold rounded-xl transition-all duration-300 focus:outline-none focus:ring-4 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer active:scale-95;
+    @apply inline-flex items-center justify-center font-bold transition-all duration-300 focus:outline-none focus:ring-4 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer active:scale-95;
+    border-radius: var(--radio-borde-boton);
   }
-  
-  /* Variantes */
+
+  /* Variantes ligadas a variables CSS */
   .boton-primario {
-    @apply border border-transparent text-white bg-marca-primaria hover:bg-marca-oscura focus:ring-marca-primaria/30 shadow-lg shadow-marca-primaria/20 hover:shadow-marca-primaria/40;
+    background-color: var(--color-principal);
+    color: white;
+    border: 1px solid transparent;
   }
-  
+
+  .boton-primario:hover {
+    background-color: var(--color-texto-principal);
+  }
+
   .boton-secundario {
-    @apply border border-transparent text-marca-primaria bg-marca-primaria/10 hover:bg-marca-primaria/20 focus:ring-marca-primaria/30;
+    background-color: color-mix(in srgb, var(--color-principal) 10%, transparent);
+    color: var(--color-principal);
+    border: 1px solid transparent;
+  }
+
+  .boton-secundario:hover {
+    background-color: color-mix(in srgb, var(--color-principal) 20%, transparent);
   }
 
   .boton-acento {
-    @apply border border-transparent text-white bg-marca-acento hover:bg-red-600 focus:ring-marca-acento/30 shadow-lg shadow-marca-acento/20;
+    background-color: var(--color-acento);
+    color: white;
   }
-  
+
+  .boton-acento:hover {
+    background-color: var(--color-error);
+  }
+
   .boton-outline {
-    @apply border-2 border-slate-200 text-slate-700 bg-transparent hover:border-marca-primaria hover:text-marca-primaria focus:ring-slate-200;
+    background-color: transparent;
+    border: 2px solid var(--color-borde);
+    color: var(--color-texto-secundario);
+  }
+
+  .boton-outline:hover {
+    border-color: var(--color-principal);
+    color: var(--color-principal);
   }
 
   .boton-fantasma {
-    @apply bg-transparent text-slate-500 hover:text-marca-primaria hover:bg-marca-primaria/5;
+    background-color: transparent;
+    color: var(--color-texto-mutado);
+  }
+
+  .boton-fantasma:hover {
+    color: var(--color-principal);
+    background-color: color-mix(in srgb, var(--color-principal) 5%, transparent);
   }
 
   /* Tamaños */
-  .boton-peque {  @apply px-4 py-2 text-sm; }
-  .boton-medio {  @apply px-6 py-3 text-base; }
-  .boton-grande { @apply px-8 py-4 text-lg; }
+  .boton-peque {
+    @apply px-4 py-2 text-sm;
+  }
+
+  .boton-medio {
+    @apply px-6 py-3 text-base;
+  }
+
+  .boton-grande {
+    @apply px-8 py-4 text-lg;
+  }
 
   /* Tarjetas (Cards) */
   .tarjeta {
-    @apply bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden transition-all duration-500;
-  }
-  
-  .tarjeta-hover {
-    @apply hover:shadow-xl hover:-translate-y-1 hover:border-marca-primaria/30;
+    background-color: var(--color-superficie);
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radio-borde-tarjeta);
+    @apply shadow-sm overflow-hidden transition-all duration-500;
   }
 
-  /* Grid Layouts */
+  .tarjeta-hover {
+    @apply hover:shadow-xl hover:-translate-y-1;
+  }
+
+  .tarjeta-hover:hover {
+    border-color: color-mix(in srgb, var(--color-principal) 30%, transparent);
+  }
+
+  /* Grid Layouts - Eliminaremos estas clases progresivamente en favor de Contenedor.astro y Seccion.astro, pero las mantenemos por compatibilidad temporal */
   .contenedor-fluido {
     @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
   }
-  
+
   .grid-responsive {
     @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8;
   }

@@ -1,8 +1,9 @@
 ---
 import SeoHead from "../components/SeoHead.astro";
 import Boton from "../components/ui/Boton.astro";
+import Contenedor from "../components/ui/Contenedor.astro";
 import { getLangFromUrl, useTranslations } from "../i18n/utils";
-import { NAV_ITEMS, FOOTER_LINKS } from "../config/navigation";
+import { NAV_ITEMS, NAV_ZONAS, FOOTER_LINKS } from "../config/navigation";
 import "../styles/global.css";
 
 const lang = getLangFromUrl(Astro.url);
@@ -50,9 +51,10 @@ const getPath = (href: string) => {
     class="bg-marca-clara flex flex-col min-h-screen selection:bg-marca-primaria/10 selection:text-marca-primaria"
   >
     <nav
-      class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-100"
+      class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b"
+      style="border-color: var(--color-borde)"
     >
-      <div class="contenedor-fluido">
+      <Contenedor>
         <div class="flex justify-between items-center h-20">
           <!-- Logo -->
           <div class="flex-shrink-0 flex items-center gap-2">
@@ -70,30 +72,74 @@ const getPath = (href: string) => {
               NAV_ITEMS.map((item) => (
                 <a
                   href={getPath(item.href)}
-                  class="text-slate-600 hover:text-marca-primaria font-medium transition duration-150"
+                  style="color: var(--color-texto-secundario)"
+                  class="hover:text-marca-primaria font-medium transition duration-150"
                 >
-                  {t(item.key)}
+                  {t(item.key as any)}
                 </a>
               ))
             }
 
+            <!-- Dropdown Zonas (SILO Architecture) -->
+            <div class="group relative">
+              <button
+                style="color: var(--color-texto-secundario)"
+                class="hover:text-marca-primaria font-medium transition duration-150 flex items-center gap-1"
+              >
+                {t("nav.zonas" as any)}
+                <svg
+                  class="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  ><path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M19 9l-7 7-7-7"></path></svg
+                >
+              </button>
+              <div
+                class="absolute left-0 mt-2 w-48 bg-white border shadow-xl rounded-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 pointer-events-none group-hover:pointer-events-auto"
+                style="border-color: var(--color-borde)"
+              >
+                <div class="py-2">
+                  {
+                    NAV_ZONAS.map((zona) => (
+                      <a
+                        href={getPath(zona.href)}
+                        class="block px-4 py-2 text-sm hover:bg-slate-50 hover:text-marca-primaria transition-colors"
+                        style="color: var(--color-texto-secundario)"
+                      >
+                        {zona.label}
+                      </a>
+                    ))
+                  }
+                </div>
+              </div>
+            </div>
+
             <!-- Selector de Idioma -->
             <div
-              class="flex items-center gap-2 text-sm font-medium border-l border-slate-200 pl-6 ml-2"
+              class="flex items-center gap-2 text-sm font-medium border-l pl-6 ml-2"
+              style="border-color: var(--color-borde)"
             >
               <a
                 href="/"
-                class={`transition ${lang === "es" ? "text-marca-primaria font-bold" : "text-slate-400 hover:text-marca-primaria"}`}
+                class={`transition ${lang === "es" ? "text-marca-primaria font-bold" : "hover:text-marca-primaria"}`}
+                style={lang !== "es" ? "color: var(--color-texto-mutado)" : ""}
                 title="Español">🇪🇸 ES</a
               >
               <a
                 href="/en"
-                class={`transition ${lang === "en" ? "text-marca-primaria font-bold" : "text-slate-400 hover:text-marca-primaria"}`}
+                class={`transition ${lang === "en" ? "text-marca-primaria font-bold" : "hover:text-marca-primaria"}`}
+                style={lang !== "en" ? "color: var(--color-texto-mutado)" : ""}
                 title="English">🇬🇧 EN</a
               >
               <a
                 href="/fr"
-                class={`transition ${lang === "fr" ? "text-marca-primaria font-bold" : "text-slate-400 hover:text-marca-primaria"}`}
+                class={`transition ${lang === "fr" ? "text-marca-primaria font-bold" : "hover:text-marca-primaria"}`}
+                style={lang !== "fr" ? "color: var(--color-texto-mutado)" : ""}
                 title="Français">🇫🇷 FR</a
               >
             </div>
@@ -107,7 +153,7 @@ const getPath = (href: string) => {
             </Boton>
           </div>
         </div>
-      </div>
+      </Contenedor>
     </nav>
 
     <!-- Main Content -->
@@ -116,12 +162,17 @@ const getPath = (href: string) => {
     </main>
 
     <!-- Footer -->
-    <footer class="bg-marca-oscura text-slate-300 border-t border-slate-800">
-      <div class="contenedor-fluido py-12">
+    <footer
+      class="bg-marca-oscura text-marca-clara border-t border-marca-oscura"
+    >
+      <Contenedor className="py-12">
         <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div class="col-span-1">
             <span class="text-2xl mb-4 block">☀️</span>
-            <p class="text-sm leading-relaxed text-slate-400">
+            <p
+              style="color: var(--color-texto-mutado)"
+              class="text-sm leading-relaxed"
+            >
               {t("hero.desc")}
             </p>
           </div>
@@ -130,7 +181,7 @@ const getPath = (href: string) => {
             <h3 class="text-xl font-bold text-white mb-4">
               {t("footer.company")}
             </h3>
-            <ul class="space-y-2 text-slate-300">
+            <ul class="space-y-2" style="color: var(--color-texto-mutado)">
               {
                 FOOTER_LINKS.company.map((link) => (
                   <li>
@@ -150,7 +201,7 @@ const getPath = (href: string) => {
             <h3 class="text-xl font-bold text-white mb-4">
               {t("destinations.title")} 🚀
             </h3>
-            <ul class="space-y-2 text-slate-300">
+            <ul class="space-y-2" style="color: var(--color-texto-mutado)">
               {
                 FOOTER_LINKS.destinations.map((dest) => (
                   <li>
@@ -170,17 +221,23 @@ const getPath = (href: string) => {
             <h3 class="text-xl font-bold text-white mb-4">
               {t("footer.contact")}
             </h3>
-            <p class="text-slate-300">📧 info@costadelsol.com</p>
-            <p class="text-slate-300">📞 +34 612 345 678</p>
-            <p class="text-sm text-slate-400 mt-4 italic">
+            <p style="color: var(--color-texto-mutado)">
+              📧 info@costadelsol.com
+            </p>
+            <p style="color: var(--color-texto-mutado)">📞 +34 612 345 678</p>
+            <p
+              style="color: var(--color-texto-mutado)"
+              class="text-sm mt-4 italic opacity-75"
+            >
               📍 Calle Larios 1, 29005 Málaga, España.<br />
               Oficina registrada: B-12345678
             </p>
           </div>
         </div>
-      </div>
+      </Contenedor>
       <div
-        class="border-t border-slate-800 mt-8 py-8 text-center text-slate-500"
+        style="border-top: 1px solid color-mix(in srgb, var(--color-fondo) 20%, transparent); color: var(--color-texto-mutado)"
+        class="mt-8 py-8 text-center text-sm"
       >
         <p>
           &copy; {new Date().getFullYear()} Costa del Sol. {t("footer.rights")}

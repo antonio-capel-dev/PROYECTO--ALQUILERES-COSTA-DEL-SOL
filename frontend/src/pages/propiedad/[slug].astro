@@ -210,15 +210,14 @@ const ubicacion = rental.ubicacion;
           )
         }
 
-        <h1
-          class="text-4xl md:text-5xl font-extrabold text-marca-oscura tracking-tight mb-4"
+        <h1 class="mb-4"
         >
           {rental.title}
         </h1>
 
         {
           (rental.location || ubicacion) && (
-            <p class="flex items-center text-slate-500 text-lg mb-8">
+            <p class="flex items-center text-lg mb-8">
               <span class="mr-2 text-marca-acento">📍</span>
               {rental.location || ubicacion?.nombre || "Costa del Sol"}
             </p>
@@ -308,7 +307,7 @@ const ubicacion = rental.ubicacion;
     {
       rental.description && (
         <section class="mb-16">
-          <h2 class="text-2xl font-bold text-marca-oscura mb-6">
+          <h2 class="mb-6">
             Sobre esta propiedad
           </h2>
           <div class="prose prose-slate lg:prose-lg max-w-none">
@@ -320,10 +319,10 @@ const ubicacion = rental.ubicacion;
 
     <!-- cta final -->
     <section class="bg-marca-oscura rounded-3xl p-12 text-center">
-      <h2 class="text-3xl font-bold text-white mb-4">
+      <h2 class="mb-4">
         ¿Te interesa {rental.title}?
       </h2>
-      <p class="text-slate-300 mb-8 max-w-xl mx-auto">
+      <p class="mb-8 max-w-xl mx-auto">
         Contacta con nuestro equipo local para confirmar disponibilidad y
         reservar sin intermediarios.
       </p>
