@@ -1,6 +1,9 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import Hero from "../components/layout/Hero.astro";
+import { IMAGENES_ZONA, IMAGEN_ZONA_FALLBACK } from "../config/zonas";
 import Boton from "../components/ui/Boton.astro";
+import Icon from "../components/ui/Icon.astro";
 import FichaAlquiler from "../components/FichaAlquiler.astro";
 import ZoneCard from "../components/ZoneCard.astro";
 import BarraBusqueda from "../components/BarraBusqueda.astro";
@@ -9,68 +12,29 @@ import SeccionFaq from "../components/SeccionFaq.astro";
 import SeccionTestimonios from "../components/SeccionTestimonios.astro";
 import propiedades20 from "../data/propiedades_20.json";
 import { getLangFromUrl, useTranslations } from "../i18n/utils";
+import {
+  normalizarRentalStrapi,
+  normalizarRentalLocal,
+} from "../utils/normalizadores";
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
-
-// ── Tipo unificado — única fuente de verdad para FichaAlquiler ──────
-type Propiedad = {
-  slug: string;
-  titulo: string;
-  zona: string;
-  tipo?: string;
-  precio: number;
-  capacidad: number;
-  habitaciones?: number;
-  image_url?: string;
-};
-
-// ── Normalize: Strapi response → formato plano de FichaAlquiler ─────
-const normalizarStrapi = (r: any): Propiedad => ({
-  slug: r.slug ?? "",
-  titulo: r.title ?? "Sin título",
-  zona: r.ubicacion?.ciudad ?? r.location ?? "",
-  tipo: r.tipo ?? undefined,
-  precio: r.price ?? 0,
-  capacidad: r.detalles?.capacidad ?? 0,
-  habitaciones: r.detalles?.habitaciones,
-  // Preferimos el campo texto image_url (seed); como fallback, la URL del media de Strapi
-  image_url:
-    r.image_url ??
-    (r.image?.url
-      ? r.image.url.startsWith("http")
-        ? r.image.url
-        : `${STRAPI_URL}${r.image.url}`
-      : undefined),
-});
-
-// ── Normalize: JSON local → mismo formato plano ──────────────────
-const normalizarLocal = (p: any): Propiedad => ({
-  slug: p.slug,
-  titulo: p.titulo,
-  zona: p.zona,
-  tipo: p.tipo,
-  precio: p.precio,
-  capacidad: p.capacidad,
-  habitaciones: p.habitaciones,
-  image_url: p.image_url,
-});
 
 // ── Fetch Strapi; si falla o devuelve vacío → JSON local (20 props) ─
 const STRAPI_URL = import.meta.env.PUBLIC_STRAPI_URL || "http://localhost:1337";
 let strapiData: any[] = [];
 try {
-  const res = await fetch(`${STRAPI_URL}/api/rentals?populate=*`);
+  const res = await fetch(`${STRAPI_URL}/api/rentals?populate=*&pagination[limit]=100`);
   const json = await res.json();
   strapiData = json.data || [];
 } catch {
   // Strapi no disponible — se usará el JSON local como fallback
 }
 
-const data: Propiedad[] =
+const data =
   strapiData.length > 0
-    ? strapiData.map(normalizarStrapi)
-    : (propiedades20 as any[]).map(normalizarLocal);
+    ? strapiData.map(normalizarRentalStrapi)
+    : (propiedades20 as any[]).map(normalizarRentalLocal);
 
 // ── Dataset mínimo para filtros.js (slug + criterios de filtrado) ─
 // titulo incluido para que mapa.js pueda mostrarlo en el popup
@@ -82,99 +46,55 @@ const dataset = data.map(({ slug, zona, precio, capacidad, titulo }) => ({
   titulo,
 }));
 
-const faqs = [
-  {
-    pregunta: "¿Por qué elegir Alquileres Costa del Sol?",
-    respuesta:
-      "Contamos con más de 15 años de experiencia local y todas nuestras propiedades son verificadas presencialmente. Ofrecemos soporte 24/7 y garantía de pago seguro.",
-  },
-  {
-    pregunta: "¿Cómo se realiza el proceso de reserva?",
-    respuesta:
-      "Es sencillo: eliges tu propiedad, seleccionas las fechas y realizas el pago de reserva. Nosotros nos encargamos de todo el proceso legal y de entregarte las llaves en mano.",
-  },
-  {
-    pregunta: "¿Qué servicios están incluidos en el precio?",
-    respuesta:
-      "Generalmente el precio incluye limpieza final, WiFi de alta velocidad, sábanas y toallas. Algunos alojamientos incluyen parking y acceso a piscina comunitaria.",
-  },
-  {
-    pregunta: "¿Es seguro alquilar con vosotros?",
-    respuesta:
-      "Absolutamente. Somos una empresa registrada oficialmente en la Junta de Andalucía. Tu dinero está protegido y solo se libera al propietario tras un check-in exitoso.",
-  },
-];
 ---
 
 <Layout
-  titulo="Alquiler Vacacional Costa del Sol 2026: +250 Apartamentos Exclusivos ✓"
-  descripcion="Alquila apartamentos y villas en Málaga, Marbella y Benalmádena. Gestión local profesional con 15 años de experiencia. Sin comisiones ocultas. ¡Reserva ahora!"
-  faq={faqs}
+  titulo={`Alquiler Vacacional Costa del Sol ${new Date().getFullYear()} | Apartamentos y Villas`}
+  descripcion="Alquila apartamentos y villas en Málaga, Marbella y Benalmádena. Reserva directa con anfitriones locales verificados. Sin comisiones ocultas."
+  alternateLinks={[
+    { lang: "es", url: "https://alquileres-costadelsol.com" },
+    { lang: "en", url: "https://alquileres-costadelsol.com/en" },
+    { lang: "fr", url: "https://alquileres-costadelsol.com/fr" },
+  ]}
 >
   <fragment slot="preload">
     <link
       rel="preload"
-      href="https://images.unsplash.com/photo-1596400501869-7c458a1f81df?auto=format&fit=crop&w=1920&q=70"
+      href="/images/zonas/fondo_hero_playa.webp"
       as="image"
     />
   </fragment>
-  <!-- Barra buscador -->
-  <section class="relative pt-32 pb-48 px-10 overflow-hidden bg-slate-900">
-    <!-- Fondo estático (Imagen UNIFICADA - Req. Usuario) -->
-    <div
-      class="absolute inset-0 bg-cover bg-center z-0"
-      style="background-image: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1920&q=80');"
-    >
-    </div>
 
-    <!-- Overlay oscuro suave (para legibilidad) -->
-    <div class="absolute inset-0 bg-black/40 z-10"></div>
+  <!-- Hero institucional -->
+  <Hero
+    titulo="Alquiler Vacacional en Costa del Sol"
+    tituloDestacado="Tu Ventana al Mediterráneo"
+    subtitulo="Desde áticos exclusivos en Málaga hasta villas escondidas en Nerja. Tu historia inolvidable empieza con una llave."
+    badge="Tu experto local en la Costa del Sol"
+    ctaLabel="Ver Propiedades"
+    ctaHref="/#rentals"
+  />
 
-    <div class="relative z-10 max-w-5xl mx-auto text-center">
-      <div
-        class="inline-block mb-4 px-4 py-1.5 rounded-full bg-marca-primaria/10 border border-marca-primaria/20 text-marca-acento text-sm font-semibold tracking-wide uppercase backdrop-blur-sm"
-      >
-        ✨ TU EXPERTO LOCAL EN LA COSTA DEL SOL
-      </div>
-      <h1
-        class="text-5xl md:text-7xl font-extrabold text-white tracking-tight mb-8 leading-tight"
-      >
-        Alquiler Vacacional en Costa del Sol
-        <br />
-        <span
-          class="text-transparent bg-clip-text bg-linear-to-r from-marca-acento to-marca-secundaria"
-          >Tu Ventana al Mediterráneo</span
-        >
-      </h1>
-      <p
-        class="text-xl text-slate-300 max-w-2xl mx-auto mb-10 font-light leading-relaxed"
-      >
-        Desde áticos exclusivos en Málaga hasta villas escondidas en Nerja. Tu
-        historia inolvidable empieza con una llave.
-      </p>
-    </div>
-  </section>
-
-  <!-- Search Bar (Floating) -->
+  <!-- Search Bar -->
   <BarraBusqueda />
 
   <!-- Top Destinos: SEO Silos (Linking Strategy) -->
-  <section class="py-16 bg-white border-b border-slate-100">
-    <div class="max-w-7xl mx-auto px-6">
+  <section class="py-16 bg-white border-b border-superficie">
+    <div class="contenedor-fluido">
       <div
         class="flex flex-col md:flex-row justify-between items-end mb-10 gap-6"
       >
         <div>
-          <h2 class="text-3xl font-bold text-marca-oscura mb-2">
+          <h2 class="text-3xl font-bold text-primario mb-2">
             {t("destinations.title")}
           </h2>
-          <p class="text-slate-500">
+          <p class="text-texto-secundario">
             {t("destinations.desc")}
           </p>
         </div>
         <a
           href="/#rentals"
-          class="text-marca-primaria font-bold hover:underline flex items-center gap-1"
+          class="text-secundario font-bold hover:underline flex items-center gap-1"
         >
           {t("destinations.viewAll")} →
         </a>
@@ -202,8 +122,8 @@ const faqs = [
                 zonasMap.set(slug, {
                   nombre,
                   slug,
-                  // Usamos la foto de la primera propiedad encontrada como cover
-                  img: p.image_url,
+                  // Fuente de verdad: mapa curado (idéntico al hero de /zona/[slug])
+                  img: IMAGENES_ZONA[slug] ?? IMAGEN_ZONA_FALLBACK,
                   cantidad: 1,
                 });
               } else {
@@ -217,25 +137,37 @@ const faqs = [
               {
                 nombre: "Málaga Centro",
                 slug: "malaga",
-                img: "https://images.unsplash.com/photo-1570698473651-b2de99bae12f?auto=format&fit=crop&w=400&q=80",
+                img: IMAGENES_ZONA["malaga"],
                 cantidad: 0,
               },
               {
                 nombre: "Marbella",
                 slug: "marbella",
-                img: "https://images.unsplash.com/photo-1565538563750-2591e8455e98?auto=format&fit=crop&w=400&q=80",
+                img: IMAGENES_ZONA["marbella"],
                 cantidad: 0,
               },
               {
                 nombre: "Benalmádena",
                 slug: "benalmadena",
-                img: "https://images.unsplash.com/photo-1595245842277-c990ee428236?auto=format&fit=crop&w=400&q=80",
+                img: IMAGENES_ZONA["benalmadena"],
                 cantidad: 0,
               },
               {
                 nombre: "Torre del Mar",
                 slug: "torre-del-mar",
-                img: "https://images.unsplash.com/photo-1596400501869-7c458a1f81df?auto=format&fit=crop&w=400&q=80",
+                img: IMAGENES_ZONA["torre-del-mar"],
+                cantidad: 0,
+              },
+              {
+                nombre: "Torremolinos",
+                slug: "torremolinos",
+                img: IMAGENES_ZONA["torremolinos"],
+                cantidad: 0,
+              },
+              {
+                nombre: "Nerja",
+                slug: "nerja",
+                img: IMAGENES_ZONA["nerja"],
                 cantidad: 0,
               },
             ];
@@ -264,19 +196,19 @@ const faqs = [
   <!-- Listings Grid -->
   <section
     id="rentals"
-    class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 bg-marca-clara"
+    class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 bg-fondo-claro"
   >
     <div
       class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6"
     >
       <div>
-        <h2 class="text-3xl md:text-4xl font-bold text-marca-oscura">
+        <h2 class="text-3xl md:text-4xl font-bold text-primario">
           {t("listings.title")}
         </h2>
-        <p class="text-slate-500 mt-2 text-lg">
+        <p class="text-texto-secundario mt-2 text-lg">
           {t("listings.subtitle")}
         </p>
-        <p class="text-sm text-marca-primaria font-semibold mt-1">
+        <p class="text-sm text-secundario font-semibold mt-1">
           <span id="contador-resultados"
             >{data.length}
             {
@@ -289,7 +221,7 @@ const faqs = [
       </div>
       <a
         href="#"
-        class="flex items-center text-marca-primaria font-semibold hover:text-marca-secundaria transition group"
+        class="flex items-center text-secundario font-semibold hover:text-secundario transition group"
       >
         {t("listings.viewCatalog")}
         <span class="ml-2 transform group-hover:translate-x-1 transition"
@@ -306,9 +238,9 @@ const faqs = [
         aria-label="Propiedad anterior"
         class="hidden md:flex absolute left-0 -translate-x-1/2 top-1/2 -translate-y-1/2 z-10
                w-11 h-11 items-center justify-center
-               bg-white rounded-full shadow-lg border border-slate-100
-               text-marca-oscura text-xl font-bold
-               hover:bg-marca-primaria hover:text-white hover:border-marca-primaria
+               bg-white rounded-full shadow-lg border border-superficie
+               text-primario text-xl font-bold
+               hover:bg-secundario hover:text-white hover:border-secundario
                transition-colors"
       >
         ←
@@ -340,9 +272,9 @@ const faqs = [
         aria-label="Propiedad siguiente"
         class="hidden md:flex absolute right-0 translate-x-1/2 top-1/2 -translate-y-1/2 z-10
                w-11 h-11 items-center justify-center
-               bg-white rounded-full shadow-lg border border-slate-100
-               text-marca-oscura text-xl font-bold
-               hover:bg-marca-primaria hover:text-white hover:border-marca-primaria
+               bg-white rounded-full shadow-lg border border-superficie
+               text-primario text-xl font-bold
+               hover:bg-secundario hover:text-white hover:border-secundario
                transition-colors"
       >
         →
@@ -352,17 +284,19 @@ const faqs = [
     {/* Empty State Rediseñado */}
     {
       data.length === 0 && (
-        <div class="text-center py-32 bg-white rounded-3xl border-2 border-dashed border-slate-200">
-          <div class="text-6xl mb-6">🏝️</div>
-          <h3 class="text-2xl font-bold text-marca-oscura mb-2">
-            No hay propiedades visibles
+        <div class="text-center py-32 bg-white rounded-3xl border-2 border-dashed border-superficie">
+          <div class="flex justify-center mb-6">
+            <Icon name="search-x" class="w-16 h-16 text-fondo-claro/80" aria-hidden="true" />
+          </div>
+          <h3 class="text-2xl font-bold text-primario mb-2">
+            No hay propiedades disponibles
           </h3>
-          <p class="text-slate-500 max-w-md mx-auto mb-8">
-            Parece que Strapi no está enviando datos o la colección está vacía.
-            ¡Añade tu primer piso en el panel de control!
+          <p class="text-texto-secundario max-w-md mx-auto mb-8">
+            Strapi no está enviando datos o la colección está vacía.
+            Añade propiedades desde el panel de administración.
           </p>
           <Boton href="#" variante="outline">
-            Ir al CMS →
+            Ir al panel →
           </Boton>
         </div>
       )
@@ -392,17 +326,17 @@ const faqs = [
 
   <section
     aria-label="Mapa de propiedades disponibles"
-    class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 bg-marca-clara"
+    class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 bg-fondo-claro"
   >
-    <h2 class="text-2xl md:text-3xl font-bold text-marca-oscura mb-2">
+    <h2 class="text-2xl md:text-3xl font-bold text-primario mb-2">
       {t("map.title")}
     </h2>
-    <p class="text-slate-500 mb-6 text-base">
+    <p class="text-texto-secundario mb-6 text-base">
       {t("map.desc")}
     </p>
     <div
       id="mapa-propiedades"
-      class="w-full rounded-2xl overflow-hidden border border-slate-200 shadow-sm"
+      class="w-full rounded-2xl overflow-hidden border border-superficie shadow-sm"
     >
       {/* Leaflet monta el mapa aquí — altura definida en <style> */}
     </div>
@@ -411,8 +345,8 @@ const faqs = [
   <!-- Testimonios de Clientes (Reviews) -->
   <SeccionTestimonios />
 
-  <!-- FAQ Section (Dudas y Confianza) -->
-  <SeccionFaq preguntas={faqs} />
+  <!-- FAQ Section (Dudas y Confianza) — datos gestionados en Strapi -->
+  <SeccionFaq pagina="home" />
 </Layout>
 
 {/* Dataset inyectado en build-time → lo leerá filtros.js en el navegador */}

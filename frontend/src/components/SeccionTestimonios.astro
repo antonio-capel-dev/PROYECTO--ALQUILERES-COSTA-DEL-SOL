@@ -1,99 +1,62 @@
 ---
-const testimonios = [
-  {
-    nombre: "Sophie Martin",
-    origen: "París, Francia",
-    texto:
-      "Una experiencia inolvidable. El apartamento en Marbella superó todas nuestras expectativas. La atención del equipo fue exquisita desde el primer momento.",
-    valoracion: 5,
-    foto: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=150&q=80",
-  },
-  {
-    nombre: "James & Sarah",
-    origen: "Londres, UK",
-    texto:
-      "We've been renting in Costa del Sol for years, and this is by far the best agency we've used. Professional, transparent, and the property was pristine.",
-    valoracion: 5,
-    foto: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=150&q=80",
-  },
-  {
-    nombre: "Elena R.",
-    origen: "Madrid, España",
-    texto:
-      "Buscábamos tranquilidad para teletrabajar un par de meses y encontramos el paraíso. Internet de alta velocidad y vistas al mar. Repetiremos seguro.",
-    valoracion: 5,
-    foto: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=150&q=80",
-  },
-];
-
 import { getLangFromUrl, useTranslations } from "../i18n/utils";
+import { buildStrapiUrl } from "../utils/imagenes";
+
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
+
+const STRAPI_URL = import.meta.env.PUBLIC_STRAPI_URL || "http://localhost:1337";
+
+let testimonios: any[] = [];
+try {
+  // STRAPI_URL sigue siendo necesaria para la URL del fetch
+  const res = await fetch(`${STRAPI_URL}/api/testimonios?populate=*`);
+  const json = await res.json();
+  testimonios = json.data || [];
+} catch {
+  // Strapi no disponible — sección no se renderiza
+}
 ---
 
-<section class="py-24 bg-slate-50 relative overflow-hidden">
-  <!-- Decoración de fondo -->
-  <div
-    class="absolute top-0 left-0 w-64 h-64 bg-marca-primaria/5 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"
-  >
-  </div>
-  <div
-    class="absolute bottom-0 right-0 w-96 h-96 bg-marca-acento/5 rounded-full blur-3xl translate-x-1/2 translate-y-1/2"
-  >
-  </div>
+{
+  testimonios.length > 0 && (
+    <section class="py-24 bg-fondo-claro relative overflow-hidden">
+      <div class="contenedor-fluido relative z-10">
+        <div class="text-center mb-16">
+          <span class="text-secundario font-semibold tracking-wider uppercase text-sm">
+            {t("reviews.badge")}
+          </span>
+          <h2 class="text-3xl md:text-5xl font-bold text-primario mt-3 mb-6">
+            {t("reviews.title")}
+          </h2>
+          <p class="text-texto-secundario max-w-2xl mx-auto text-lg">
+            {t("reviews.desc")}
+          </p>
+        </div>
 
-  <div class="max-w-7xl mx-auto px-6 relative z-10">
-    <div class="text-center mb-16">
-      <span
-        class="text-marca-primaria font-semibold tracking-wider uppercase text-sm"
-        >{t("reviews.badge")}</span
-      >
-      <h2 class="text-3xl md:text-5xl font-bold text-marca-oscura mt-3 mb-6">
-        {t("reviews.title")}
-      </h2>
-      <p class="text-slate-500 max-w-2xl mx-auto text-lg">
-        {t("reviews.desc")}
-      </p>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-      {
-        testimonios.map((t) => (
-          <div class="bg-white p-8 rounded-2xl shadow-sm hover:shadow-xl transition-shadow duration-300 border border-slate-100 flex flex-col h-full">
-            <div class="flex items-center gap-4 mb-6">
-              <img
-                src={t.foto}
-                alt={`Foto de ${t.nombre}`}
-                class="w-16 h-16 rounded-full object-cover border-2 border-marca-primaria/20"
-              />
-              <div>
-                <h3 class="font-bold text-marca-oscura text-lg">{t.nombre}</h3>
-                <p class="text-slate-400 text-sm">{t.origen}</p>
+        <div class="grid-responsive">
+          {testimonios.map((item: any) => (
+            <div class="bg-white p-8 rounded-2xl shadow-sm hover:shadow-xl transition-shadow duration-300 border border-superficie flex flex-col h-full">
+              <div class="flex items-center gap-4 mb-6">
+                {item.foto?.url && (
+                  <img
+                    src={buildStrapiUrl(item.foto.url)}
+                    alt={`Foto de ${item.nombre}`}
+                    class="w-16 h-16 rounded-full object-cover border-2 border-secundario/20"
+                  />
+                )}
+                <div>
+                  <h3 class="font-bold text-primario text-lg">{item.nombre}</h3>
+                  {item.origen && (
+                    <p class="text-texto-secundario text-sm">{item.origen}</p>
+                  )}
+                </div>
               </div>
+              <p class="text-texto-secundario italic leading-relaxed grow">"{item.texto}"</p>
             </div>
-
-            <div class="flex text-yellow-400 mb-4 text-lg">
-              {"★".repeat(t.valoracion)}
-            </div>
-
-            <p class="text-slate-600 italic leading-relaxed grow">
-              "{t.texto}"
-            </p>
-          </div>
-        ))
-      }
-    </div>
-
-    <div class="mt-16 text-center">
-      <div
-        class="inline-flex items-center gap-2 bg-white px-6 py-3 rounded-full shadow-md border border-slate-100"
-      >
-        <span class="text-2xl font-bold text-marca-oscura">4.9/5</span>
-        <div class="flex text-yellow-400 text-xl">★★★★★</div>
-        <span class="text-slate-500 text-sm ml-2"
-          >en Google Reviews (+500 reseñas)</span
-        >
+          ))}
+        </div>
       </div>
-    </div>
-  </div>
-</section>
+    </section>
+  )
+}

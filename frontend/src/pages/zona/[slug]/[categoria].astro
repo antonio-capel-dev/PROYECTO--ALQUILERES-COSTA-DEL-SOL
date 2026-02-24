@@ -3,6 +3,8 @@ import Layout from "../../../layouts/Layout.astro";
 import FichaAlquiler from "../../../components/FichaAlquiler.astro";
 import HeroZona from "../../../components/HeroZona.astro";
 import Boton from "../../../components/ui/Boton.astro";
+import Breadcrumbs from "../../../components/ui/Breadcrumbs.astro";
+import { normalizarRentalStrapi } from "../../../utils/normalizadores";
 
 // ── 1. GET STATIC PATHS (Combinatoria Zona * Categoria) ─────────────────────
 export async function getStaticPaths() {
@@ -22,10 +24,6 @@ export async function getStaticPaths() {
     },
   ];
 
-  /* 
-     En un proyecto real, consultaríamos Strapi para saber qué zonas tienen propiedades de qué tipo.
-     Para el MVP académico, generamos la combinatoria completa para todas las zonas principales.
-  */
   const zones = [
     { slug: "marbella", nombre: "Marbella" },
     { slug: "malaga", nombre: "Málaga" },
@@ -39,7 +37,7 @@ export async function getStaticPaths() {
     import.meta.env.PUBLIC_STRAPI_URL || "http://localhost:1337";
   let propData = [];
   try {
-    const res = await fetch(`${STRAPI_URL}/api/rentals?populate=*`);
+    const res = await fetch(`${STRAPI_URL}/api/rentals?populate=*&pagination[limit]=100`);
     const json = await res.json();
     propData = json.data || [];
   } catch (e) {
@@ -56,10 +54,7 @@ export async function getStaticPaths() {
 
 const { zona, categoria, propData } = Astro.props;
 
-// ── 2. FILTRADO INTELIGENTE (Simulado para demostración) ────────────────────
-// En producción real, esto filtrarían por tags reales de Strapi.
-// Aquí usamos una heurística básica basada en keywords o precio para "simular" la categorización.
-const filteredProps = propData.filter((p) => {
+const filteredProps = propData.filter((p: any) => {
   // Primero filtramos por zona
   const pSlug = p.ubicacion?.slug || p.location?.toLowerCase() || "";
   if (!pSlug.includes(zona.slug)) return false;
@@ -68,17 +63,16 @@ const filteredProps = propData.filter((p) => {
   if (categoria.slug === "lujo") return p.price > 150;
   if (categoria.slug === "familias") return (p.detalles?.capacidad || 0) >= 4;
   if (categoria.slug === "playa")
-    return p.description?.toLowerCase().includes("playa") || true; // Fallback generoso
+    return p.description?.toLowerCase().includes("playa");
 
   return true;
 });
+
 
 // Metadatos SEO Específicos (Long Tail)
 const seoTitle = `Alquiler ${categoria.seo} en ${zona.nombre} | Costa del Sol`;
 const seoDesc = `Descubre nuestra selección exclusiva de ${categoria.nombre.toLowerCase()} en ${zona.nombre}. Precios verificados y reserva directa.`;
 
-// Imagen Hero (Reutilizamos la de la zona para coherencia)
-// En Fase 15 podríamos tener imágenes específicas por categoría si quisiéramos.
 ---
 
 <Layout
@@ -90,14 +84,29 @@ const seoDesc = `Descubre nuestra selección exclusiva de ${categoria.nombre.toL
     { nombre: categoria.nombre, url: `/zona/${zona.slug}/${categoria.slug}` },
   ]}
 >
+  <div class="relative z-40 bg-white border-b border-superficie shadow-xs">
+    <Breadcrumbs
+      items={[
+        { label: "Inicio", href: "/" },
+        { label: zona.nombre, href: `/zona/${zona.slug}` },
+        {
+          label: categoria.nombre,
+          href: `/zona/${zona.slug}/${categoria.slug}`,
+          active: true,
+        },
+      ]}
+      backLink={{ label: "Volver a la zona", href: `/zona/${zona.slug}` }}
+    />
+  </div>
+
   <HeroZona nombre={`${zona.nombre} ${categoria.nombre}`} slug={zona.slug} />
 
-  <section class="max-w-7xl mx-auto px-6 py-16">
+  <section class="contenedor-fluido py-16">
     <div class="mb-12 text-center max-w-3xl mx-auto">
-      <h2 class="text-3xl font-bold text-marca-oscura mb-4">
+      <h2 class="text-3xl font-bold text-primario mb-4">
         {categoria.seo} en {zona.nombre}
       </h2>
-      <p class="text-slate-500 text-lg">
+      <p class="text-texto-secundario text-lg">
         Hemos seleccionado las mejores propiedades en {zona.nombre} pensando en
         <strong>{categoria.nombre.toLowerCase()}</strong>. Disfruta de la Costa
         del Sol a tu manera.
@@ -107,28 +116,25 @@ const seoDesc = `Descubre nuestra selección exclusiva de ${categoria.nombre.toL
     {
       filteredProps.length > 0 ? (
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredProps.map((prop: any) => (
-            <FichaAlquiler
-              titulo={prop.title}
-              precio={prop.price}
-              habitaciones={prop.detalles?.habitaciones}
-              capacidad={prop.detalles?.capacidad}
-              image_url={prop.image_url || prop.image?.url}
-              slug={prop.slug}
-              zona={zona.nombre}
-              tipo={prop.tipo}
-            />
-          ))}
+          {filteredProps.map((prop: any) => {
+            const p = normalizarRentalStrapi(prop);
+            return (
+              <FichaAlquiler
+                {...p}
+                zona={p.zona || zona.nombre}
+              />
+            );
+          })}
         </div>
       ) : (
-        <div class="text-center py-20 bg-slate-50 rounded-3xl border-2 border-dashed border-slate-200">
-          <p class="text-slate-500">
+        <div class="text-center py-20 bg-fondo-claro rounded-3xl border-2 border-dashed border-superficie">
+          <p class="text-texto-secundario">
             No encontramos propiedades específicas de tipo "{categoria.nombre}"
             en este momento para {zona.nombre}.
             <br />
             <a
               href={`/zona/${zona.slug}`}
-              class="text-marca-primaria underline"
+              class="text-secundario underline"
             >
               Ver todas las propiedades en {zona.nombre}
             </a>
@@ -138,8 +144,8 @@ const seoDesc = `Descubre nuestra selección exclusiva de ${categoria.nombre.toL
     }
   </section>
 
-  <section class="bg-marca-clara py-16 text-center">
-    <h3 class="text-2xl font-bold text-marca-oscura mb-6">
+  <section class="bg-fondo-claro py-16 text-center">
+    <h3 class="text-2xl font-bold text-primario mb-6">
       Explora otras colecciones en {zona.nombre}
     </h3>
     <div class="flex flex-wrap justify-center gap-4">

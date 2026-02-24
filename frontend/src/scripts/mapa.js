@@ -10,6 +10,14 @@
 //                        con <script is:inline> (bloqueante) antes del bundle
 // ===================================================================
 
+// Tokens de color del sistema (--color-marca-* de global.css)
+const COLOR = {
+  titulo:    '#0f172a', // --color-marca-oscura
+  subtitulo: '#64748b', // slate-500 (neutro)
+  precio:    '#2563eb', // --color-marca-primaria
+  enlace:    '#2563eb', // --color-marca-primaria
+};
+
 /** Coordenadas de fallback por zona — se usan si el item no trae lat/lng */
 const COORDS_ZONA = {
   'Marbella':     [36.5100, -4.8850],
@@ -87,16 +95,16 @@ export default function inicializarMapa() {
     // Popup: título + precio/zona + enlace a la página de detalle
     marker.bindPopup(`
       <div style="min-width:170px;font-family:system-ui,sans-serif;line-height:1.6">
-        <strong style="font-size:.9rem;display:block;color:#1e293b;margin-bottom:2px">
+        <strong style="font-size:.9rem;display:block;color:${COLOR.titulo};margin-bottom:2px">
           ${prop.titulo ?? prop.slug}
         </strong>
-        <span style="font-size:.78rem;color:#64748b">
+        <span style="font-size:.78rem;color:${COLOR.subtitulo}">
           ${prop.zona} &nbsp;·&nbsp;
-          <b style="color:#f59e0b">${prop.precio}€</b>/noche
+          <b style="color:${COLOR.precio}">${prop.precio}€</b>/noche
         </span>
         <br>
         <a href="/propiedad/${prop.slug}"
-           style="font-size:.8rem;color:#3b82f6;font-weight:600;text-decoration:none;display:inline-block;margin-top:4px">
+           style="font-size:.8rem;color:${COLOR.enlace};font-weight:600;text-decoration:none;display:inline-block;margin-top:4px">
           Ver disponibilidad →
         </a>
       </div>

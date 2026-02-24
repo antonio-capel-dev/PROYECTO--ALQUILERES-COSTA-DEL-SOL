@@ -7,7 +7,10 @@ interface Props {
 const { items, backLink } = Astro.props;
 ---
 
-<nav aria-label="Breadcrumb" class="bg-slate-50 border-b border-slate-200 py-3">
+<nav
+  aria-label="Breadcrumb"
+  class="bg-fondo-claro border-b border-superficie py-3 relative z-10"
+>
   <div
     class="contenedor-fluido flex flex-wrap items-center justify-between gap-2"
   >
@@ -16,15 +19,15 @@ const { items, backLink } = Astro.props;
       {
         items.map((item, index) => (
           <li class="flex items-center">
-            {index > 0 && <span class="mx-2 text-slate-300">/</span>}
+            {index > 0 && <span class="mx-2 text-fondo-claro/80">/</span>}
             {item.active ? (
-              <span class="text-marca-oscura font-bold" aria-current="page">
+              <span class="text-primario font-bold" aria-current="page">
                 {item.label}
               </span>
             ) : (
               <a
                 href={item.href}
-                class="text-slate-500 hover:text-marca-primaria transition font-medium"
+                class="text-texto-secundario hover:text-secundario transition font-medium"
               >
                 {item.label}
               </a>
@@ -39,7 +42,7 @@ const { items, backLink } = Astro.props;
       backLink && (
         <a
           href={backLink.href}
-          class="text-xs font-semibold text-marca-primaria hover:text-marca-oscura hover:underline flex items-center gap-1 transition-colors ml-auto sm:ml-0"
+          class="text-sm font-bold text-secundario hover:text-primario hover:underline flex items-center gap-1 transition-colors ml-auto sm:ml-0 bg-white px-3 py-1 rounded-full shadow-sm border border-superficie"
         >
           <span class="text-lg leading-none">←</span> {backLink.label}
         </a>

@@ -1,10 +1,13 @@
 ---
 interface Props {
   href?: string;
-  variante?: "primario" | "secundario" | "outline" | "fantasma";
+  variante?: "primario" | "secundario" | "acento" | "outline" | "fantasma";
   tamano?: "peque" | "medio" | "grande";
   clase?: string;
   tipo?: "button" | "submit" | "reset";
+  target?: "_blank" | "_self" | "_parent" | "_top";
+  onclick?: string;
+  disabled?: boolean;
 }
 
 const {
@@ -13,14 +16,18 @@ const {
   tamano = "medio",
   clase = "",
   tipo = "button",
+  target,
+  onclick,
+  disabled = false,
+  ...rest
 } = Astro.props;
 
-// Diccionario de estilos según la variante (Sincronizado con @theme en global.css)
 const variantes = {
-  primario: "boton-primario",
+  primario:   "boton-primario",
   secundario: "boton-secundario",
-  outline: "boton-outline",
-  fantasma: "boton-fantasma hover:bg-slate-100 text-slate-600",
+  acento:     "boton-acento",
+  outline:    "boton-outline",
+  fantasma:   "boton-fantasma",
 };
 
 const tamanos = {
@@ -29,16 +36,28 @@ const tamanos = {
   grande: "boton-grande",
 };
 
-const estilos = `boton ${variantes[variante]} ${tamanos[tamano]} ${clase}`;
+const estilos = `boton ${variantes[variante]} ${tamanos[tamano]} ${disabled ? "opacity-50 cursor-not-allowed pointer-events-none" : ""} ${clase}`;
 ---
 
 {
   href ? (
-    <a href={href} class={estilos}>
+    <a
+      href={href}
+      class={estilos}
+      target={target}
+      rel={target === "_blank" ? "noopener noreferrer" : undefined}
+      {...rest}
+    >
       <slot />
     </a>
   ) : (
-    <button type={tipo} class={estilos}>
+    <button
+      type={tipo}
+      class={estilos}
+      onclick={onclick}
+      disabled={disabled}
+      {...rest}
+    >
       <slot />
     </button>
   )

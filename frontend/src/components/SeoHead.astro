@@ -1,4 +1,6 @@
 ---
+import { getLangFromUrl } from "../i18n/utils";
+
 export interface Props {
   titulo?: string;
   descripcion?: string;
@@ -10,6 +12,7 @@ export interface Props {
   urlSiguiente?: string | URL;
   faq?: { pregunta: string; respuesta: string }[];
   breadcrumbs?: { nombre: string; url: string }[];
+  alternateLinks?: { lang: string; url: string }[];
 }
 
 const {
@@ -23,7 +26,16 @@ const {
   urlSiguiente,
   faq = [],
   breadcrumbs = [],
+  alternateLinks = [],
 } = Astro.props;
+
+const lang = getLangFromUrl(Astro.url);
+const OG_LOCALE: Record<string, string> = {
+  es: "es_ES",
+  en: "en_US",
+  fr: "fr_FR",
+};
+const ogLocale = OG_LOCALE[lang] ?? "es_ES";
 
 const siteName = "Alquileres Costa del Sol";
 const twitterHandle = "@alquileres_costasol";
@@ -40,6 +52,13 @@ const twitterHandle = "@alquileres_costasol";
 {urlPrevia && <link rel="prev" href={urlPrevia} />}
 {urlSiguiente && <link rel="next" href={urlSiguiente} />}
 
+<!-- Hreflang Tags -->
+{
+  alternateLinks.map((link) => (
+    <link rel="alternate" hreflang={link.lang} href={link.url} />
+  ))
+}
+
 <title>{titulo}</title>
 <meta name="title" content={titulo} />
 <meta name="description" content={descripcion} />
@@ -52,7 +71,7 @@ const twitterHandle = "@alquileres_costasol";
 <meta property="og:description" content={descripcion} />
 <meta property="og:image" content={new URL(imagen, Astro.url)} />
 <meta property="og:site_name" content={siteName} />
-<meta property="og:locale" content="es_ES" />
+<meta property="og:locale" content={ogLocale} />
 
 <!-- Twitter -->
 <meta property="twitter:card" content="summary_large_image" />

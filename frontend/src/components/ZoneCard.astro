@@ -1,4 +1,6 @@
 ---
+import Icon from "./ui/Icon.astro";
+
 interface Props {
   nombre: string;
   slug: string;
@@ -10,8 +12,7 @@ interface Props {
 const { nombre, slug, imagen, descripcion, cantidad } = Astro.props;
 
 // Estrategia de Fallback visual (Defensa Oral: "Experience Degradation Graceful")
-const DEFAULT_IMAGE =
-  "https://images.unsplash.com/photo-1569335466847-b8f362793152?auto=format&fit=crop&w=400&q=80";
+const DEFAULT_IMAGE = "/images/zonas/placeholder.webp";
 const safeImage = imagen && imagen !== "" ? imagen : DEFAULT_IMAGE;
 ---
 
@@ -27,7 +28,7 @@ const safeImage = imagen && imagen !== "" ? imagen : DEFAULT_IMAGE;
     loading="lazy"
     width="400"
     height="225"
-    class="w-full h-full object-cover transform group-hover:scale-110 transition duration-700 ease-out bg-slate-200"
+    class="w-full h-full object-cover transform group-hover:scale-110 transition duration-700 ease-out bg-superficie"
   />
 
   {/* Gradiente de legibilidad */}
@@ -45,7 +46,7 @@ const safeImage = imagen && imagen !== "" ? imagen : DEFAULT_IMAGE;
     <div class="flex items-center justify-between">
       {
         descripcion && (
-          <p class="text-xs text-slate-300 opacity-90 font-medium truncate max-w-[70%]">
+          <p class="text-xs text-fondo-claro/80 opacity-90 font-medium truncate max-w-[70%]">
             {descripcion}
           </p>
         )
@@ -53,8 +54,9 @@ const safeImage = imagen && imagen !== "" ? imagen : DEFAULT_IMAGE;
 
       {
         cantidad !== undefined && (
-          <span class="text-xs bg-white/20 backdrop-blur-md px-2 py-0.5 rounded-full text-white border border-white/30">
-            {cantidad} 🏠
+          <span class="inline-flex items-center gap-1 text-xs bg-white/20 backdrop-blur-md px-2 py-0.5 rounded-full text-white border border-white/30">
+            {cantidad}
+            <Icon name="home" class="w-3 h-3" aria-hidden="true" />
           </span>
         )
       }

@@ -1,5 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import Icon from "../components/ui/Icon.astro";
 
 // Datos simulados para esta landing específica
 const properties = [
@@ -43,34 +44,34 @@ const properties = [
   ]}
 >
   <!-- Hero Section específico para Long Tail -->
-  <section class="relative bg-marca-oscura text-white py-24 text-center px-4">
+  <section class="relative bg-primario text-white py-24 text-center px-4">
     <div class="absolute inset-0 overflow-hidden opacity-30">
       <!-- Background pattern placeholder -->
       <img
-        src="https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?q=80&w=2049&auto=format&fit=crop"
+        src="/images/about/piscina.webp"
         alt="Marbella Piscina"
         class="w-full h-full object-cover"
       />
     </div>
     <div class="relative z-10 max-w-4xl mx-auto">
       <span
-        class="inline-block bg-marca-primaria/20 backdrop-blur-md px-4 py-2 rounded-full text-marca-acento font-semibold mb-6 border border-marca-primaria/30"
+        class="inline-block bg-secundario/20 backdrop-blur-md px-4 py-2 rounded-full text-acento font-semibold mb-6 border border-secundario/30"
       >
-        ☀️ Especial Familias 2026
+        <Icon name="sun" class="w-4 h-4 inline-block mr-1" aria-hidden="true" /> Especial Familias 2026
       </span>
       <h1
         class="text-4xl md:text-6xl font-extrabold tracking-tight mb-6 leading-tight"
       >
         Marbella en Familia: <br />
-        <span class="text-marca-acento">Piscina + Vistas al Mar</span>
+        <span class="text-acento">Piscina + Vistas al Mar</span>
       </h1>
-      <p class="text-lg md:text-xl text-slate-300 max-w-2xl mx-auto mb-10">
+      <p class="text-lg md:text-xl text-fondo-claro/80 max-w-2xl mx-auto mb-10">
         Olvídate de hoteles masificados. Descubre villas y apartamentos
         diseñados para que los niños disfruten y los padres descansen.
       </p>
       <a
         href="#booking"
-        class="bg-marca-secundaria text-white px-8 py-4 rounded-full font-bold hover:bg-marca-primaria transition shadow-xl transform hover:-translate-y-1"
+        class="bg-secundario text-white px-8 py-4 rounded-full font-bold hover:bg-secundario transition shadow-xl transform hover:-translate-y-1"
       >
         Ver Disponibilidad Familiar
       </a>
@@ -82,30 +83,36 @@ const properties = [
     <div
       class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-center"
     >
-      <div class="p-6 bg-marca-clara rounded-2xl">
-        <div class="text-4xl mb-4">🏊‍♂️</div>
-        <h3 class="text-xl font-bold text-marca-oscura mb-2">
+      <div class="p-6 bg-fondo-claro rounded-2xl">
+        <div class="flex justify-center mb-4">
+          <Icon name="waves" class="w-10 h-10 text-secundario" aria-hidden="true" />
+        </div>
+        <h3 class="text-xl font-bold text-primario mb-2">
           Piscina Garantizada
         </h3>
-        <p class="text-slate-600">
+        <p class="text-texto-secundario">
           Todas nuestras opciones tienen piscina vigilada o privada.
         </p>
       </div>
-      <div class="p-6 bg-marca-clara rounded-2xl">
-        <div class="text-4xl mb-4">🌊</div>
-        <h3 class="text-xl font-bold text-marca-oscura mb-2">
+      <div class="p-6 bg-fondo-claro rounded-2xl">
+        <div class="flex justify-center mb-4">
+          <Icon name="waves" class="w-10 h-10 text-secundario" aria-hidden="true" />
+        </div>
+        <h3 class="text-xl font-bold text-primario mb-2">
           Vistas al Mediterráneo
         </h3>
-        <p class="text-slate-600">
+        <p class="text-texto-secundario">
           Despierta con la brisa del mar. Ubicaciones privilegiadas.
         </p>
       </div>
-      <div class="p-6 bg-marca-clara rounded-2xl">
-        <div class="text-4xl mb-4">👶</div>
-        <h3 class="text-xl font-bold text-marca-oscura mb-2">
+      <div class="p-6 bg-fondo-claro rounded-2xl">
+        <div class="flex justify-center mb-4">
+          <Icon name="users" class="w-10 h-10 text-secundario" aria-hidden="true" />
+        </div>
+        <h3 class="text-xl font-bold text-primario mb-2">
           Family Friendly
         </h3>
-        <p class="text-slate-600">
+        <p class="text-texto-secundario">
           Cunas, tronas y espacios seguros para los más pequeños.
         </p>
       </div>
@@ -113,23 +120,23 @@ const properties = [
   </section>
 
   <!-- Listings -->
-  <section id="booking" class="py-20 bg-marca-clara px-4">
+  <section id="booking" class="py-20 bg-fondo-claro px-4">
     <div class="max-w-7xl mx-auto">
-      <h2 class="text-3xl font-bold text-marca-oscura mb-12 text-center">
+      <h2 class="text-3xl font-bold text-primario mb-12 text-center">
         Alojamientos Destacados para Tu Familia
       </h2>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
         {
           properties.map((item) => (
-            <article class="bg-white rounded-xl shadow-sm hover:shadow-lg transition border border-slate-100 overflow-hidden">
-              <div class="h-48 bg-slate-200 flex items-center justify-center text-slate-400">
+            <article class="bg-white rounded-xl shadow-sm hover:shadow-lg transition border border-superficie overflow-hidden">
+              <div class="h-48 bg-superficie flex items-center justify-center text-texto-secundario">
                 {/* Placeholder Image */}
-                <span class="text-4xl">🏡</span>
+                <Icon name="home" class="w-12 h-12 text-fondo-claro/80" aria-hidden="true" />
               </div>
               <div class="p-6">
                 <div class="flex justify-between items-start mb-4">
-                  <h3 class="text-xl font-bold text-marca-oscura">
+                  <h3 class="text-xl font-bold text-primario">
                     {item.title}
                   </h3>
                   <span class="bg-green-100 text-green-700 text-xs font-bold px-2 py-1 rounded">
@@ -138,14 +145,14 @@ const properties = [
                 </div>
                 <ul class="flex flex-wrap gap-2 mb-6">
                   {item.features.map((feat) => (
-                    <li class="text-xs bg-slate-100 text-slate-600 px-2 py-1 rounded">
+                    <li class="text-xs bg-superficie text-texto-secundario px-2 py-1 rounded">
                       {feat}
                     </li>
                   ))}
                 </ul>
                 <a
                   href="#"
-                  class="block w-full text-center bg-marca-primaria text-white py-2 rounded-lg font-semibold hover:bg-marca-secundaria transition"
+                  class="block w-full text-center bg-secundario text-white py-2 rounded-lg font-semibold hover:bg-secundario transition"
                 >
                   Reservar Ahora
                 </a>
@@ -158,19 +165,19 @@ const properties = [
   </section>
 
   <!-- FAQ / SEO Content -->
-  <section class="py-16 bg-white px-4 border-t border-slate-100">
+  <section class="py-16 bg-white px-4 border-t border-superficie">
     <div class="max-w-4xl mx-auto prose prose-blue">
-      <h2 class="text-2xl font-bold text-marca-oscura mb-6">
+      <h2 class="text-2xl font-bold text-primario mb-6">
         ¿Por qué elegir Marbella para tus vacaciones familiares?
       </h2>
-      <p class="text-slate-600 mb-4">
+      <p class="text-texto-secundario mb-4">
         Marbella no es solo lujo y fiesta. Es uno de los destinos más seguros y
         amigables para familias en la Costa del Sol. Nuestros <strong
           >alquileres vacacionales en Marbella con vistas al mar</strong
         > están situados en zonas tranquilas como Elviria o Los Monteros, lejos del
         ruido pero cerca de la playa.
       </p>
-      <p class="text-slate-600 mb-4">
+      <p class="text-texto-secundario mb-4">
         Además, contar con <strong>piscina privada o comunitaria</strong> es esencial
         para esos días en los que el mar está agitado o simplemente quieres relajarte
         mientras los niños juegan seguros.

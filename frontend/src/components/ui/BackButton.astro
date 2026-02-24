@@ -1,0 +1,43 @@
+---
+import Boton from "./Boton.astro";
+
+interface Props {
+  href?: string;
+  label?: string;
+  clase?: string;
+}
+
+const { href, label = "Volver", clase = "" } = Astro.props;
+---
+
+{
+  /* 
+    Si hay href, es un enlace normal.
+    Si no, usa history.back() con un script inline ligero.
+  */
+}
+{
+  href ? (
+    <Boton
+      href={href}
+      variante="fantasma"
+      tamano="peque"
+      clase={`group flex items-center gap-2 pl-0 hover:bg-transparent hover:text-secundario ${clase}`}
+    >
+      <span class="text-xl group-hover:-translate-x-1 transition-transform">
+        ←
+      </span>
+      {label}
+    </Boton>
+  ) : (
+    <button
+      onclick="history.back()"
+      class={`group flex items-center gap-2 text-texto-secundario hover:text-secundario font-bold transition-colors text-sm ${clase}`}
+    >
+      <span class="text-xl group-hover:-translate-x-1 transition-transform">
+        ←
+      </span>
+      {label}
+    </button>
+  )
+}

@@ -1,46 +1,40 @@
 @import "tailwindcss";
 
-/* 
-  SISTEMA DE DISEÑO "COSTA SOL" (Atomic & Fluid)
-  -------------------------------------------------------------------------
-  Arquitectura: TailwindCSS 4
-  Estrategia: Tokens semánticos en @theme + Variables CSS nativas
-  Nivel: Sobresaliente (Interfaces 10)
-*/
+/* SISTEMA DE DISEÑO — ALQUILERES COSTA DEL SOL */
 
 @theme {
-  /* PALETA DE COLORES SEMÁNTICA (IDENTIDAD ORIGINAL RESTAURADA) */
-  --color-marca-oscura:     #0f172a; /* brand-dark */
-  --color-marca-primaria:   #2563eb; /* brand-primary */
-  --color-marca-secundaria: #3b82f6; /* Variation for hover/gradients */
-  --color-marca-acento:     #06b6d4; /* brand-accent */
-  --color-marca-purpura:    #9333ea; /* brand-purple */
-  --color-marca-clara:      #f8fafc; /* Slate 50 */
-  
+  /* PALETA CROMÁTICA MEDITERRÁNEA (Fuente única de verdad) */
+  --color-primario:         #0f172a; /* Azul noche profundo   — fondos / tipografía */
+  --color-secundario:       #1e3a8a; /* Azul institucional    — CTAs / botones */
+  --color-acento:           #0ea5e9; /* Azul mar Mediterráneo — acentos / interacción */
+  --color-fondo-claro:      #f8fafc; /* Blanco limpio         — fondos de sección */
+  --color-fondo-oscuro:     #020617; /* Azul casi negro       — hero / footer */
+  --color-texto-secundario: #64748b; /* Gris uniforme         — texto de apoyo */
+  --color-superficie:       #f1f5f9; /* Gris muy claro        — bordes / tarjetas */
+
   /* TIPOGRAFÍA */
   --font-sans: "Inter", system-ui, -apple-system, sans-serif;
 
-  /* SOMBRAS Y EFECTOS */
-  --sombra-marca: 0 10px 15px -3px rgba(37, 99, 235, 0.1), 0 4px 6px -2px rgba(37, 99, 235, 0.05);
-  
+  /* SOMBRAS */
+  --sombra-marca: 0 10px 15px -3px rgba(30, 58, 138, 0.1), 0 4px 6px -2px rgba(30, 58, 138, 0.05);
+
   /* ANIMACIONES */
   --ease-fluido: cubic-bezier(0.4, 0, 0.2, 1);
   --animate-fade-in-up: fadeInUp 0.5s ease-out forwards;
 
   @keyframes fadeInUp {
     from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+    to   { opacity: 1; transform: translateY(0); }
   }
 }
 
-/* 
-  CAPA BASE (Reset & defaults & :root formalization) 
+/*
+  CAPA BASE
 */
 @layer base {
   :root {
-    /* Formalización para Defensa Oral: Variables CSS Nativas */
-    --espaciado-base: 0.25rem; /* 4px (Tailwind scale) */
-    --radio-borde-tarjeta: 1rem; /* 16px */
+    --espaciado-base: 0.25rem;
+    --radio-borde-tarjeta: 1rem;
     --fuente-principal: "Inter", sans-serif;
   }
 
@@ -51,87 +45,87 @@
   }
 
   body {
-    @apply font-sans text-slate-900 bg-white;
+    @apply font-sans text-primario bg-white;
     text-rendering: optimizeLegibility;
   }
 
-  /* TIPOGRAFÍA FLUIDA (Clamp nativo) */
+  /* TIPOGRAFÍA FLUIDA */
   h1 {
-    @apply font-extrabold tracking-tight text-marca-oscura;
-    font-size: clamp(2.5rem, 5vw + 1rem, 4.5rem); /* Min 40px, Val 5vw+16px, Max 72px */
+    @apply font-extrabold tracking-tight text-primario;
+    font-size: clamp(2.5rem, 5vw + 1rem, 4.5rem);
     line-height: 1.1;
   }
 
   h2 {
-    @apply font-bold tracking-tight text-marca-oscura;
+    @apply font-bold tracking-tight text-primario;
     font-size: clamp(2rem, 4vw + 1rem, 3rem);
     line-height: 1.2;
   }
 
   h3 {
-    @apply font-bold text-marca-oscura;
+    @apply font-bold text-primario;
     font-size: clamp(1.5rem, 3vw + 1rem, 2.25rem);
   }
 
   h4, h5, h6 {
-    @apply font-bold text-marca-oscura;
+    @apply font-bold text-primario;
   }
 
   p {
-    @apply leading-relaxed text-slate-600;
+    @apply leading-relaxed text-texto-secundario;
     font-size: clamp(1rem, 0.5vw + 0.875rem, 1.125rem);
   }
 }
 
-/* 
-  COMPONENTES REUTILIZABLES (Abstracciones UI) 
+/*
+  COMPONENTES REUTILIZABLES
 */
 @layer components {
-  /* Botones - Sistema Completo */
+
+  /* Botones */
   .boton {
     @apply inline-flex items-center justify-center font-bold rounded-xl transition-all duration-300 focus:outline-none focus:ring-4 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer active:scale-95;
   }
-  
-  /* Variantes */
+
   .boton-primario {
-    @apply border border-transparent text-white bg-marca-primaria hover:bg-marca-oscura focus:ring-marca-primaria/30 shadow-lg shadow-marca-primaria/20 hover:shadow-marca-primaria/40;
+    @apply border border-transparent text-white bg-secundario hover:bg-primario focus:ring-secundario/30 shadow-lg shadow-secundario/20 hover:shadow-secundario/40;
   }
-  
+
   .boton-secundario {
-    @apply border border-transparent text-marca-primaria bg-marca-primaria/10 hover:bg-marca-primaria/20 focus:ring-marca-primaria/30;
+    @apply border border-transparent text-secundario bg-secundario/10 hover:bg-secundario/20 focus:ring-secundario/30;
   }
 
   .boton-acento {
-    @apply border border-transparent text-white bg-marca-acento hover:bg-red-600 focus:ring-marca-acento/30 shadow-lg shadow-marca-acento/20;
+    @apply border border-transparent text-white bg-acento hover:bg-sky-600 focus:ring-acento/30 shadow-lg shadow-acento/20;
   }
-  
+
   .boton-outline {
-    @apply border-2 border-slate-200 text-slate-700 bg-transparent hover:border-marca-primaria hover:text-marca-primaria focus:ring-slate-200;
+    @apply border-2 border-superficie text-texto-secundario bg-transparent hover:border-secundario hover:text-secundario focus:ring-superficie;
   }
 
   .boton-fantasma {
-    @apply bg-transparent text-slate-500 hover:text-marca-primaria hover:bg-marca-primaria/5;
+    @apply bg-transparent text-texto-secundario hover:text-secundario hover:bg-secundario/5;
   }
 
   /* Tamaños */
-  .boton-peque {  @apply px-4 py-2 text-sm; }
-  .boton-medio {  @apply px-6 py-3 text-base; }
+  .boton-peque  { @apply px-4 py-2 text-sm; }
+  .boton-medio  { @apply px-6 py-3 text-base; }
   .boton-grande { @apply px-8 py-4 text-lg; }
 
-  /* Tarjetas (Cards) */
+  /* Tarjetas */
   .tarjeta {
-    @apply bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden transition-all duration-500;
-  }
-  
-  .tarjeta-hover {
-    @apply hover:shadow-xl hover:-translate-y-1 hover:border-marca-primaria/30;
+    @apply bg-white rounded-2xl border border-superficie shadow-sm overflow-hidden transition-all duration-500;
   }
 
-  /* Grid Layouts */
+  .tarjeta-hover {
+    @apply hover:shadow-xl hover:-translate-y-1 hover:border-secundario/30;
+  }
+
+  /* Layouts */
   .contenedor-fluido {
     @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
   }
-  
+
   .grid-responsive {
     @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8;
   }

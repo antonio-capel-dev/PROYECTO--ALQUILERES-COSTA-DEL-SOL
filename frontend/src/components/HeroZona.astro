@@ -1,4 +1,8 @@
 ---
+import { IMAGENES_ZONA, IMAGEN_ZONA_FALLBACK } from "../config/zonas";
+import { buildStrapiUrl } from "../utils/imagenes";
+import Hero from "./ui/Hero.astro";
+
 interface Props {
   nombre: string;
   slug: string;
@@ -8,93 +12,28 @@ interface Props {
 
 const { nombre, slug, imagen, propiedadesCount } = Astro.props;
 
-// ── 1. MAPA CENTRALIZADO DE IMÁGENES POR ZONA (Fuente de Verdad) ────────────
-// Estas URLs coinciden con las usadas en la sección "Top Destinos" de index.astro
-const ZONE_IMAGES: Record<string, string> = {
-  marbella:
-    "https://images.unsplash.com/photo-1565538563750-2591e8455e98?auto=format&fit=crop&w=1920&q=80",
-  malaga:
-    "https://images.unsplash.com/photo-1570698473651-b2de99bae12f?auto=format&fit=crop&w=1920&q=80",
-  benalmadena:
-    "https://images.unsplash.com/photo-1595245842277-c990ee428236?auto=format&fit=crop&w=1920&q=80",
-  "torre-del-mar":
-    "https://images.unsplash.com/photo-1596400501869-7c458a1f81df?auto=format&fit=crop&w=1920&q=80",
-  nerja:
-    "https://images.unsplash.com/photo-1548261313-05f32a3928eb?auto=format&fit=crop&w=1920&q=80",
-  fuengirola:
-    "https://images.unsplash.com/photo-1621259182978-f09e5e2ca0c5?auto=format&fit=crop&w=1920&q=80",
-  torremolinos:
-    "https://images.unsplash.com/photo-1561576974-2c5e538ef352?auto=format&fit=crop&w=1920&q=80",
-  mijas:
-    "https://images.unsplash.com/photo-1574345719329-84737d91df5e?auto=format&fit=crop&w=1920&q=80",
-  estepona:
-    "https://images.unsplash.com/photo-1621259182978-f09e5e2ca0c5?auto=format&fit=crop&w=1920&q=80",
-  // Fallback visual para zonas sin foto específica asignada
-  default:
-    "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1920&q=80",
-};
-
-const STRAPI = import.meta.env.PUBLIC_STRAPI_URL || "http://localhost:1337";
-
-// ── 2. LÓGICA DE PRIORIDAD DE IMAGEN (Smart Fallback) ───────────────────────
-// Prioridad 1: Imagen explícita de Strapi (campo hero_image si existiera o imagen de zona)
-// Prioridad 2: Mapa interno por slug (reuse section images)
-// Prioridad 3: Fallback genérico de alta calidad (Playa Torremolinos/General)
-
-let bgImage = ZONE_IMAGES["default"];
-
-// Normalizamos slug para asegurar match en el mapa
 const cleanSlug = slug?.toLowerCase().trim();
 
-if (imagen?.url) {
-  // Si viene de Strapi
-  bgImage = imagen.url.startsWith("http")
-    ? imagen.url
-    : `${STRAPI}${imagen.url}`;
-} else if (ZONE_IMAGES[cleanSlug]) {
-  // Si existe en nuestro mapa curado
-  bgImage = ZONE_IMAGES[cleanSlug];
+let bgImage: string;
+
+if (IMAGENES_ZONA[cleanSlug]) {
+  bgImage = IMAGENES_ZONA[cleanSlug];
+} else if (imagen?.url) {
+  bgImage = buildStrapiUrl(imagen.url);
+} else {
+  bgImage = IMAGEN_ZONA_FALLBACK;
 }
+
+const subtitulo =
+  propiedadesCount !== undefined
+    ? `${propiedadesCount} alojamientos disponibles`
+    : undefined;
 ---
 
-<div
-  class="relative h-[55vh] min-h-[400px] flex items-center justify-center overflow-hidden bg-slate-900"
->
-  {/* IMAGEN DE FONDO */}
-  <img
-    src={bgImage}
-    alt={`Alquiler vacacional en ${nombre}`}
-    class="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-700 ease-in-out"
-    onload="this.classList.remove('opacity-0')"
-    onerror={`this.src='${ZONE_IMAGES["default"]}'`}
-    loading="eager"
-  />
-
-  {/* OVERLAY DE LEGIBILIDAD (bg-black/40 REQUERIDO) */}
-  <div class="absolute inset-0 bg-black/40 z-10"></div>
-
-  {/* CONTENIDO CENTRADO */}
-  <div
-    class="relative z-20 text-center px-4 max-w-5xl mx-auto animate-fade-in-up"
-  >
-    <div
-      class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white text-xs font-bold uppercase tracking-wider mb-6"
-    >
-      <span>📍</span> Destino Costa del Sol
-    </div>
-
-    <h1
-      class="text-4xl md:text-6xl lg:text-7xl font-black text-white mb-6 leading-tight drop-shadow-2xl"
-    >
-      {nombre}
-    </h1>
-
-    {
-      propiedadesCount !== undefined && (
-        <p class="text-lg md:text-2xl text-slate-100 font-medium drop-shadow-md">
-          {propiedadesCount} alojamientos exclusivos disponibles
-        </p>
-      )
-    }
-  </div>
-</div>
+<Hero
+  titulo={nombre}
+  imagen={bgImage}
+  subtitulo={subtitulo}
+  badge="Destino Costa del Sol"
+  altura="media"
+/>

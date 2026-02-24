@@ -1,0 +1,530 @@
+y ya está, ¿no?
+bien, perfecto
+muy, Antonio, en su duda
+bueno, visto en medio del párchio que tengo prisa
+sí, más o menos
+lo que es la propuesta de balo
+a ver, yo le añadió algunas cosas
+por ejemplo, el hecho de ponerlo en distinto idioma
+esto lo he hecho
+y un poco
+aquí lo tengo
+nuevamente ahora no
+esto es un poco la apariencia de la página principal
+con su filtro, lo quiero dividir por zona
+lo que termina con lo de las fotos, un carrocer de imágenes
+ahí es, de productor, con el hecho con javascript
+esto es un balo añadido para el cliente darle la confianza
+de donde está, físicamente su apartamento
+si quiero de mal haga tengo la pasada dos adelante
+aquí no?
+experiencias reales por el tema del exp
+confianza
+pregunta el frecuente
+esto es la idea, esto es el fútbol que vaya todo bien
+y que más
+le añadió una parta sobre nosotros
+y hay otra razón, avale que está aquí
+que esto yo creo que lo más
+lo que claramente da más balo
+obviamente tengo que reconfigurar un poco lo estoy
+en esta construcción
+lo que quiero es que desde aquí
+el cliente que está interesa
+de esta pilla
+le mando un formulario
+y ya lo tengo a mis gymés sin cronizar
+la idea sea que lo que meta en este formulario
+me llega a mi mail
+para yo manejar el link
+vale perfecto
+bien, cosas a tener en cuenta
+bien
+veo muchos rastros de ellas
+vale, entonces limpia
+los rastros de inteligencia artificial que tienes allí
+vale, que se notan
+así que que es profesional hecho
+otra cosa
+cuidado con contrastes
+tiene problemas de contrastes
+de lado del fronte
+después
+las propiedades, las casas
+aquí las dos de alta
+bien, hazle un fronte
+para dar de alta las propiedades
+para que una persona
+viene el administrador
+de la aplicación
+por ejemplo, si les otro
+nos vamos a torre de hermano
+así
+vemos la disponibilidad
+aquí vayan bien
+no la tengo pero ahí
+de otra, a ver si en esta no me da
+pero es disponibilidad
+vale, bien
+en el momento de dar la disponibilidad
+en el siguiente paso
+lo que lo enfocao
+en que el cliente deje su solicitud
+me lo mande por el formulario
+por input
+y me llega a mi correo
+que no se si está bien enfocado
+o venme enfocado otra manera
+no, no, que te llega al correo y que quede un registro
+de los formularios en vía
+vale
+de todos los formularios
+de los nips que hay
+que quede la base de datos
+en la base de datos
+cambia
+los
+cambia los emoticones
+por ahí
+de una librería de icon
+utiliza una librería de icon
+y cambia todos los emoticones por ahí
+porque ahí se ve un rastro muy gordo
+vale
+y no queda bien
+vamos a hacer lo profesional
+luego, ¿qué más va a hacer?
+vas a
+quiero ver si
+los cambios de idioma
+están hechos
+en el HTML
+o están hechos
+rápidamente porque
+tienen un HTML
+cada idioma
+en Thai escrib
+en Thai escrib
+la herramienta utiliza para cambiar de idioma
+la enseña
+se la tenía por aquí
+más pata
+escribrandes
+propiedades
+bueno, eso, mira
+¿a dónde voy yo?
+si
+si es la que no se me eres
+por un lado
+pero por otro lado
+si es el HTML
+no sé, la transformación
+de idioma
+la hace
+en Strappy
+y que lo que hace renderé
+es a todo el contenido de inglés
+sí
+es una cosa
+si tú utiliza
+en navegador
+el HTML sigue estando en español
+cuando tanto no va a posicionar
+cuando alguien busca en inglés
+¿me entiende?
+sí
+a ver, si tú generas tu versión de sitio web
+tanto en español
+como en inglés
+como en francés
+es una cosa
+si tú lo tienes solo en español
+utiliza una librería de script
+para cambiar el idioma
+es otra funcionalidad diferente
+hay una
+que es amigable con el SEO
+y hay otra que no
+porque hay un HTML que existen 3 idiomas
+y hay otro HTML que existe solamente en español
+¿y cuál es la más amigable con el SEO claramente?
+claramente la que existe el contenido
+entre sitios más diferentes
+y tengo que tenerlo entre HTML diferente
+es exactamente
+lo mejor ¿no?
+exactamente
+¿por qué? ¿por qué? ¿alguien va a poner?
+no sé
+¿cómo se dice Villa?
+o no sé
+Villa de...
+de piso en nerja del lujo
+lo que es
+departamento de piso
+lo va a escribir en francés
+sí
+y hay una combinación exacta
+en HTML con
+entonces vuelvo a piso
+porque esa idea
+yo había pensado claramente
+estoy equivocado
+que si eso lo guardo en un objeto
+y me lo traigo
+y lo modifico
+eso no queda bien
+bueno
+quiero decir
+en español
+eso lo guardo en otro objeto
+y lo voy a trabajar
+¿viste dónde están las 3 rayitas de astro?
+sí
+si tú lo transformas
+en otro idioma
+ahí adentro
+estás generando lo antes
+lo que sí tiene que tener en cuenta
+las canónicas
+canónicas
+quiere decir
+decirle
+y hay que reflaque
+se llama eso
+es decirle a Google
+este contenido que está en español
+es exactamente este mismo
+que está en inglés
+que este mismo que está en francés
+son idiomas
+pero
+estos 3 páginas
+estos 3 HTML es el mismo
+porque
+porque si no te va a pasar
+lo que le pasó al profel
+otro día con un cliente que me contaba
+no sé si ustedes estaban escuchando
+estaba hablando
+de que le pasó esto mismo
+tenía 4 idiomas
+y Google
+no actualización
+le metí una penalización
+que se le cayó
+se le cayó en tráfico
+tráfico
+porque
+porque Google se te cuenta
+y si esto me están queriendo meter
+3 páginas
+HTML es por la misma
+yo se le estoy posicionando
+a las 3
+como gilipoya
+y me ha ganado de todo
+me está
+Google posicionada para las 3
+claro porque yo no le dijeron a Google
+mira que estas 3 o 4
+son la misma página
+pero de diferente idioma
+las 3 o las 4 son mía
+pero yo quiero esta
+para posicionarme con un cliente
+en español
+este en inglés
+esta en francés
+y esta en alemán
+claro
+si tú eso no se lo dices
+Google crees que te las
+estás queriendo colar
+para el mismo idioma
+ve contenido de poco valor
+Latin content
+contenido poco valor
+porque el mismo contenido
+muchas páginas
+contenido duplicado
+Latin content
+cannibalización
+te entran
+10 penalizaciones
+eso
+claro
+boom
+o sea
+vas a ser idioma
+a lo bien
+si no lo hagan
+vale
+experiencia
+profesional
+transmitida
+vas a ser idioma
+cuidados
+cuidados
+con lo que vas a ser
+porque te pillan los dedos
+vale y te cargas el proyecto
+vale
+entonces la opción de hacer
+los distintos HTML
+tampoco puede ser la mesilla
+y en el tinto HTML
+pero existe
+una nomenclatura
+que es H
+flash
+que tú le puedes decir
+es una estiqueta
+que tú le dices
+en el
+en el G
+tú le dices
+esta página
+el equivalente es esta
+vale
+y esta equivalente
+vale y este
+el otro idioma
+entonces Google
+le dice
+vale
+que esta es la original
+esta es la canónica
+esta es la buena
+vale
+y luego tienes cuatro copias
+para experiencia
+vale
+vale
+si alguien lo quiere en inglés
+ya sé que me lo está por
+esta web no vea
+porque
+es una persona
+que tiene intención de búsqueda
+de
+alquiler
+de una
+propia
+torre del mar
+y
+también
+la persona que lo buscó un guiri
+que está buscando en inglés
+claro
+que voy a mostrar con que mira
+encima tiene el idioma
+en español
+pero su cuenta
+de usuario está en alemán
+porque el tío es alemán
+entonces lo voy a mostrar
+este sitio
+porque tiene una opción de alemán
+porque lo que le gusta
+se lo muestra en español
+pero claro
+su configuración es alemán
+claro
+si yo me voy a
+alguien le se ha ido
+a otro país
+a
+renunido
+renunido
+y tu cabaja algo
+y muchas veces
+resulta de bug
+que era en español o no
+si
+te ha pasado
+por la IP que o
+no, no, no, por la gente
+es con la IP
+porque tu usuario
+es en español
+de Google
+no que está con el sale de Google
+claro
+tu cuenta de Google
+tu cuenta de Google
+tu cuenta de Google
+en español es configurada
+en español de español
+entonces lo resultado
+de búsqueda
+va a estar un poco orientado
+a eso
+vale
+y tu agencia
+había que quiera
+español
+o guiri
+gente que dé dinero
+guiri
+a ver esto es por plata
+no es por orgullo
+no, no, no
+pero que ponen más dinero
+y a mi me interesa eso
+o no
+claro
+que sí que sí
+yo lo
+y a mi bilo
+que busco también
+es otra vez
+el servicio de extranjería
+aquí se lo va a vender
+a español
+pues no
+porque
+gura español que es un servicio
+de extranjería
+aquí va a apuntar
+o sea lo que más
+extranjero vaya
+el
+colombiano
+alemán
+argentino
+lo mejor obvio
+es
+la
+va a apuntar
+a otros dios
+vale
+si tú va a vender curso
+en
+la
+afuera
+a apuntar
+a colombia
+bueno, vuelta
+argentina
+a apuntar
+pero con una
+hípes pañola
+porque
+porque la educación
+española
+como esta en Europa
+tiene
+una élite mejor
+y acá lo subo un poco
+pero es verdad
+a ver
+la gente confía
+en la educación
+es pañola
+lo ve como algo
+muy bueno
+entonces
+con qué lo va a aposicionar
+con esto
+por más que vaya
+a apuntar afuera
+tu dominio
+un punter
+porque por
+convierte
+vieron
+cuando nosotros vemos
+lo el CTR
+si
+bueno
+el dominio
+el punto es
+en el caso de
+compra un curso
+en colombia
+para
+desarrollo con estrapi
+y la gente
+cuando ve a punto es
+un poco más
+pero es bueno
+vale
+y te puedes
+posicionar bien
+en colombia
+vendiendo de aquí
+pero confía más
+en un punto es
+que en un punto
+lo se guarda
+en colombia
+en el dominio de colombia
+vale
+la educación
+a
+col
+o
+o
+o
+o
+o
+o
+o
+o
+o
+o
+o
+o
+o
+o
+o
+o
+o
+o
+o
+o
+o
+o
+o
+o
+o
+o
+o
+o
+un
+un
+punto
+en el
+ujęen
+este
+un
+un
+ka hoffe
+y que vende chino, ya, ya, dos minios, tú no has dicho que le herramientas de alemania,
+solamente pusiste dos minios, de a la gente entra como por un tubo, sí, entonces, en la
+estrategia, quete conmigo, vale, en la estrategia, yo voy a vender aquí productos chino,
+que dos minios me compro, punto es porque la gente creo que se lo voy a enviar de almozo
+y el vecino al lado, y no, hablando de eso, yo no digo que vio de a la, pero la gente
+lo te dice solo, como también si pongo un domínio, que, puntó a la Argentina, lo que
+ha volvido a todo Europa, así el día que llegué, esto sabe cuando va a llevar, ¿no?
+Eso se va a morar por lo menos, dos meses. Y una pregunta super rápida, ¿cómo buca el atraer
+el máximo público de otros países? Por ejemplo, sin mi web, la tengo en inglés y quiero
+atraer clientes de Reino Unido Obritánico, ellos se conectan, es simplemente con el
+acceso relajo, o le añado mala estrategia. No, no, tiene que agregarle más cosas.
+O sea, en las palabras clave, todo eso, contá, contó eso, de las palabras clave.
+¿Cómo va la estrategia que hemos visto? ¿Para qué te cuase?
+Hace un clop al inglés, digamos. ¿Para qué te posiciones en Inglaterra, que va
+a necesitar backlins de Inglaterra, decítios de Inglaterra, para que te dé un contexto
+local y aquí, pero para personas en blog de allí, hay un blog de allá que habla de emigrar
+a la costa del sol, para dejar un contenido ahí, ¿sí? Porque un contenido de calidad
+que está relacionado, directamente en azas con lo tuyo, lo tendrás que pagar, te va
+a recargo, porque los contos saben que le recibe de mucho, la autoridad, capa que tiene
+10, la autoridad, capa que tiene 13, la autoridad, pero el impacto va a ser muy fuerte, el impacto
+que te va a dar, y aparte, te va a traer que es terreal, sin posicionarte, ya vas a tener
+futuro imposible, porque gente que entra a otro lado por intención. Entonces, si ya
+ve en este aquí, aquí, aquí y aquí, ya te ve a tal la sopa, o no dice eso, tiene que
+poner. Es la misma estrategia que voy a poner aquí la marca, los jugadores de pudo en
+la camiseta, ¿por qué pone en Nike, acá hay pagas millones de personas que no relacionan
+su pasión, por lo que le gusta, le gusta con tu bien eso, pues yo también. Claro, se
+obtiendes, ahí tenemos todo el contexto, a ver acá, Rubén.

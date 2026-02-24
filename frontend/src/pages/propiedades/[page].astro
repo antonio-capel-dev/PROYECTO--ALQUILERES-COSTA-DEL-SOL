@@ -2,57 +2,17 @@
 import Layout from "../../layouts/Layout.astro";
 import FichaAlquiler from "../../components/FichaAlquiler.astro";
 import propiedades20 from "../../data/propiedades_20.json";
-
-// ── Normalize Functions (Shared with index.astro) ──────────────────
-// Si este proyecto creciera, moveríamos esto a utils/data.ts
-// ───────────────────────────────────────────────────────────────────
+import {
+  normalizarRentalStrapi,
+  normalizarRentalLocal,
+} from "../../utils/normalizadores";
 
 // ── getStaticPaths (Pagination Logic) ──────────────────────────────
 export async function getStaticPaths({ paginate }) {
   const STRAPI_URL =
     import.meta.env.PUBLIC_STRAPI_URL || "http://localhost:1337";
 
-  // Helper types and functions defined INSIDE getStaticPaths to ensure scope availability
-  type Propiedad = {
-    slug: string;
-    titulo: string;
-    zona: string;
-    tipo?: string;
-    precio: number;
-    capacidad: number;
-    habitaciones?: number;
-    image_url?: string;
-  };
-
-  const normalizarStrapi = (r: any): Propiedad => ({
-    slug: r.slug ?? "",
-    titulo: r.title ?? "Sin título",
-    zona: r.ubicacion?.ciudad ?? r.location ?? "",
-    tipo: r.tipo ?? undefined,
-    precio: r.price ?? 0,
-    capacidad: r.detalles?.capacidad ?? 0,
-    habitaciones: r.detalles?.habitaciones,
-    image_url:
-      r.image_url ??
-      (r.image?.url
-        ? r.image.url.startsWith("http")
-          ? r.image.url
-          : `${STRAPI_URL}${r.image.url}`
-        : undefined),
-  });
-
-  const normalizarLocal = (p: any): Propiedad => ({
-    slug: p.slug,
-    titulo: p.titulo,
-    zona: p.zona,
-    tipo: p.tipo,
-    precio: p.precio,
-    capacidad: p.capacidad,
-    habitaciones: p.habitaciones,
-    image_url: p.image_url,
-  });
-
-  let allProperties: Propiedad[] = [];
+  let allProperties = [];
 
   // 1. Fetch Data
   try {
@@ -63,17 +23,16 @@ export async function getStaticPaths({ paginate }) {
     const strapiData = json.data || [];
 
     if (strapiData.length > 0) {
-      allProperties = strapiData.map(normalizarStrapi);
+      allProperties = strapiData.map(normalizarRentalStrapi);
     } else {
-      allProperties = (propiedades20 as any[]).map(normalizarLocal);
+      allProperties = (propiedades20 as any[]).map(normalizarRentalLocal);
     }
   } catch (error) {
     console.error("Error fetching Strapi for pagination:", error);
-    allProperties = (propiedades20 as any[]).map(normalizarLocal);
+    allProperties = (propiedades20 as any[]).map(normalizarRentalLocal);
   }
 
   // 2. Paginate (9 items per page)
-  // Genera rutas: /propiedades/1, /propiedades/2, etc. (o /propiedades si page=1 en config)
   return paginate(allProperties, { pageSize: 9 });
 }
 
@@ -93,17 +52,17 @@ const description = `Explora nuestra colección completa de alquileres vacaciona
   urlSiguiente={page.url.next}
 >
   <!-- Hero / Header -->
-  <section class="bg-marca-oscura py-20 px-6 text-center">
+  <section class="bg-primario py-20 px-6 text-center">
     <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">
       Catálogo Completo
     </h1>
-    <p class="text-slate-300 text-lg">
+    <p class="text-fondo-claro/80 text-lg">
       Descubre todas nuestras opciones disponibles para tus próximas vacaciones.
     </p>
   </section>
 
   <!-- Listings Grid -->
-  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 bg-marca-clara">
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 bg-fondo-claro">
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
       {properties.map((prop) => <FichaAlquiler {...prop} />)}
     </div>
@@ -114,18 +73,18 @@ const description = `Explora nuestra colección completa de alquileres vacaciona
         page.url.prev ? (
           <a
             href={page.url.prev}
-            class="px-6 py-3 bg-white border border-slate-200 rounded-full font-semibold text-marca-oscura hover:bg-marca-primaria hover:text-white transition shadow-sm"
+            class="px-6 py-3 bg-white border border-superficie rounded-full font-semibold text-primario hover:bg-secundario hover:text-white transition shadow-sm"
           >
             ← Anterior
           </a>
         ) : (
-          <span class="px-6 py-3 text-slate-300 border border-slate-100 rounded-full cursor-not-allowed">
+          <span class="px-6 py-3 text-fondo-claro/80 border border-superficie rounded-full cursor-not-allowed">
             ← Anterior
           </span>
         )
       }
 
-      <span class="text-slate-500 font-medium">
+      <span class="text-texto-secundario font-medium">
         Página {page.currentPage} de {page.lastPage}
       </span>
 
@@ -133,12 +92,12 @@ const description = `Explora nuestra colección completa de alquileres vacaciona
         page.url.next ? (
           <a
             href={page.url.next}
-            class="px-6 py-3 bg-white border border-slate-200 rounded-full font-semibold text-marca-oscura hover:bg-marca-primaria hover:text-white transition shadow-sm"
+            class="px-6 py-3 bg-white border border-superficie rounded-full font-semibold text-primario hover:bg-secundario hover:text-white transition shadow-sm"
           >
             Siguiente →
           </a>
         ) : (
-          <span class="px-6 py-3 text-slate-300 border border-slate-100 rounded-full cursor-not-allowed">
+          <span class="px-6 py-3 text-fondo-claro/80 border border-superficie rounded-full cursor-not-allowed">
             Siguiente →
           </span>
         )

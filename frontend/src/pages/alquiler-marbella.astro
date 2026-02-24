@@ -1,5 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import Icon from "../components/ui/Icon.astro";
 
 // Datos SEO específicos para esta Landing
 const title = "Alquiler en Marbella | Pisos, Apartamentos y Villas de Lujo";
@@ -14,36 +15,36 @@ const description =
   breadcrumbs={[{ nombre: "Alquiler Marbella", url: "/alquiler-marbella" }]}
 >
   <!-- Hero Section Brand Identity -->
-  <section class="relative bg-marca-oscura py-32 px-6 overflow-hidden">
+  <section class="relative bg-primario py-32 px-6 overflow-hidden">
     <!-- Background Gradient/Pattern -->
     <div class="absolute inset-0 z-0 opacity-40">
       <div
-        class="absolute inset-0 bg-linear-to-r from-marca-primaria filter blur-3xl opacity-50 animate-pulse"
+        class="absolute inset-0 bg-linear-to-r from-secundario filter blur-3xl opacity-50 animate-pulse"
       >
       </div>
       <div
-        class="absolute -top-24 -left-24 w-96 h-96 bg-marca-acento rounded-full mix-blend-multiply filter blur-3xl opacity-30"
+        class="absolute -top-24 -left-24 w-96 h-96 bg-acento rounded-full mix-blend-multiply filter blur-3xl opacity-30"
       >
       </div>
     </div>
 
     <div class="relative z-10 max-w-5xl mx-auto text-center">
       <div
-        class="inline-block mb-4 px-4 py-1.5 rounded-full bg-marca-primaria/10 border border-marca-primaria/20 text-marca-acento text-sm font-semibold tracking-wide uppercase backdrop-blur-sm"
+        class="inline-block mb-4 px-4 py-1.5 rounded-full bg-secundario/10 border border-secundario/20 text-acento text-sm font-semibold tracking-wide uppercase backdrop-blur-sm"
       >
-        🌟 Destino Exclusivo
+        <Icon name="star" class="w-4 h-4 inline-block mr-1" aria-hidden="true" /> Destino Exclusivo
       </div>
       <h1
-        class="text-5xl md:text-7xl font-extrabold text-white tracking-tight mb-8 leading-tight"
+        class="text-white mb-8"
       >
         Alquileres en <br />
         <span
-          class="text-transparent bg-clip-text bg-linear-to-r from-marca-acento to-marca-secundaria"
+          class="text-transparent bg-clip-text bg-linear-to-r from-acento to-secundario"
           >Marbella</span
         >
       </h1>
       <p
-        class="text-xl text-slate-300 max-w-2xl mx-auto mb-10 font-light leading-relaxed"
+        class="text-xl text-fondo-claro/80 max-w-2xl mx-auto mb-10 font-light leading-relaxed"
       >
         Marbella no es solo lujo; es calidad de vida. Desde el bullicio
         exclusivo de Puerto Banús hasta la tranquilidad del Casco Antiguo.
@@ -52,8 +53,8 @@ const description =
   </section>
 
   <section class="max-w-7xl mx-auto px-4 py-16">
-    <div class="prose lg:prose-xl mx-auto text-slate-600">
-      <h2 class="text-3xl font-bold text-marca-oscura mb-6">
+    <div class="prose lg:prose-xl mx-auto text-texto-secundario">
+      <h2 class="text-3xl font-bold text-primario mb-6">
         Vivir en Marbella: El sueño de la Costa del Sol
       </h2>
       <p class="mb-4">
@@ -61,27 +62,27 @@ const description =
         opciones para alquilar.
       </p>
 
-      <h3 class="text-2xl font-bold text-marca-oscura mt-8 mb-4">
+      <h3 class="text-2xl font-bold text-primario mt-8 mb-4">
         Zonas destacadas
       </h3>
       <ul class="grid grid-cols-1 md:grid-cols-2 gap-4 not-prose">
         <li
-          class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition"
+          class="bg-white p-6 rounded-2xl shadow-sm border border-superficie hover:shadow-md transition"
         >
-          <strong class="text-marca-primaria block mb-2 text-lg"
+          <strong class="text-secundario block mb-2 text-lg"
             >Puerto Banús</strong
           >
-          <span class="text-slate-500"
+          <span class="text-texto-secundario"
             >Ideal para quienes buscan lujo, compras y vida nocturna.</span
           >
         </li>
         <li
-          class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition"
+          class="bg-white p-6 rounded-2xl shadow-sm border border-superficie hover:shadow-md transition"
         >
-          <strong class="text-marca-primaria block mb-2 text-lg"
+          <strong class="text-secundario block mb-2 text-lg"
             >Nueva Andalucía</strong
           >
-          <span class="text-slate-500"
+          <span class="text-texto-secundario"
             >Perfecto para golfistas y familias que buscan villas.</span
           >
         </li>
@@ -90,13 +91,15 @@ const description =
 
     <!-- Placeholder para listado dinámico -->
     <div
-      class="mt-16 text-center bg-marca-clara p-12 rounded-3xl border-2 border-dashed border-marca-primaria/20"
+      class="mt-16 text-center bg-fondo-claro p-12 rounded-3xl border-2 border-dashed border-secundario/20"
     >
-      <div class="text-4xl mb-4">💎</div>
-      <p class="text-xl text-marca-oscura font-bold">
+      <div class="flex justify-center mb-4">
+        <Icon name="home" class="w-12 h-12 text-secundario/40" aria-hidden="true" />
+      </div>
+      <p class="text-xl text-primario font-bold">
         Cargando propiedades de lujo en Marbella...
       </p>
-      <p class="text-sm text-slate-400 mt-2">
+      <p class="text-sm text-texto-secundario mt-2">
         (Conexión con Strapi en mantenimiento)
       </p>
     </div>

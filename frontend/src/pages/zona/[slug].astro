@@ -4,8 +4,10 @@ import FichaAlquiler from "../../components/FichaAlquiler.astro";
 import Boton from "../../components/ui/Boton.astro";
 import Breadcrumbs from "../../components/ui/Breadcrumbs.astro";
 import HeroZona from "../../components/HeroZona.astro";
+import SeccionFaq from "../../components/SeccionFaq.astro";
+import { normalizarRentalStrapi } from "../../utils/normalizadores";
 
-// ── 1. GET STATIC PATHS (Build Time) ────────────────────────────────────────
+// 1. GET STATIC PATHS (Build Time)
 export async function getStaticPaths() {
   const STRAPI_URL =
     import.meta.env.PUBLIC_STRAPI_URL || "http://localhost:1337";
@@ -21,21 +23,25 @@ export async function getStaticPaths() {
   let propiedades = [];
 
   try {
-    const res = await fetch(`${STRAPI_URL}/api/rentals?populate=*`);
+    const res = await fetch(`${STRAPI_URL}/api/rentals?populate=*&pagination[limit]=100`);
     const data = await res.json();
     propiedades = data.data || [];
 
     const zonasMap = new Map();
 
     propiedades.forEach((p: any) => {
-      const nombreZona = p.ubicacion?.nombre || p.location || "Costa del Sol";
+      // Soporte robusto para: Objeto ubicacion (Strapi) | String zona (JSON) | String location (Legacy)
+      const nombreZona =
+        p.ubicacion?.nombre || p.zona || p.location || "Costa del Sol";
       const slug = p.ubicacion?.slug || normalizarSlug(nombreZona);
 
       if (!zonasMap.has(slug)) {
         zonasMap.set(slug, {
           slug,
           nombre: nombreZona,
-          imagen: p.image,
+          // imagen: p.ubicacion?.imagen ?? undefined (we want the curated one mostly)
+          // If we pass undefined, HeroZona uses the curated list.
+          imagen: p.ubicacion?.imagen,
         });
       }
     });
@@ -55,8 +61,10 @@ export async function getStaticPaths() {
 
   return zonas.map((zona) => {
     const propsDeZona = propiedades.filter((p: any) => {
-      const pSlug =
-        p.ubicacion?.slug || normalizarSlug(p.ubicacion?.nombre || p.location);
+      // Filtrado robusto coincidente con la logica de arriba
+      const pNombreZona =
+        p.ubicacion?.nombre || p.zona || p.location || "Costa del Sol";
+      const pSlug = p.ubicacion?.slug || normalizarSlug(pNombreZona);
       return pSlug === zona.slug;
     });
 
@@ -68,24 +76,7 @@ export async function getStaticPaths() {
 }
 
 const { zona, propiedades } = Astro.props;
-
-// Fallbacks para propiedades sin foto (Evitar repetición visual)
-const PROPERTY_FALLBACKS = [
-  "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80",
-  "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80",
-  "https://images.unsplash.com/photo-1502005229762-cf1b2da7c5d6?auto=format&fit=crop&w=800&q=80",
-  "https://images.unsplash.com/photo-1493809842364-78817add7ffb?auto=format&fit=crop&w=800&q=80",
-  "https://images.unsplash.com/photo-1484154218962-a1c002085d2f?auto=format&fit=crop&w=800&q=80",
-];
-
-const getPropertyImage = (prop: any, index: number) => {
-  if (prop.image?.url) {
-    return prop.image.url.startsWith("http")
-      ? prop.image.url
-      : `${import.meta.env.PUBLIC_STRAPI_URL}${prop.image.url}`;
-  }
-  return PROPERTY_FALLBACKS[index % PROPERTY_FALLBACKS.length];
-};
+const zonaUrl = "/zona/" + zona.slug;
 
 const seoTitle = `Alquiler Vacacional en ${zona.nombre} | Costa del Sol`;
 const seoDesc = `Descubre los mejores apartamentos y villas en ${zona.nombre}. Precios verificados. Reserva directa.`;
@@ -95,77 +86,137 @@ const breadcrumbConfig = [
   { label: "Inicio", href: "/" },
   { label: "Zonas", href: "/#zonas" },
   { label: zona.nombre, href: Astro.url.pathname, active: true },
+  /* { label: "Alquiler " + zona.nombre, href: Astro.url.pathname, active: true }, */
 ];
+
+// Otras zonas (enlace interno a destinos cercanos)
+const otrasZonas = [
+  { nombre: "Marbella", slug: "marbella" },
+  { nombre: "Málaga", slug: "malaga" },
+  { nombre: "Benalmádena", slug: "benalmadena" },
+  { nombre: "Nerja", slug: "nerja" },
+]
+  .filter((z) => z.slug !== zona.slug)
+  .slice(0, 3);
+
+const count = propiedades.length;
 ---
 
 <Layout
   titulo={seoTitle}
   descripcion={seoDesc}
-  <Layout
-  titulo={seoTitle}
-  descripcion={seoDesc}
   breadcrumbs={[
     { nombre: "Inicio", url: "/" },
-    { nombre: zona.nombre, url: `/zona/${zona.slug}` },
+    { nombre: zona.nombre, url: zonaUrl },
   ]}
 >
   {/* NAVEGACIÓN Y HERO */}
-  <Breadcrumbs
-    items={breadcrumbConfig}
-    backLink={{ label: "Volver a todas las zonas", href: "/#zonas" }}
-  />
+  {/* Wrapper de seguridad para Breadcrumbs: bg-white y alto z-index */}
+  <div class="relative z-40 bg-white border-b border-superficie shadow-xs">
+    <Breadcrumbs
+      items={breadcrumbConfig}
+      backLink={{ label: "Volver a todas las zonas", href: "/#zonas" }}
+    />
+  </div>
 
   <HeroZona
     nombre={zona.nombre}
     slug={zona.slug}
     imagen={zona.imagen}
-    propiedadesCount={propiedades.length}
+    propiedadesCount={count}
   />
 
+  {/* 2. CONTENIDO SEO (Rich Content) */}
+  <section class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div class="prose prose-slate prose-lg max-w-none">
+      <h2 class="text-3xl font-bold text-primario mb-6">
+        Vacaciones en {zona.nombre}: Todo lo que necesitas saber
+      </h2>
+      <p>
+        Descubre por qué <strong>{zona.nombre}</strong> es uno de los destinos más
+        solicitados de la Costa del Sol. Con sus playas de arena dorada, su rica gastronomía
+        y su vibrante vida cultural, ofrece el equilibrio perfecto para desconectar.
+      </p>
+
+      <h3>Playas y Naturaleza</h3>
+      <p>
+        Desde calas escondidas hasta extensos arenales con Bandera Azul, la
+        costa de {zona.nombre} te sorprenderá. Disfruta de deportes acuáticos o simplemente
+        relájate bajo el sol mediterráneo.
+      </p>
+
+      <h3>Ocio y Gastronomía</h3>
+      <p>
+        No puedes irte sin probar los espetos de sardinas en un chiringuito o
+        visitar el casco antiguo repleto de historia. Además, la oferta de ocio
+        nocturno y familiar es inigualable.
+      </p>
+    </div>
+  </section>
+
   {/* LISTADO DE PROPIEDADES */}
-  <section class="contenedor-fluido py-16">
+  <section class="contenedor-fluido py-16 bg-fondo-claro">
     <div
-      class="flex items-center justify-between mb-8 border-b border-slate-100 pb-4"
+      class="flex items-center justify-between mb-8 border-b border-superficie pb-4"
     >
-      <h2 class="text-2xl md:text-3xl font-bold text-marca-oscura">
-        Catálogo Disponible
+      <h2 class="text-2xl md:text-3xl font-bold text-primario">
+        Alojamientos destacados en {zona.nombre}
       </h2>
     </div>
 
     {
       propiedades.length > 0 ? (
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {propiedades.map((prop: any, index: number) => (
-            <FichaAlquiler
-              titulo={prop.title}
-              precio={prop.price}
-              habitaciones={prop.detalles?.habitaciones || 2}
-              capacidad={prop.detalles?.capacidad || 4}
-              banos={prop.detalles?.banos || 1}
-              metros={prop.detalles?.metros}
-              image_url={getPropertyImage(prop, index)}
-              slug={prop.slug}
-              zona={prop.ubicacion?.nombre || prop.location || zona.nombre}
-              tipo={prop.tipo}
-              puntuacion={4.7}
-            />
-          ))}
+          {propiedades.map((prop: any) => {
+            const p = normalizarRentalStrapi(prop);
+            return (
+              <FichaAlquiler
+                {...p}
+                zona={p.zona || zona.nombre}
+              />
+            );
+          })}
         </div>
       ) : (
-        /* EMPTY STATE SOBRESALIENTE */
-        <div class="text-center py-20 bg-slate-50 rounded-3xl border-2 border-dashed border-slate-200">
-          <div class="animate-bounce mb-4 text-4xl">🏖️</div>
-          <h3 class="text-xl font-bold text-marca-oscura mb-2">
-            Sin disponibilidad en {zona.nombre}
+        <div class="text-center py-20 bg-white rounded-3xl border-2 border-dashed border-superficie">
+          <h3 class="text-xl font-bold text-primario mb-2">
+            Sin propiedades disponibles en {zona.nombre}
           </h3>
-          <p class="text-slate-500 max-w-md mx-auto mb-8">
-            Nuestras propiedades en esta zona se han agotado temporalmente.
+          <p class="text-texto-secundario max-w-md mx-auto mb-8">
+            No hay alojamientos publicados en esta zona en este momento.
           </p>
           <Boton href="/" variante="primario">
-            Explorar otras zonas cercanas
+            Ver todas las zonas
           </Boton>
         </div>
       )
     }
+  </section>
+
+  {/* 3. FAQs CON SCHEMA (Structured Data) */}
+  <SeccionFaq pagina="zona" />
+
+  {/* 4. INTERNAL LINKING (Strategy Bakery) */}
+  <section class="py-16 border-t border-superficie">
+    <div class="contenedor-fluido">
+      <h3 class="text-2xl font-bold text-primario mb-8 text-center">
+        Explora otros destinos cercanos
+      </h3>
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+        {
+          otrasZonas.map((z) => (
+            <a
+              href={`/zona/${z.slug}`}
+              class="group block bg-white rounded-xl border border-superficie p-4 hover:shadow-md hover:border-secundario/30 transition-all text-center"
+            >
+              <span class="block font-bold text-primario group-hover:text-secundario transition-colors">
+                {z.nombre}
+              </span>
+              <span class="text-xs text-texto-secundario">Ver alojamientos →</span>
+            </a>
+          ))
+        }
+      </div>
+    </div>
   </section>
 </Layout>

@@ -1,15 +1,3 @@
-/**
- * ============================================================================
- * LÓGICA DE NEGOCIO AVANZADA: SISTEMA DE FILTRADO MVI
- * ============================================================================
- * Nivel: Sobresaliente (Exam Ready)
- * Arquitectura: Model-View-Intent (Unidirectional Data Flow)
- *
- * 1. MODEL (Estado): Ssource of Truth inmutable.
- * 2. VIEW (Render): Función pura f(State) -> UI.
- * 3. INTENT (Actions): Eventos del usuario que proponen cambios de estado.
- */
-
 // ── CONSTANTES Y SELECTORES ─────────────────────────────────────────────────
 const DOM = {
   DATASET: "propiedades-data",
@@ -82,10 +70,6 @@ const createStore = (initialState, subscriber) => {
   return {
     getState: () => ({ ...state }), // Return copy
     dispatch: (partialState) => {
-      // Simulamos latencia mínima para feedback visual (opcional, da toque 'pro')
-      // En un examen papel: state = { ...state, ...partialState }; subscriber(state);
-
-      // Update síncrono para filtros client-side (instantáneo)
       state = { ...state, ...partialState };
       subscriber(state);
     },
@@ -153,14 +137,6 @@ const render = (state, dataset) => {
   actualizarVisibilidad(slugsVisibles);
   actualizarContador(resultados.length);
 
-  // 3. Manejo de 'Estados de UI' (Empty State)
-  // Nota: El empty state visual lo manejamos mostrando/ocultando un div específico o por CSS.
-  // Aquí delegamos en la lógica visual simple del contador + display:none.
-
-  // Debug para Defensa:
-  console.log(
-    `[MVI] Estado: ${state.status}, Resultados: ${resultados.length}`,
-  );
 };
 
 // ── INTENT (Event Handling) ─────────────────────────────────────────────────

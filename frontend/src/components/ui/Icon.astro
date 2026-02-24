@@ -1,0 +1,142 @@
+---
+/**
+ * Icon.astro — Sistema de iconografía profesional basado en Lucide (lucide.dev)
+ *
+ * Todos los paths son los originales de la librería Lucide.
+ * Renderizado como SVG inline (SSG puro, sin JavaScript, sin bundle overhead).
+ *
+ * Props:
+ *   name       — nombre del icono (union type)
+ *   class      — clases CSS de tamaño/color (default: "w-5 h-5")
+ *   aria-hidden — true para iconos decorativos (default: true)
+ *   aria-label  — texto alternativo para iconos informativos
+ */
+
+interface Props {
+  name:
+    | "sun"
+    | "search"
+    | "map-pin"
+    | "euro"
+    | "users"
+    | "mail"
+    | "phone"
+    | "compass"
+    | "home"
+    | "check-circle"
+    | "menu"
+    | "x"
+    | "globe"
+    | "search-x"
+    | "waves"
+    | "star";
+  class?: string;
+  "aria-hidden"?: boolean | string;
+  "aria-label"?: string;
+}
+
+const {
+  name,
+  class: className = "w-5 h-5",
+  "aria-hidden": ariaHidden = true,
+  "aria-label": ariaLabel,
+} = Astro.props;
+
+/**
+ * Paths SVG de cada icono (Lucide v0.x design system)
+ * viewBox: 0 0 24 24 | stroke-width: 1.5 | fill: none | stroke: currentColor
+ */
+const paths: Record<string, string> = {
+  sun: `
+    <circle cx="12" cy="12" r="4"/>
+    <path d="M12 2v2"/>
+    <path d="M12 20v2"/>
+    <path d="m4.93 4.93 1.41 1.41"/>
+    <path d="m17.66 17.66 1.41 1.41"/>
+    <path d="M2 12h2"/>
+    <path d="M20 12h2"/>
+    <path d="m6.34 17.66-1.41 1.41"/>
+    <path d="m19.07 4.93-1.41 1.41"/>`,
+
+  search: `
+    <circle cx="11" cy="11" r="8"/>
+    <path d="m21 21-4.3-4.3"/>`,
+
+  "map-pin": `
+    <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/>
+    <circle cx="12" cy="10" r="3"/>`,
+
+  euro: `
+    <path d="M4 10h12"/>
+    <path d="M4 14h9"/>
+    <path d="M19 6a7.7 7.7 0 0 0-5.2-2A7.9 7.9 0 0 0 6 12c0 4.4 3.5 8 7.8 8 2 0 3.8-.8 5.2-2"/>`,
+
+  users: `
+    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+    <circle cx="9" cy="7" r="4"/>
+    <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+    <path d="M16 3.13a4 4 0 0 1 0 7.75"/>`,
+
+  mail: `
+    <rect width="20" height="16" x="2" y="4" rx="2"/>
+    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>`,
+
+  phone: `
+    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.41 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9a16 16 0 0 0 6.29 6.29l.91-.91a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>`,
+
+  compass: `
+    <circle cx="12" cy="12" r="10"/>
+    <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>`,
+
+  home: `
+    <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+    <polyline points="9 22 9 12 15 12 15 22"/>`,
+
+  "check-circle": `
+    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+    <path d="m9 11 3 3L22 4"/>`,
+
+  menu: `
+    <line x1="4" x2="20" y1="12" y2="12"/>
+    <line x1="4" x2="20" y1="6" y2="6"/>
+    <line x1="4" x2="20" y1="18" y2="18"/>`,
+
+  x: `
+    <path d="M18 6 6 18"/>
+    <path d="m6 6 12 12"/>`,
+
+  globe: `
+    <circle cx="12" cy="12" r="10"/>
+    <line x1="2" x2="22" y1="12" y2="12"/>
+    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>`,
+
+  "search-x": `
+    <path d="m13.5 8.5-5 5"/>
+    <path d="m8.5 8.5 5 5"/>
+    <circle cx="11" cy="11" r="8"/>
+    <path d="m21 21-4.3-4.3"/>`,
+
+  waves: `
+    <path d="M2 6c.6.5 1.2 1 2.5 1C7 7 7 5 9.5 5c2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/>
+    <path d="M2 12c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/>
+    <path d="M2 18c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/>`,
+
+  star: `
+    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>`,
+};
+---
+
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1.5"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  class={className}
+  aria-hidden={ariaHidden === true ? "true" : undefined}
+  aria-label={ariaLabel}
+>
+  <Fragment set:html={paths[name] ?? ""} />
+</svg>

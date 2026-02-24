@@ -4,7 +4,7 @@ export async function GET({ site }) {
   let properties = [];
 
   try {
-    const res = await fetch(`${STRAPI_URL}/api/rentals?fields[0]=slug&fields[1]=updatedAt`);
+    const res = await fetch(`${STRAPI_URL}/api/rentals?fields[0]=slug&fields[1]=updatedAt&pagination[limit]=100`);
     const json = await res.json();
     properties = json.data || [];
   } catch (error) {
