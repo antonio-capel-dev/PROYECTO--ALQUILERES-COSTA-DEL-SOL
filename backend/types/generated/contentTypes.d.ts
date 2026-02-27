@@ -452,8 +452,16 @@ export interface ApiContactoContacto extends Struct.CollectionTypeSchema {
       'api::contacto.contacto'
     > &
       Schema.Attribute.Private;
-    mensaje: Schema.Attribute.Text & Schema.Attribute.Required;
-    nombre: Schema.Attribute.String & Schema.Attribute.Required;
+    mensaje: Schema.Attribute.Text &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 2000;
+      }>;
+    nombre: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 100;
+      }>;
     publishedAt: Schema.Attribute.DateTime;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &

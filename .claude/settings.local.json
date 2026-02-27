@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:unsplash.com)",
+      "Bash(xargs -I{} sh -c 'printf \"\"%8d bytes  %s\\\\n\"\" \"\"$\\(wc -c < {}\\)\"\" \"\"{}\"\"')",
+      "Bash(SRC=/c/PROYECTO--ALQUILERES-COSTA-DEL-SOL-master/frontend/src)",
+      "Bash(__NEW_LINE_9b029b53781c35c5__ find \"$SRC\" -name \"*.astro\")",
+      "Bash(curl:*)",
+      "Bash(npm run build:*)",
+      "Bash(git checkout:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)"
+    ],
+    "additionalDirectories": [
+      "C:\\PROYECTO--ALQUILERES-COSTA-DEL-SOL-master"
+    ]
+  }
+}
