@@ -514,76 +514,6 @@ export interface ApiFaqFaq extends Struct.CollectionTypeSchema {
   };
 }
 
-export interface ApiGuiaGuia extends Struct.CollectionTypeSchema {
-  collectionName: 'guias';
-  info: {
-    displayName: 'Guia';
-    pluralName: 'guias';
-    singularName: 'guia';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  pluginOptions: {
-    i18n: {
-      localized: true;
-    };
-  };
-  attributes: {
-    contenido: Schema.Attribute.RichText &
-      Schema.Attribute.Required &
-      Schema.Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
-    createdAt: Schema.Attribute.DateTime;
-    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-    cta_texto: Schema.Attribute.String &
-      Schema.Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
-    cta_url: Schema.Attribute.String;
-    extracto: Schema.Attribute.Text &
-      Schema.Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }> &
-      Schema.Attribute.SetMinMaxLength<{
-        maxLength: 300;
-      }>;
-    imagen_portada: Schema.Attribute.Media<'images'>;
-    locale: Schema.Attribute.String;
-    localizations: Schema.Attribute.Relation<'oneToMany', 'api::guia.guia'>;
-    orden: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
-    publicada: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
-    publishedAt: Schema.Attribute.DateTime;
-    seo: Schema.Attribute.Component<'seo.meta-seo', false>;
-    slug: Schema.Attribute.UID<'titulo'> & Schema.Attribute.Required;
-    titulo: Schema.Attribute.String &
-      Schema.Attribute.Required &
-      Schema.Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }> &
-      Schema.Attribute.SetMinMaxLength<{
-        maxLength: 120;
-      }>;
-    updatedAt: Schema.Attribute.DateTime;
-    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-    zona_relacionada: Schema.Attribute.Relation<
-      'manyToOne',
-      'api::ubicacion.ubicacion'
-    >;
-  };
-}
-
 export interface ApiLandingLanding extends Struct.CollectionTypeSchema {
   collectionName: 'landings';
   info: {
@@ -641,36 +571,35 @@ export interface ApiRentalRental extends Struct.CollectionTypeSchema {
     };
   };
   attributes: {
+    city: Schema.Attribute.String;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    description: Schema.Attribute.RichText &
-      Schema.Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
+    description: Schema.Attribute.RichText;
     detalles: Schema.Attribute.Component<'inmueble.detalles', false> &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
           localized: true;
         };
       }>;
-    featured: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
-    galeria: Schema.Attribute.Media<'images', true>;
-    image: Schema.Attribute.Media<'images'>;
+    image: Schema.Attribute.Media;
     locale: Schema.Attribute.String;
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::rental.rental'>;
-    price: Schema.Attribute.Decimal &
-      Schema.Attribute.Required &
-      Schema.Attribute.SetMinMax<
-        {
-          min: 0;
-        },
-        number
-      >;
+    location: Schema.Attribute.String;
+    metaDescription: Schema.Attribute.Text &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    metaTitle: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    price: Schema.Attribute.Decimal & Schema.Attribute.Required;
     publishedAt: Schema.Attribute.DateTime;
-    seo: Schema.Attribute.Component<'seo.meta-seo', false>;
     Servicios: Schema.Attribute.Component<'inmueble.servicios', false> &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
@@ -678,17 +607,7 @@ export interface ApiRentalRental extends Struct.CollectionTypeSchema {
         };
       }>;
     slug: Schema.Attribute.UID<'title'> & Schema.Attribute.Required;
-    title: Schema.Attribute.String &
-      Schema.Attribute.Required &
-      Schema.Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }> &
-      Schema.Attribute.SetMinMaxLength<{
-        maxLength: 120;
-        minLength: 10;
-      }>;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
     ubicacion: Schema.Attribute.Relation<
       'manyToOne',
       'api::ubicacion.ubicacion'
@@ -709,40 +628,23 @@ export interface ApiUbicacionUbicacion extends Struct.CollectionTypeSchema {
   options: {
     draftAndPublish: true;
   };
-  pluginOptions: {
-    i18n: {
-      localized: true;
-    };
-  };
   attributes: {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    descripcion: Schema.Attribute.RichText &
-      Schema.Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
-    imagen: Schema.Attribute.Media<'images'>;
-    locale: Schema.Attribute.String;
+    descripcion: Schema.Attribute.RichText;
+    imagen: Schema.Attribute.Media;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
       'api::ubicacion.ubicacion'
-    >;
-    nombre: Schema.Attribute.String &
-      Schema.Attribute.Required &
-      Schema.Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }> &
-      Schema.Attribute.SetMinMaxLength<{
-        maxLength: 100;
-      }>;
+    > &
+      Schema.Attribute.Private;
+    metaDescription: Schema.Attribute.Text;
+    metaTitle: Schema.Attribute.String;
+    nombre: Schema.Attribute.String & Schema.Attribute.Required;
     publishedAt: Schema.Attribute.DateTime;
     rentals: Schema.Attribute.Relation<'oneToMany', 'api::rental.rental'>;
-    seo: Schema.Attribute.Component<'seo.meta-seo', false>;
     slug: Schema.Attribute.UID<'nombre'> & Schema.Attribute.Required;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -1263,7 +1165,6 @@ declare module '@strapi/strapi' {
       'admin::user': AdminUser;
       'api::contacto.contacto': ApiContactoContacto;
       'api::faq.faq': ApiFaqFaq;
-      'api::guia.guia': ApiGuiaGuia;
       'api::landing.landing': ApiLandingLanding;
       'api::rental.rental': ApiRentalRental;
       'api::ubicacion.ubicacion': ApiUbicacionUbicacion;

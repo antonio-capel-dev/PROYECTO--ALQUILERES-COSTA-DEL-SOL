@@ -14,8 +14,8 @@ const config = ({ env }: Core.Config.Shared.ConfigParams): Core.Config.Plugin =>
         },
       },
       settings: {
-        defaultFrom: env('MAIL_FROM', env('SMTP_USER')),
-        defaultReplyTo: env('MAIL_REPLY_TO', env('SMTP_USER')),
+        defaultFrom: env('SMTP_USER'),
+        defaultReplyTo: env('SMTP_USER'),
       },
     },
   },
