@@ -1,0 +1,522 @@
+¿Solviste?
+No, no, no, ya en peligro de los parados.
+¿Y qué sale la paga, foc?
+Completo.
+Le he de la documentación, entonces, porque los impuestos
+te lo están cogiendo bien.
+Bueno, yo ahora es lo que quiero, sobre todo,
+a la hora de construir, antes de construir.
+Sí.
+Planea, mi estrategia, ha sido.
+Es lo que te hable haya, que es lo,
+al final lo está mirando y no está en deshaz.
+La tengo aquí, pero no la tengo todo.
+No, no tiene contenido de valor, entonces, vuelvo a te va.
+Te tiene que ir a páginas para saber si tienes alguna idea.
+No, pero sí es que no estén deshaz.
+Si no tiene la, tiene dos páginas.
+Y tiene ser indexas.
+Y tiene ser indexas.
+Bien.
+Y lo que antes de meterle cosas al CMS y demás,
+estoy pensando en la estrategia que voy a hacer,
+que voy a hacer con el C.
+Bien, yo ahora mismo lo que pensaba,
+porque la temática, lo que te comenté,
+me metí en el tinglado de lo alclérez.
+Sí.
+El alclérez temporario en la costa.
+Bueno, entonces lo que tú necesitas hacer es,
+y si te ejer, bien, y si te el fúter, aquí está, por parte.
+Con que si te ejer, fúter, con que ya lo hiciste.
+Colada de jugo.
+Con estrapi.
+Con estrapi.
+Colada de gemin.
+Colada de Google.
+Ah, con la de Google.
+Google.
+Pero la de Google, ¿cómo es que se llama?
+Apare.
+¿No me sale nunca nombre, la rosadita de esta?
+¿Cómo se llama?
+¿Cuál es tiche?
+¿Con tiche?
+No, con eso no.
+¿Con eso no?
+¿Con Gemini?
+Sí, porque sí no me convence.
+Bien.
+No me convence por las, bueno, por algunas cosas.
+Y entonces, eso, le tengo que meter contenido en el primero
+en el CMS.
+Ahora mismo he hecho la de Marvella, he hecho la de Málaga.
+Y estoy pensando de tu copina, de dividirlo un poco
+los siglos, de ponerlo por localidades.
+El contenido primero, antes que nada, bajo por parte.
+El contenido que usted tiene es ahí.
+Está renderezando desde donde?
+Desde una base de datos, desde o desde el HTML ahí.
+¿Cómo está utilizando estrapi con astro?
+Dabe, ¿cómo estoy utilizando puesto y trayendo número?
+O sea, yo tengo estrapi con el enginx.
+Pero todos esos campos son jercodeados en HTML o lo está
+trayendo estrapi.
+Lo está tallendo de estrapi con su objeto.
+Este campo es de estrapi, esto está en la base de datos, eso es.
+Pues eso está en la base de datos, ¿no?
+Entonces, sí, el putero.
+Porque lo que quiere, básicamente, entiendo por tu pregunta
+es que desestrutura el objeto y vaya trayendo en vez de
+escribirlo un estrín con las comillas.
+Es lo que tú, ¿qué es esa parte de la entendida?
+Bien, ¿y lo está haciendo sigo?
+Sí, bien.
+Esta página, la URL, todo lo genera con astro y trae el
+slug de exactamente de la base de datos.
+Con cuidadito, porque ya los slug hay un botón de trap y que
+me dio un slug muy largo.
+Y eso me interesa, eso es el slug tan largo.
+Bueno, entonces, pero básicamente la pregunta que te hago
+es para la etapa.
+Y primero que quiero saber es que la cosa esté...
+Si, que vaya por buen camino.
+Que vaya por buen camino.
+Que no sea que todo, por ejemplo, que esto,
+tengamos el código en el H1, sino que el H1 nos traiga de la base de datos,
+del componente de Strappy y lo meta ahí adentro.
+O sea, que si yo lo cambio la va a hacer, eso es el cambio.
+Sí, señor, la idea es eso.
+Ahora mismo esto es nada más, pero evidentemente es el que tiene
+muchísimo más contenido, pero sí la idea es eso.
+Bien, y luego los botones, las fuentes, los colores,
+todo es global.
+Ahí está tirando de Tyree, sí, de Tyree, pero tienes que hacer tú,
+la ya o global, ¿sí?
+Tú tienes que tener ahí un componente que es un botón,
+un componente que es contenedor, un componente que es...
+Un componente que es fúter, ¿sí?
+Si eso era a robar la Layers y después abre ya, ¿véis?
+Es lo que... Eso quiero que es fúter, yo te digo eso,
+yo quiero eso.
+Y después, cuando todos los componentes es y los secundarios,
+que son los que vendrán después, cuando todos esos componentes,
+ya que ya estén creados, se tienen que crear con,
+no con un color arcoviado, tiene que ser con el color institucional,
+una paleta de color, que tiene que estar en un route,
+donde ese route va a tener toda la paleta de color,
+que los fuentes, los tamaños, los tamaños de fuentes con clam,
+que tiene que ser responsivo, ¿sí?
+Y cada los H1, los H1, los H3, un tipo de fuente,
+con los barras, o sea, todo trabajado de manera modular.
+Me explico?
+Te explicas, ¿por qué?
+Porque si no pasa lo que está pasando ahí, por ejemplo, ¿sí?
+Que está... Ahí tienes un color en el H1, mira el inicio.
+Y ahí tienes otro diseño totalmente diferente.
+Aquí tienes un diseño con un degradado, que es muy bonito,
+me parece muy actual.
+Sí, ahí esto es muy actual y demás, pero luego la hía,
+si tú no los controlas a eso, mente a la segunda.
+O a la otra página, no sé cuál era.
+Esa tampoco es.
+No, porque no es que yo es más rella.
+Creo que a otras tienes estilos diferentes.
+Mira, parece otro sitio.
+No tiene contraste, no tienes tiro.
+¿Cómo va a controlar eso?
+Eso solamente se controla teniendo la madre el cordero.
+Necesitemos que haya ahí una estructura,
+como tenemos una estructura para la base de alto,
+tenemos una estructura para el código de frente.
+Y tenemos que tener unas estructuras para los estilos.
+Los estilos tienen que tener marco.
+Un identidad de marca.
+Si yo tengo un layout, ¿cuánto de pa' de mantener el curfeeba?
+¿Cuánto de pa' de naba?
+¿Cuánto de wheat?
+Bien, en el caso de un componente.
+¿Cómo va a ser los H1?
+Todos tienen que ser de una manera.
+¿Cómo va a ser los H1?
+Todos tienen que ser de una manera.
+¿Cómo va a ser los H1?
+Todos tienen que ser de una manera.
+Y a poner con clámblo, a poner con clámblo.
+¿Por qué?
+Porque tengo que ser responsivo y adaptativo los textos, ¿no?
+Los botones, todos tienen que ser igual.
+O al menos dos botones, tres botones.
+A ver, versiones, pero no lo estaremos
+y ficando en cada uno de los proyectos.
+Eso te lo va a hacer la idea.
+Entonces, son de los cuidados que vos tenés que ir teniendo.
+Y ahora una pregunta que te ha dado que me surgió,
+mientras lo en para ello, para toda la paleta rub,
+es aconsejable hacer un mix de un archivo CSS y el Tyrewing.
+O me trabajo directamente con el Tyrewing,
+trabajando con los componentes, con los lagers y con todo eso.
+¿Tú qué me recongues?
+¿Qué es más profesional?
+Es la brevo.
+Yo quiero cualquier camino te puede llevar a Roma.
+Porque hay muchas maneras de hacerlo.
+Lo puedes trabajar solo con CSS tradicional,
+sino hacerlo al estilo de Tyrewing.
+Sí.
+Yo van a estar un archivo jota también por el posiblemente,
+puede llegar a necesitarlo.
+Pero lo que yo quiero es que investigue en tu forma.
+Y luego me explique por qué lo hiciste así.
+Y por qué no lo hiciste de otra manera.
+Entonces, yo quiero que investigue las posibilidades que hay
+para poder hacerlo de una o de otra manera.
+Y tú decías cuál vas a utilizarlo.
+En esa investigación que tú vas a elegir,
+si quieres usar un CSS global o utilizar un CSS global,
+hasta un Tyrewing, con clases de Tyrewing,
+para decidir si una cosa por si la otra es por qué.
+Va a aprender a ir a dos maneras.
+Pero podrías hacerlo tranquilamente
+después que hay de las dos maneras y te va a quedar bien digamos.
+Yo sé que no te respondo la pregunta.
+No te voy a ir diciendo ahora.
+Tiene que hacer esto.
+Eso era hasta la semana pasada a partir de esta semana.
+Buscarte la vida.
+Y con el CEO sería más o menos la misma respuesta.
+Con el CEO de qué era decir.
+Porque yo ya estoy pensando en meterle contenido a estas páginas.
+Sí.
+Pero claro.
+Yo pienso en meterle contenido.
+Yo tengo que meter a lo loco.
+Yo tengo que pensar lo que estoy haciendo.
+No puedo que eso le queda mucho trabajo todavía por hacerlo.
+Porque a medida que empieza a agregar contenido,
+vas a necesitar, vas a ir creando y llenando tu base de datos.
+Pero a medida que vayas creando contenido en tu base de datos,
+lo que va a pasar es que todo ese contenido que va a crear
+si tiene que reenteresano.
+Y se va a empezar a reenteresar todo con malas prácticas.
+¿Entiendos?
+Con malas prácticas de que...
+Tú tienes que tener una estructura cuando tú vas a hacer un diseño
+de una casa como de eso.
+Es decir, bueno, la paleta de colores es esta.
+La paleta tendrá esta paleta de colores de pintura.
+Yo no puedo decir, bueno, amarillo.
+¿No?
+Amarillo. ¿Cuál?
+Un código de color.
+Eso es lo mismo.
+Tú tienes que tener una paleta con un código de colores.
+Tienes que tener una estructura de identidad con un...
+dipado de fuente, con un tamaño de fuente.
+Tienes que tener un...
+un parámetro para decir, este botón lo quiero de estas características.
+Este títico, este archivo, este archivo,
+este archivo, lo quiero con estas características.
+Y así.
+¿Sí?
+Sí.
+Primario secundario, la ayuda,
+todo eso lo necesita de estructurar.
+Una vez que tengas todas las estructuras,
+lo demás cae por su propio peso.
+Luego es ir soltando cosas en el fronque.
+Eír armándole a la izquierda, a la derecha, a la derecha,
+a la derecha, a la derecha.
+Pero no a otra cosa.
+En un proyecto así, a lo mejor me va a responder como antes y en un pasarianas.
+Pero en un proyecto así, yo entiendo de que primero,
+antes de meter el contenido,
+mismo la base de datos,
+en el baque y después para renderizarlo en el fronque,
+antes tú tienes que tener claro cómo,
+esta base de tu página de Home,
+después le va a dividir en tu sitio,
+después de cálita,
+la estructura principal,
+que vaya a acorde con tu...
+Esa es para saber cuánta cantidad.
+Pero bueno, normalmente en un proyecto,
+cuando títedan, por ejemplo, trabajas como freelance,
+puede tener diferentes etapas al proyecto.
+El proyecto inicial comienza siempre con un diseño.
+Pues que con un diseño,
+si por ahí quizás hasta lo menos relevante,
+pero el diseño es lo que lo único que lo usuario ve y entiende
+lo que el cliente es final, tú y lo entiendo.
+Entonces, bueno, por eso empieza por ahí.
+¿Qué lo que necesita?
+Tomar todo un diseño, hacer la home.
+Luego, ascontácte nosotros, que son tres landings que siempre van.
+Home, contacte nosotros.
+Luego, te explicarlos y los padres. ¿Quién va a hacer?
+No sé.
+Servicio 1, servicio 2, servicio 3, servicio 4,
+por ahí necesitas 7 servicios y un blog.
+Lo recomiendo trabaja por servicio,
+o en este caso por localidades.
+Quiero decir, por ejemplo, en este tema,
+da alquileres, de villa, de...
+No es lo mismo, estoy pensando, ¿no?
+Mira, tú te estás preocupando.
+Por cosas que todavía no te han sucedido.
+Lo preocupaste por lo que te estás sucediendo ahora.
+Tú no puedes ponerte a pensar en todo lo que vas a necesitar
+con todos los problemas que van a tener al momento de ser millonario.
+Si todavía no tenemos ese problema.
+Entonces tú, lo preocupaste ahora.
+Ahora, ahora, ahora.
+De entender astro, de saber cómo funciona,
+de pedirle a la...
+a ver, de armar una estructura correcta,
+de armar componente,
+de armar toda una estructura.
+Luego de eso,
+puedes pensar en lo siguiente.
+Luego de eso te puedes hacer problemas por otras cosas,
+pero por ahora,
+a cortarse lo que necesitamos,
+que es esto, que no te va a ayudar poco tiempo,
+a regularizarlo.
+Pasa que parece que has avanzado mucho.
+Y no digo que no te va a ayudar mucho,
+simplemente...
+Bueno, en la llave está muy bien.
+Sí.
+En la llave está muy bien.
+Está profesional.
+Está muy bonito.
+Sigue por ese camino, pero de manera modular.
+Sigue por ese camino.
+Está muy bien.
+Mira que bien que has avanzado.
+Tiene un botón primario, muy destacado.
+Tiene una versión de botón secundario.
+Esto es un componente, esto otro y esto otro.
+Sí.
+Bien.
+¿Por qué esos botones lo vas a seguir teniendo durante todo el site?
+Y tú no quieres configurar el mismo botón,
+100 millones de veces.
+Y cada vez que tengo un HTML,
+de una propia se tiene que generar solo,
+no puedes crear un botón otra vez.
+No se puede.
+Entonces, tú necesitas algo más modular.
+Eso es lo que tienes que hacer ahora.
+Una vez que tú tengas eso,
+ya puedes pensar en los siros que van a tener.
+Sí, claramente.
+Por eso un trae los siros que va a tener por ciudad.
+¿Por qué?
+Porque la gente como buca.
+Por ciudad.
+¿Por ciudad?
+Por ciudad.
+Va a filtrar todos tus propias, ¿por qué?
+Por ciudad.
+¿Por dónde va?
+Por precio.
+¿Por qué va?
+Que va a tener diferentes filtros.
+Tu página va a tener que ser dinámica en ese sentido.
+Tengo y ping y ping y ping y tirando y filtrando las propias.
+Eso cómo lo vas a saber.
+¿Cómo vas a saber cuánto ha sido?
+¿Cuántas páginas?
+Yo me lo invento.
+¿Dónde lo saco?
+El experiencia.
+Después sí, pero al principio como se aprende súper fácil.
+Te fija el líder del mercado y lo hace igual.
+Tiene otro secreto.
+O sea, él le funciona.
+Atiti.
+Atiti dame.
+¿Cuántas personas debes tener?
+O sea, ¿cuánto desarrolladores de tener fotocas?
+¿Tocas de tener un chísimo dinero invertido y idealista?
+O el book.
+O el book.
+O el book.
+O el book.
+O el book.
+O el book.
+O el book.
+O el book.
+O el book.
+O el book.
+O el book.
+O el book.
+O el book.
+O el book.
+O el book.
+O el book.
+O el book.
+O no está horizonte.
+No está horizonte.
+No está 핑____.
+El wii,"," η, ¿ 3652, y no stat laiei"?
+bienyel iro.
+Eso
+Sofac contuberHuh?
+No, no, porque었습니다 spices hombroma.
+Es que esa es un mejor por eso,
+porque yo somos personas, han por eso,
+pensé Circuit también tu te Kansas y dice bueno,
+No sé, eso depende de vos y de tu estrategia.
+Vale, sabe que se que va a querer decir, sabe que se que no.
+Categoría, cómo lo va a armar.
+Pero para todo eso, para todo,
+tiene que tener primero un identidad de marca.
+Una vez que tú tengas tu identidad de marca,
+tiene que tener una maqueta de la joven,
+una maqueta de contacto, una maqueta de nosotros.
+Ya tiene esas tres maquetas.
+Todo el proyecto se va a ver igual que esa tres maquetas.
+Esa tres maqueta que va a tener botón, por mular,
+y que va a usar en nuestros lados.
+¿Qué mamá te va a tener en la joven?
+Oye, cuánto de ancho, versiones responsivas.
+¿Qué mamá te va a tener en esa maqueta?
+Todo lo que es en la estructura de las etiquetas,
+cómo se va a haber un H1, un H1, un H3,
+lo que te dije anteriormente, cómo se va a haber un párrafo.
+Cuando tengas un background en que paleta van a hacer,
+el contraste cómo va a hacer,
+eso te lo da una maqueta.
+Por eso que nosotros hicimos maqueta,
+porque pude armar una maqueta,
+luego todo el edificio va a ir a acorde a esa maqueta.
+Si va a haber una paren de color oscuro,
+cómo va a hacer en el edificio,
+del color bordo, intitucional de edificio,
+no va a hacer amarilla.
+Y si no podrás ser un color terciario,
+que es el amarillo, pero está planificado.
+Una desentida de marga.
+Hay una identidad.
+Fíjate, que es MacDonald,
+que te entrega la bolsita,
+está de la identidad de marga.
+Que te entrega un sticker para el móvil.
+Está de la identidad.
+En todo el lado, nadie tiene por quién ventan.
+Todos seguimos la misma identidad.
+Todo el mundo.
+Si tú entras al agua,
+ves de esa identidad marga con esas fuentes,
+con ese color y con ese tamaño.
+Relación de tamaño.
+Estaron imprimientes, lo que dice a una nueva.
+En una tipografía, con un tamaño, con un formato.
+Con un color.
+Que ponen esos cuadros,
+lo mismo.
+Es un cuadro.
+Fíjate la identidad de marga
+en la empresa en la que estamos.
+Como, por ejemplo,
+puede mejorarse, claro,
+puede estar bien, puede estar mal.
+Yo veo que la identidad de marga,
+la trabaja bien y la pongo de ejemplo.
+La identidad de marga,
+lo veo que se respeta en las redes sociales,
+en el inquedín,
+cuando hacen los videos,
+donde salen ustedes, nosotros,
+el inquedín, también la respetamos aquí en el aula,
+en las puertas.
+Se ve ser y el trabajo.
+Y no digo que no lo sé.
+Yo veo que también es el trabajo.
+Los profesionales que tienen son muy buenos.
+No hablo de mí,
+o lo de mis compañeros.
+Pero veo que hay una identidad marca plantada
+en los pasillos.
+Sí, señores.
+También, sí, señores.
+En el portón, cuando tú entras,
+el cartel que está parado del costado,
+la cartelidad fuera,
+el cartel del costado,
+todo tiene la identidad marca.
+Eso es lo que tú tienes que hacer.
+Como no hay identidad marca,
+imagínate que bien hacer eso,
+le ponen la letra que se le parece bonita
+y que se hace la puerta,
+le ponen el color que le parece fantástico.
+Por eso es que la idea ha hecho eso.
+Le pareció bonito el rosa, le puso el rosa.
+Después, otro le va a aparecer la idea,
+le va a aparecer bonito,
+el tal tipado de la letra, le va a poner ese tipado.
+En cambio, es diferente,
+cuando tú le dices la idea, quiero que me haga esto
+y tenéis cuenta estos dos archivos que te paso
+de identidad de marca
+y le pasa a esas maquetas.
+Una vez que le da la maqueta,
+ya sabe un poco más lo que tiene que hacer.
+Le estás informando.
+Cada uno haría aquí lo que quisiera.
+La chica de marca tiene que venir,
+que nos filma, que es el yo, con la cosa que la otra.
+Cuando le iba el tipado de la letra,
+que a ella le parezca bien.
+Y ya tiene una estructura que seguir,
+tiene una identidad.
+Y nosotros también.
+Como cualquier menos,
+donde tú trabajas es lo mismo.
+No, no, no, sí, entiende lo que me dices.
+Entiende lo que me dices.
+Por eso tú largarte.
+A hacer ya, a hacer ya producir.
+Con qué sentido.
+Claro.
+Tener lo sentido que tiene,
+es que luego va a tener que volver
+a reacer todo el proyecto de ser.
+Y trabajar cuando termines,
+va a tener que volver a empezar ya,
+regla que peor todo ahí.
+Viste la práctica cuando nosotros hicimos acá
+que ustedes tenéis que cambiarse ordenado
+y a reglarlo de otro.
+Es más complejo,
+es lo muestro.
+Sí,
+entonces,
+por eso te digo,
+no te lances a hacer superproducciones,
+si todavía no te den las bases.
+Estable.
+Establece bases.
+Luego,
+te lanza a hacer el proyecto de producir
+y dividir.
+Bueno, sí.
+Lo que tú ves.
+Bueno, pero primero lo primero.
+Pues me viene muy bien.
+Yo eso que me ha dicho.
+Muchas gracias.
+Por eso te puedo dar unas respuestas,
+la respuesta mejor que te puedo dar,
+es merada a perjeto.
+Hace esto.
+No, no, no.
+Merada a perjeto.
+Para que no gastes tiempo, ¿vale?
+No, no, no.
+Es que este es la punta correcta.
+Qué pasa, yo voy a ver el proyecto.
+No, no, no, no.

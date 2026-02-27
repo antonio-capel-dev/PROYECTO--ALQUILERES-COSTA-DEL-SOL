@@ -1,0 +1,87 @@
+{
+  "kind": "collectionType",
+  "collectionName": "guias",
+  "info": {
+    "singularName": "guia",
+    "pluralName": "guias",
+    "displayName": "Guia"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {
+    "i18n": {
+      "localized": true
+    }
+  },
+  "attributes": {
+    "titulo": {
+      "type": "string",
+      "required": true,
+      "maxLength": 120,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "titulo",
+      "required": true
+    },
+    "zona_relacionada": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::ubicacion.ubicacion"
+    },
+    "contenido": {
+      "type": "richtext",
+      "required": true,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "extracto": {
+      "type": "text",
+      "maxLength": 300,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "imagen_portada": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
+    "cta_texto": {
+      "type": "string",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "cta_url": {
+      "type": "string"
+    },
+    "orden": {
+      "type": "integer",
+      "default": 0
+    },
+    "publicada": {
+      "type": "boolean",
+      "default": false
+    },
+    "seo": {
+      "type": "component",
+      "component": "seo.meta-seo",
+      "repeatable": false
+    }
+  }
+}

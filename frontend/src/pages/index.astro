@@ -1,0 +1,379 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Hero from "../components/layout/Hero.astro";
+import { IMAGENES_ZONA, IMAGEN_ZONA_FALLBACK } from "../config/zonas";
+import Boton from "../components/ui/Boton.astro";
+import Icon from "../components/ui/Icon.astro";
+import FichaAlquiler from "../components/FichaAlquiler.astro";
+import ZoneCard from "../components/ZoneCard.astro";
+import BarraBusqueda from "../components/BarraBusqueda.astro";
+import SeccionInfo from "../components/SeccionInfo.astro";
+import SeccionFaq from "../components/SeccionFaq.astro";
+import SeccionTestimonios from "../components/SeccionTestimonios.astro";
+import propiedades20 from "../data/propiedades_20.json";
+import { getLangFromUrl, useTranslations } from "../i18n/utils";
+import {
+  normalizarRentalStrapi,
+  normalizarRentalLocal,
+} from "../utils/normalizadores";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+// ── Fetch Strapi; si falla o devuelve vacío → JSON local (20 props) ─
+const STRAPI_URL = import.meta.env.PUBLIC_STRAPI_URL || "http://localhost:1337";
+let strapiData: any[] = [];
+try {
+  const res = await fetch(`${STRAPI_URL}/api/rentals?populate[ubicacion][fields][0]=nombre&populate[ubicacion][fields][1]=slug&populate[image][fields][0]=url&populate[image][fields][1]=formats&populate[detalles]=*&pagination[limit]=100`);
+  const json = await res.json();
+  strapiData = json.data || [];
+} catch {
+  // Strapi no disponible — se usará el JSON local como fallback
+}
+
+const data =
+  strapiData.length > 0
+    ? strapiData.map(normalizarRentalStrapi)
+    : (propiedades20 as any[]).map(normalizarRentalLocal);
+
+// ── Dataset mínimo para filtros.js (slug + criterios de filtrado) ─
+// titulo incluido para que mapa.js pueda mostrarlo en el popup
+const dataset = data.map(({ slug, zona, precio, capacidad, titulo }) => ({
+  slug,
+  zona,
+  precio,
+  capacidad,
+  titulo,
+}));
+
+---
+
+<Layout
+  titulo={t('meta.home.title')}
+  descripcion={t('meta.home.desc')}
+>
+  <fragment slot="preload">
+    <link
+      rel="preload"
+      href="/images/zonas/hero-costa-del-sol.webp"
+      as="image"
+    />
+  </fragment>
+
+  <!-- Hero institucional -->
+  <Hero
+    titulo={t("hero.title")}
+    tituloDestacado="Costa del Sol"
+    subtitulo={t("hero.desc")}
+    badge={t("hero.expert")}
+    ctaLabel={t("nav.rentals")}
+    ctaHref="/#rentals"
+  />
+
+  <!-- Search Bar -->
+  <BarraBusqueda />
+
+  <!-- Listings Grid — justo después de los filtros para UX directa -->
+  <section
+    id="rentals"
+    class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 bg-fondo-claro"
+  >
+    <div
+      class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6"
+    >
+      <div>
+        <h2 class="text-3xl md:text-4xl font-bold text-primario">
+          {t("listings.title")}
+        </h2>
+        <p class="text-texto-secundario mt-2 text-lg">
+          {t("listings.subtitle")}
+        </p>
+        <p class="text-sm text-secundario font-semibold mt-1">
+          <span id="contador-resultados"
+            >{data.length}
+            {
+              data.length === 1
+                ? t('count.one')
+                : t('count.many')
+            }</span
+          >
+        </p>
+      </div>
+      <a
+        href="#"
+        class="flex items-center text-secundario font-semibold hover:text-secundario transition group"
+      >
+        {t("listings.viewCatalog")}
+        <span class="ml-2 transform group-hover:translate-x-1 transition"
+          >→</span
+        >
+      </a>
+    </div>
+
+    {/* Carrusel horizontal — scroll-snap nativo CSS, sin librerías */}
+    <div class="relative">
+      {/* Flecha anterior — oculta en móvil (el usuario desliza con el dedo) */}
+      <button
+        id="btn-prev"
+        aria-label="Propiedad anterior"
+        class="hidden md:flex absolute left-0 -translate-x-1/2 top-1/2 -translate-y-1/2 z-10
+               w-11 h-11 items-center justify-center
+               bg-white rounded-full shadow-lg border border-superficie
+               text-primario text-xl font-bold
+               hover:bg-secundario hover:text-white hover:border-secundario
+               transition-colors"
+      >
+        ←
+      </button>
+
+      {/* Contenedor scrollable: flex-row + snap en eje X */}
+      <div
+        id="carrusel-propiedades"
+        class="flex overflow-x-auto snap-x snap-mandatory gap-6 pb-2"
+        style="scrollbar-width: none;"
+      >
+        {
+          data.map((prop) => (
+            // data-slug en el WRAPPER → filtros.js oculta el wrapper completo
+            // (el article de FichaAlquiler también lleva data-slug; ambos reciben display:none)
+            <div
+              data-slug={prop.slug}
+              class="flex-none basis-full md:basis-1/2 lg:basis-1/3 snap-start"
+            >
+              <FichaAlquiler {...prop} />
+            </div>
+          ))
+        }
+      </div>
+
+      {/* Flecha siguiente */}
+      <button
+        id="btn-next"
+        aria-label="Propiedad siguiente"
+        class="hidden md:flex absolute right-0 translate-x-1/2 top-1/2 -translate-y-1/2 z-10
+               w-11 h-11 items-center justify-center
+               bg-white rounded-full shadow-lg border border-superficie
+               text-primario text-xl font-bold
+               hover:bg-secundario hover:text-white hover:border-secundario
+               transition-colors"
+      >
+        →
+      </button>
+    </div>
+
+    {/* Empty State Rediseñado */}
+    {
+      data.length === 0 && (
+        <div class="text-center py-32 bg-white rounded-3xl border-2 border-dashed border-superficie">
+          <div class="flex justify-center mb-6">
+            <Icon name="search-x" class="w-16 h-16 text-fondo-claro/80" aria-hidden="true" />
+          </div>
+          <h3 class="text-2xl font-bold text-primario mb-2">
+            {t("listings.empty.title")}
+          </h3>
+          <p class="text-texto-secundario max-w-md mx-auto mb-8">
+            {t("listings.empty.desc")}
+          </p>
+          <Boton href="#" variante="outline">
+            {t("listings.empty.btn")}
+          </Boton>
+        </div>
+      )
+    }
+  </section>
+
+  <!-- Top Destinos: SEO Silos (Linking Strategy) -->
+  <section class="py-16 bg-white border-b border-superficie">
+    <div class="contenedor-fluido">
+      <div
+        class="flex flex-col md:flex-row justify-between items-end mb-10 gap-6"
+      >
+        <div>
+          <h2 class="text-3xl font-bold text-primario mb-2">
+            {t("destinations.title")}
+          </h2>
+          <p class="text-texto-secundario">
+            {t("destinations.desc")}
+          </p>
+        </div>
+        <a
+          href="/#rentals"
+          class="text-secundario font-bold hover:underline flex items-center gap-1"
+        >
+          {t("destinations.viewAll")} →
+        </a>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {
+          (() => {
+            // ── ESTRATEGIA: Derivar zonas reales de las propiedades (SSG) ──
+            // Evitamos mostrar zonas vacías o con fotos rotas hardcodeadas.
+            const zonasMap = new Map();
+
+            data.forEach((p) => {
+              const nombre = p.zona || "Costa del Sol";
+              // Normalización robusta idéntica a [slug].astro
+              const slug = p.zona
+                ? p.zona
+                    .toLowerCase()
+                    .normalize("NFD")
+                    .replace(/[\u0300-\u036f]/g, "")
+                    .replace(/\s+/g, "-")
+                : "costa-del-sol";
+
+              if (!zonasMap.has(slug)) {
+                zonasMap.set(slug, {
+                  nombre,
+                  slug,
+                  // Fuente de verdad: mapa curado (idéntico al hero de /zona/[slug])
+                  img: IMAGENES_ZONA[slug] ?? IMAGEN_ZONA_FALLBACK,
+                  cantidad: 1,
+                });
+              } else {
+                const z = zonasMap.get(slug);
+                z.cantidad++;
+              }
+            });
+
+            // Zonas Fallback por si Strapi está vacío (Defensa Oral: "Empty States")
+            const zonasFallback = [
+              {
+                nombre: "Málaga Centro",
+                slug: "malaga",
+                img: IMAGENES_ZONA["malaga"],
+                cantidad: 0,
+              },
+              {
+                nombre: "Marbella",
+                slug: "marbella",
+                img: IMAGENES_ZONA["marbella"],
+                cantidad: 0,
+              },
+              {
+                nombre: "Benalmádena",
+                slug: "benalmadena",
+                img: IMAGENES_ZONA["benalmadena"],
+                cantidad: 0,
+              },
+              {
+                nombre: "Torre del Mar",
+                slug: "torre-del-mar",
+                img: IMAGENES_ZONA["torre-del-mar"],
+                cantidad: 0,
+              },
+              {
+                nombre: "Torremolinos",
+                slug: "torremolinos",
+                img: IMAGENES_ZONA["torremolinos"],
+                cantidad: 0,
+              },
+              {
+                nombre: "Nerja",
+                slug: "nerja",
+                img: IMAGENES_ZONA["nerja"],
+                cantidad: 0,
+              },
+            ];
+
+            const listadoZonas =
+              zonasMap.size > 0 ? Array.from(zonasMap.values()) : zonasFallback;
+
+            return listadoZonas.map((zona) => (
+              <ZoneCard
+                nombre={zona.nombre}
+                slug={zona.slug}
+                imagen={zona.img}
+                cantidad={zona.cantidad}
+                descripcion={t("zone.badge")}
+              />
+            ));
+          })()
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Info Section (Marketing) -->
+  <SeccionInfo />
+
+  {/* ── Mapa de ubicaciones ──────────────────────────────────────── */}
+  {
+    /*
+      Leaflet CSS — <link> en body es HTML5 válido.
+      Se coloca aquí para no tocar Layout.astro (que no tiene slot head).
+  */
+  }
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  />
+  {
+    /*
+      Leaflet JS — is:inline evita que Astro lo procese con Vite.
+      Carga SÍNCRONA (bloqueante) → window.L disponible antes de que
+      el bundle diferido (type="module") ejecute inicializarMapa().
+  */
+  }
+  <script is:inline src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+  ></script>
+
+  <section
+    aria-label="Mapa de propiedades disponibles"
+    class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 bg-fondo-claro"
+  >
+    <h2 class="text-2xl md:text-3xl font-bold text-primario mb-2">
+      {t("map.title")}
+    </h2>
+    <p class="text-texto-secundario mb-6 text-base">
+      {t("map.desc")}
+    </p>
+    <div
+      id="mapa-propiedades"
+      class="w-full rounded-2xl overflow-hidden border border-superficie shadow-sm"
+    >
+      {/* Leaflet monta el mapa aquí — altura definida en <style> */}
+    </div>
+  </section>
+
+  <!-- Testimonios de Clientes (Reviews) -->
+  <SeccionTestimonios />
+
+  <!-- FAQ Section (Dudas y Confianza) — datos gestionados en Strapi -->
+  <SeccionFaq pagina="home" />
+</Layout>
+
+{/* Dataset inyectado en build-time → lo leerá filtros.js en el navegador */}
+<script
+  type="application/json"
+  id="propiedades-data"
+  is:inline
+  set:html={JSON.stringify(dataset)}
+/>
+
+<script>
+  // Astro bundlea y difiere estos módulos → DOM garantizado al ejecutar
+  import inicializarFiltros from "../scripts/filtros.js";
+  import inicializarCarrusel from "../scripts/carrusel.js";
+  import inicializarMapa from "../scripts/mapa.js";
+  inicializarFiltros();
+  inicializarCarrusel();
+  inicializarMapa();
+</script>
+
+<style>
+  /* Oculta la barra de scroll en WebKit (Chrome, Safari, Edge) */
+  #carrusel-propiedades::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Altura responsiva del mapa Leaflet */
+  #mapa-propiedades {
+    height: 320px; /* móvil */
+  }
+  @media (min-width: 768px) {
+    #mapa-propiedades {
+      height: 420px; /* tablet / desktop */
+    }
+  }
+</style>

@@ -1,0 +1,42 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout
+  titulo="404: Página no encontrada | Costa del Sol"
+  descripcion="Lo sentimos, no hemos podido encontrar la página que buscas. Explora nuestros alquileres en Marbella, Málaga y más."
+>
+  <div
+    class="flex flex-col items-center justify-center min-h-[60vh] text-center px-4"
+  >
+    <h1 class="text-9xl font-bold text-gray-200">404</h1>
+    <h2 class="text-3xl font-bold text-primario mt-4 mb-6">
+      Página no encontrada
+    </h2>
+    <p class="text-texto-secundario max-w-lg mx-auto mb-8">
+      La página que buscas no existe o ha sido movida. Pero no te preocupes, hay
+      muchos otros sitios maravillosos por descubrir.
+    </p>
+
+    <div class="flex flex-wrap gap-4 justify-center">
+      <a
+        href="/"
+        class="bg-secundario text-white px-6 py-3 rounded-lg hover:bg-secundario transition shadow-lg"
+      >
+        Volver al Inicio
+      </a>
+      <a
+        href="/alquiler-marbella"
+        class="bg-white text-secundario border border-superficie px-6 py-3 rounded-lg hover:bg-fondo-claro transition shadow-sm"
+      >
+        Ver Marbella
+      </a>
+      <a
+        href="/alquiler-malaga"
+        class="bg-white text-secundario border border-superficie px-6 py-3 rounded-lg hover:bg-fondo-claro transition shadow-sm"
+      >
+        Ver Málaga
+      </a>
+    </div>
+  </div>
+</Layout>

@@ -1,0 +1,319 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Boton from "../components/ui/Boton.astro";
+import Badge from "../components/ui/Badge.astro";
+import Icon from "../components/ui/Icon.astro";
+---
+
+<Layout
+  titulo="Contacto | Alquileres Costa del Sol"
+  descripcion="¿Tienes alguna duda? Contacta con nuestro equipo para reservar tu estancia o gestionar tu propiedad en Málaga y Marbella."
+  breadcrumbs={[{ nombre: "Contacto", url: "/contacto" }]}
+>
+  <!-- Schema.org específico para página de Contacto -->
+  <script
+    is:inline
+    type="application/ld+json"
+    set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "ContactPage",
+      mainEntity: {
+        "@type": "Organization",
+        name: "Alquileres Costa del Sol",
+        email: "alquilerescostadelsol2026@gmail.com",
+        telephone: "+34612345678",
+        contactPoint: {
+          "@type": "ContactPoint",
+          telephone: "+34612345678",
+          contactType: "customer service",
+          areaServed: "ES",
+          availableLanguage: ["es", "en", "fr"],
+        },
+        address: {
+          "@type": "PostalAddress",
+          streetAddress: "Avenida Andalucía 42",
+          addressLocality: "Málaga",
+          postalCode: "29002",
+          addressCountry: "ES",
+        },
+      },
+    })}
+  />
+
+  <section class="bg-fondo-claro py-24 px-4 relative overflow-hidden">
+    <!-- fondo -->
+    <div
+      class="absolute top-0 right-0 w-96 h-96 bg-secundario/5 rounded-full -mr-48 -mt-48 blur-3xl"
+    >
+    </div>
+    <div
+      class="absolute bottom-0 left-0 w-96 h-96 bg-acento/5 rounded-full -ml-48 -mb-48 blur-3xl"
+    >
+    </div>
+
+    <div class="max-w-7xl mx-auto relative z-10">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+        <!-- Info de contacto -->
+        <div>
+          <Badge variante="acento" clase="mb-6">Estamos aquí para ti</Badge>
+          <h1
+            class="text-5xl font-extrabold text-primario mb-8 tracking-tight"
+          >
+            ¿Hablamos? Estamos <br /><span class="text-secundario"
+              >a un solo clic</span
+            >
+          </h1>
+          <p class="text-texto-secundario mb-12 text-xl leading-relaxed font-light">
+            ¿Tienes dudas sobre una propiedad o quieres que gestionemos tu
+            alquiler? Cuéntanos qué necesitas y nuestro equipo local te
+            responderá en menos de 24 horas.
+          </p>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
+            <div
+              class="flex items-start gap-4 p-6 bg-white rounded-2xl shadow-sm border border-superficie"
+            >
+              <div
+                class="w-12 h-12 bg-secundario/10 rounded-xl flex items-center justify-center text-secundario"
+              >
+                <Icon name="map-pin" class="w-5 h-5" aria-hidden="true" />
+              </div>
+              <div>
+                <h3 class="font-bold text-primario">Visítanos</h3>
+                <p class="text-texto-secundario text-sm leading-relaxed">
+                  Avenida Andalucía número 42 <br />Málaga, 29002
+                </p>
+              </div>
+            </div>
+            <div
+              class="flex items-start gap-4 p-6 bg-white rounded-2xl shadow-sm border border-superficie"
+            >
+              <div
+                class="w-12 h-12 bg-secundario/10 rounded-xl flex items-center justify-center text-secundario"
+              >
+                <Icon name="mail" class="w-5 h-5" aria-hidden="true" />
+              </div>
+              <div>
+                <h3 class="font-bold text-primario">Escríbenos</h3>
+                <p class="text-texto-secundario text-sm leading-relaxed">
+                  alquilerescostadelsol2026@gmail.com
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Formulario -->
+        <div class="relative" id="form-wrapper">
+          <div
+            class="absolute inset-0 bg-secundario/5 rounded-[2rem] blur-2xl -rotate-2"
+          >
+          </div>
+          <div
+            class="relative bg-white p-8 md:p-12 rounded-[2rem] shadow-2xl border border-superficie"
+          >
+            <h2 class="text-2xl font-bold text-primario mb-8">
+              Envíanos un mensaje
+            </h2>
+
+            <!-- Banner de error inline (accesible) -->
+            <div
+              id="form-error"
+              role="alert"
+              aria-live="assertive"
+              class="hidden mb-6 flex items-start gap-3 bg-red-50 border border-red-200 text-red-700 rounded-xl px-4 py-3 text-sm"
+            >
+              <svg class="w-5 h-5 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+              <span id="form-error-text">Ha ocurrido un error. Por favor, inténtalo de nuevo.</span>
+            </div>
+
+            <form
+              id="form-contacto"
+              class="space-y-6"
+              data-strapi-url={import.meta.env.PUBLIC_STRAPI_URL || "http://localhost:1337"}
+              novalidate
+            >
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label
+                    for="campo-nombre"
+                    class="block text-sm font-bold text-primario mb-2"
+                    >Nombre Completo</label
+                  >
+                  <input
+                    id="campo-nombre"
+                    type="text"
+                    name="nombre"
+                    required
+                    maxlength="100"
+                    autocomplete="name"
+                    class="w-full bg-fondo-claro border-transparent focus:border-secundario focus:bg-white rounded-xl px-5 py-4 focus:outline-none focus:ring-4 focus:ring-secundario/5 transition-all duration-300"
+                    placeholder="Ej. Ana García"
+                  />
+                </div>
+                <div>
+                  <label
+                    for="campo-email"
+                    class="block text-sm font-bold text-primario mb-2"
+                    >Correo Electrónico</label
+                  >
+                  <input
+                    id="campo-email"
+                    type="email"
+                    name="email"
+                    required
+                    autocomplete="email"
+                    class="w-full bg-fondo-claro border-transparent focus:border-secundario focus:bg-white rounded-xl px-5 py-4 focus:outline-none focus:ring-4 focus:ring-secundario/5 transition-all duration-300"
+                    placeholder="ana@email.com"
+                  />
+                </div>
+              </div>
+              <div>
+                <label
+                  for="campo-mensaje"
+                  class="block text-sm font-bold text-primario mb-2"
+                  >¿En qué podemos ayudarte?</label
+                >
+                <textarea
+                  id="campo-mensaje"
+                  name="mensaje"
+                  rows="4"
+                  required
+                  maxlength="2000"
+                  class="w-full bg-fondo-claro border-transparent focus:border-secundario focus:bg-white rounded-xl px-5 py-4 focus:outline-none focus:ring-4 focus:ring-secundario/5 transition-all duration-300"
+                  placeholder="Cuéntanos más detalles..."></textarea>
+              </div>
+
+              <!-- Honeypot anti-spam (oculto para humanos, visible para bots) -->
+              <div aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;">
+                <label for="campo-web">No rellenar</label>
+                <input id="campo-web" type="text" name="website" tabindex="-1" autocomplete="off" />
+              </div>
+
+              <Boton tipo="submit" clase="w-full py-5 shadow-marca">
+                Solicitar Información
+              </Boton>
+              <p class="text-center text-xs text-texto-secundario mt-4">
+                Prometemos no enviarte spam. Tus datos están a salvo con
+                nosotros.
+              </p>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script is:inline>
+    const form = document.getElementById("form-contacto");
+    const wrapper = document.getElementById("form-wrapper");
+    const errorBanner = document.getElementById("form-error");
+    const errorText = document.getElementById("form-error-text");
+
+    function mostrarError(msg) {
+      errorText.textContent = msg;
+      errorBanner.classList.remove("hidden");
+      errorBanner.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+
+    function ocultarError() {
+      errorBanner.classList.add("hidden");
+    }
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      ocultarError();
+
+      const btn = form.querySelector("button[type='submit']");
+      const btnText = btn.innerHTML;
+
+      // Honeypot check — si el campo oculto tiene valor, es un bot
+      const honeypot = form.querySelector("input[name='website']");
+      if (honeypot && honeypot.value.trim() !== "") {
+        // Silencio: no enviar ni alertar
+        return;
+      }
+
+      // Validación de campos
+      const nombre = form.querySelector("[name='nombre']").value.trim();
+      const email = form.querySelector("[name='email']").value.trim();
+      const mensaje = form.querySelector("[name='mensaje']").value.trim();
+
+      if (!nombre || !email || !mensaje) {
+        mostrarError("Por favor, completa todos los campos antes de enviar.");
+        return;
+      }
+      if (nombre.length > 100) {
+        mostrarError("El nombre no puede superar los 100 caracteres.");
+        return;
+      }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        mostrarError("Por favor, introduce un correo electrónico válido.");
+        return;
+      }
+      if (mensaje.length > 2000) {
+        mostrarError("El mensaje no puede superar los 2000 caracteres.");
+        return;
+      }
+
+      // Loading State
+      btn.disabled = true;
+      btn.innerHTML =
+        '<span class="flex items-center justify-center gap-2"><svg class="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Enviando...</span>';
+
+      const data = { nombre, email, mensaje };
+
+      try {
+        const STRAPI_URL = form.dataset.strapiUrl || "http://localhost:1337";
+        const res = await fetch(`${STRAPI_URL}/api/contactos`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ data }),
+        });
+
+        if (res.ok) {
+          // Reemplazar formulario por mensaje de éxito
+          wrapper.innerHTML = `
+            <div class="relative bg-white p-8 md:p-12 rounded-[2rem] shadow-2xl border border-superficie text-center">
+              <div class="flex justify-center mb-6">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                  stroke-linejoin="round" class="w-16 h-16 text-green-500" aria-hidden="true">
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                  <path d="m9 11 3 3L22 4"/>
+                </svg>
+              </div>
+              <h2 class="text-3xl font-bold text-primario mb-4">Mensaje recibido</h2>
+              <p class="text-texto-secundario mb-8 max-w-sm mx-auto">
+                Gracias, <strong>${data.nombre}</strong>. Te contactaremos en menos de
+                24 horas en <strong>${data.email}</strong>.
+              </p>
+              <a href="/"
+                class="inline-block bg-secundario text-white px-8 py-4 rounded-xl font-bold shadow-lg hover:shadow-marca transition-all">
+                Volver al Inicio
+              </a>
+            </div>
+          `;
+        } else {
+          const errorData = await res.json().catch(() => ({}));
+          console.error("Error backend:", errorData);
+          mostrarError(
+            "No se pudo enviar el mensaje. Comprueba que el servidor esté activo e inténtalo de nuevo."
+          );
+          btn.disabled = false;
+          btn.innerHTML = btnText;
+        }
+      } catch (error) {
+        console.error("Error de red:", error);
+        mostrarError(
+          "Error de conexión. Asegúrate de tener internet y vuelve a intentarlo."
+        );
+        btn.disabled = false;
+        btn.innerHTML = btnText;
+      }
+    });
+  </script>
+</Layout>

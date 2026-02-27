@@ -1,0 +1,52 @@
+---
+interface Props {
+  items: { label: string; href: string; active?: boolean }[];
+  backLink?: { label: string; href: string };
+}
+
+const { items, backLink } = Astro.props;
+---
+
+<nav
+  aria-label="Breadcrumb"
+  class="bg-fondo-claro border-b border-superficie py-3 relative z-10"
+>
+  <div
+    class="contenedor-fluido flex flex-wrap items-center justify-between gap-2"
+  >
+    {/* RUTA JERÁRQUICA */}
+    <ol class="flex items-center text-sm">
+      {
+        items.map((item, index) => (
+          <li class="flex items-center">
+            {index > 0 && <span class="mx-2 text-fondo-claro/80">/</span>}
+            {item.active ? (
+              <span class="text-primario font-bold" aria-current="page">
+                {item.label}
+              </span>
+            ) : (
+              <a
+                href={item.href}
+                class="text-texto-secundario hover:text-secundario transition font-medium"
+              >
+                {item.label}
+              </a>
+            )}
+          </li>
+        ))
+      }
+    </ol>
+
+    {/* BOTÓN VOLVER (Opcional pero recomendado) */}
+    {
+      backLink && (
+        <a
+          href={backLink.href}
+          class="text-sm font-bold text-secundario hover:text-primario hover:underline flex items-center gap-1 transition-colors ml-auto sm:ml-0 bg-superficie px-3 py-1 rounded-full shadow-sm border border-superficie"
+        >
+          <span class="text-lg leading-none">←</span> {backLink.label}
+        </a>
+      )
+    }
+  </div>
+</nav>

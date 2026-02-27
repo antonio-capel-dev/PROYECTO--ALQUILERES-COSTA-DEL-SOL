@@ -1,0 +1,56 @@
+el estado, porque antes, claro, yo cambiaba el valor de un objeto, pero lo tenías
+arcodeado en mi código, pero ahora que viene de una API, yo no puedo cambiar el valor
+de la API, pensar que está permanente, si yo sigo modificando los datos que me
+traigo de la API es confuso porque parece que estoy modificando los datos reales de
+la API y yo no estoy modificando los datos de la API, estoy modificando lo que, de lo que
+me traje y se una copia y de eso trabajo el estado, de momento que yo quiera, le envío
+esa copia, no le envío el objeto original que me traje modificado, es más confuso, se
+entiende o no, y se entiende y la copia, o sea, tú hazo una copia independiente de la
+hora, y esa referencia a la copia, la guarda en una variada distinta, exactamente cuando
+nosotros hacemos un spread que estamos haciendo, una copia, un método que devuelve, no es
+un forich, un forich recorre, pero no devuelve, recorre y ejecuta una función, pero un
+mach recorre y devuelve, recorre y devuelve, regular encontrar parámetros y horrastros de
+ella y reemplazarlos por espacio, o por lo que sea, porque porque tengo muchísimo arrastres
+de ella, su cuante no, alguien le ha pasado que la ella le reacta un contenido y le deja
+un rastro de ella, sabe lo que son los rastros de ella, cuando la ella escribe, y yo le pido
+una palabra que era optimista, bueno cuando realmente cuando escribimos contenido, a alta
+escala, la ella, si yo no soy muy preciso empieza a fallar como copeta de feria, empieza
+a dejar barras, me deja seripo aterico, me deja patrones que usa la ella, y entonces
+yo le siento rastrea, quitar, ahí me siento un forich, porque porque rastrea y quita, pero
+hay veces que yo necesito que lo que me trajo la ella hago un método inmutable, porque
+necesito filtrar los productos, cuando ustedes hacen clic en categorías de producto,
+hay que tamo ocupando, un filter, un verdad, para que me vuelva todo lo que encontró,
+lo que encontró, que los filtres, primero muestro, y ese filter ese método es muy fuerte
+porque me entero para filtrar, por precio, por palabra, por lo que yo quiero, bien, pero
+claro, tienen que ser métodos inmutable, porque no tiene lógica que yo me traiga algo
+desde la API, lo de se estructure, lo modifique, si se lo hago lo pinte, no, yo traigo, le
+cree una copia y esa copia, la muestro, porque si yo lo hago un filter y modificar el original
+y luego luces, se explique en el otro, ya no tiene esta categoría, aquí lo ésta, ya
+no encuentran los productos, se entiende a lo que voy a ir, bueno, yo sí, se entiende
+a donde voy o no, si, para o menos yo hago, mira, usted trae la API, lo ha quedado, ¿verdad?
+Sí, sí, y quiere filtrar por, quiere filtrar, tú te traes 10 productos y quieres filtrar
+por categorías de productos, los productos tienen, son un objeto, que te trae de la API,
+te trae 20 objetos y luego los renderes a todos por pantalla, ¿verdad? y tú quieres
+ocupar un filtrado, entonces ¿qué va a hacer? lo va a filtrar por tipo de producto,
+¿sí? los filtras por tipo de producto, le recorres un porich, porque tienen de eso,
+no sé, el producto, no es de abeja, de miel, de malara, va, y filtrar y te muestra 10, pero
+te muestra 10 y el programador lo que usó es un porich donde modifica la rayo original,
+¿sí? donde modifica la rayo original, entonces ¿qué pasa? la rayo original lo que la llamada
+la API que te hiciste, lo que trajiste ya no es, ya lo que estaba en data, ya no es,
+lo has modificado de esa raya, creado, o sea, la rayo original lo has modificado, entonces
+cuando el usuario quita ese filtro y va a filtrar otro otro artículo por precio, ya
+tiene los objetos solamente le quedan 3, no le quedan realmente los 10 que tenía, ya
+solamente tiene 3, entonces ¿cómo tiene 3? ¿cómo? no puede volver para atrás, exactamente,
+tiene que volver a llamar a la API, traerte, volver a filtrar y volver a modificar la
+rayo original, entonces por eso que nosotros queremos métodos inmutables, porque yo quiero
+llamar a la API, traerme los 10 y luego que el usuario filtra por málaga de esos 10 a algún
+filter un método inmutable y los 3 resultados que tienen los métodos en otro ray y eso lo
+vendré, que ya no quiere ese filtro, lo borra, entonces ese ray nuevo que había generado
+el filter y volvamos a mostrarlo en la rayo original, voy bien, lo mismo con las 3 y demás,
+por eso que no es lo mismo, un forich, como miráme el bigote, no es lo mismo, un forich
+que un método inmutable, ahora creo que quiero con este proyecto que veamos un poco más
+allá de lo que hemos utilizado, para que lo hemos utilizado y que le mugemos un poco la
+razón a todo esto, porque la verdad que con lo que sabemos han visto que se puede hacer muchísimo,
+sí ya se pueden dar más, pero bueno, era un poquito de métodos inmutables y mutables,
+son importantes, son muy importantes, vamos a ocupar, en nuestra obvia cotidiana, hay
+que haber tosnos a unpredictable.

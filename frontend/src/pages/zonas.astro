@@ -1,0 +1,77 @@
+---
+import Layout from "../layouts/Layout.astro";
+import ZoneCard from "../components/ZoneCard.astro";
+import { IMAGENES_ZONA, IMAGEN_ZONA_FALLBACK } from "../config/zonas";
+import { getLangFromUrl, useTranslations } from "../i18n/utils";
+import { fetchPropiedades } from "../lib/zona/fetchPropiedades";
+import { getZonaSlug, getZonaNombre } from "../lib/zona/getZonaSlug";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+// Single source of truth: fetchPropiedades (Strapi → fallback JSON)
+const { data: propiedades } = await fetchPropiedades();
+
+// Construir mapa de zonas con cantidad — usa getZonaSlug (no inline)
+const zonasMap = new Map<string, { nombre: string; slug: string; img: string; cantidad: number }>();
+
+propiedades.forEach((p: any) => {
+  const slug = getZonaSlug(p);
+  if (!slug) return;
+
+  if (!zonasMap.has(slug)) {
+    zonasMap.set(slug, {
+      nombre: getZonaNombre(p),
+      slug,
+      img: IMAGENES_ZONA[slug] ?? IMAGEN_ZONA_FALLBACK,
+      cantidad: 1,
+    });
+  } else {
+    zonasMap.get(slug)!.cantidad++;
+  }
+});
+
+const listadoZonas = Array.from(zonasMap.values());
+---
+
+<Layout
+  titulo={t('meta.zones.title')}
+  descripcion={t('meta.zones.desc')}
+  breadcrumbs={[{ nombre: t('nav.zones'), url: "/zonas" }]}
+>
+  <!-- H1 + Intro SEO -->
+  <section class="bg-primario py-20 px-6 text-center relative overflow-hidden">
+    <div class="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_white_1px,_transparent_1px)] bg-[length:24px_24px]"></div>
+    <div class="relative z-10 max-w-3xl mx-auto">
+      <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-6 tracking-tight">
+        {t('zones.h1')}
+      </h1>
+      <p class="text-fondo-claro/80 text-xl leading-relaxed">
+        {t('zones.intro')}
+      </p>
+    </div>
+  </section>
+
+  <!-- Grid de Zonas -->
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      {listadoZonas.map((zona) => (
+        <div class="flex flex-col gap-2">
+          <ZoneCard
+            nombre={zona.nombre}
+            slug={zona.slug}
+            imagen={zona.img}
+            cantidad={zona.cantidad}
+            descripcion={`${zona.cantidad} ${t('zones.properties')}`}
+          />
+          <a
+            href={`/zona/${zona.slug}`}
+            class="text-center text-sm font-semibold text-secundario hover:underline"
+          >
+            {t('zones.cta')}
+          </a>
+        </div>
+      ))}
+    </div>
+  </section>
+</Layout>

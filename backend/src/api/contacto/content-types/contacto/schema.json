@@ -1,0 +1,29 @@
+{
+    "kind": "collectionType",
+    "collectionName": "contactos",
+    "info": {
+        "singularName": "contacto",
+        "pluralName": "contactos",
+        "displayName": "Contacto",
+        "description": "Mensajes recibidos desde el formulario de contacto"
+    },
+    "options": {
+        "draftAndPublish": false
+    },
+    "attributes": {
+        "nombre": {
+            "type": "string",
+            "required": true,
+            "maxLength": 100
+        },
+        "email": {
+            "type": "email",
+            "required": true
+        },
+        "mensaje": {
+            "type": "text",
+            "required": true,
+            "maxLength": 2000
+        }
+    }
+}

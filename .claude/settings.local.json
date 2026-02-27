@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cat -n frontend/src/pages/zona/[slug]/[categoria].astro)",
+      "Bash(cat frontend/src/pages/zona/[slug].astro)",
+      "Bash(grep -n \"Malaga\\\\|Benalmadena\" frontend/src/pages/zona/[slug].astro)",
+      "Bash(grep -n \"Malaga\\\\|Benalmadena\\\\|Málaga\\\\|Benalmádena\" frontend/src/pages/zona/[slug].astro)",
+      "Bash(npm run build)",
+      "Bash(cat:*)",
+      "Bash(\"/mnt/c/Users/ANTONIO CAPEL/OneDrive - Digitech/Escritorio/PROYECTO--ALQUILERES-COSTA-DEL-SOL/CLAUDE.md\":*)",
+      "Bash(git init:*)",
+      "Bash(git branch:*)",
+      "Bash(git add:*)"
+    ]
+  }
+}

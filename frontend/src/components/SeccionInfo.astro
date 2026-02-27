@@ -1,0 +1,81 @@
+---
+import Boton from "./ui/Boton.astro";
+import { getLangFromUrl, useTranslations } from "../i18n/utils";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+// Imagen de Unsplash de alta calidad (Málaga/Costa del Sol style)
+const IMAGE_URL = "/images/zonas/marbella.webp";
+---
+
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 bg-white">
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+    <!-- Texto (Izquierda) -->
+    <div>
+      <div
+        class="inline-block mb-4 px-3 py-1 rounded-full bg-secundario/10 text-secundario text-sm font-semibold tracking-wide uppercase"
+      >
+        {t("info.badge")}
+      </div>
+      <h2
+        class="text-4xl md:text-5xl font-extrabold text-primario leading-tight mb-6"
+      >
+        {t("info.title.1")}
+        <span
+          class="text-transparent bg-clip-text bg-linear-to-r from-secundario to-acento"
+          >{t("info.title.highlight")}</span
+        >
+        <br />
+        <span class="text-3xl font-bold text-texto-secundario"
+          >{t("info.title.2")}</span
+        >
+      </h2>
+
+      <div class="space-y-4 text-texto-secundario text-lg leading-relaxed">
+        <p>
+          {t("info.p1.1")}<strong
+            class="text-primario"
+            >{t("info.p1.strong")}</strong
+          >.
+        </p>
+        <p>
+          {t("info.p2.1")}<strong>{t("info.p2.strong1")}</strong>{t("info.p2.2")}<strong>{t("info.p2.strong2")}</strong>{t("info.p2.3")}
+        </p>
+        <p>
+          {t("info.p3")}
+        </p>
+      </div>
+
+      <div class="mt-8 flex gap-4">
+        <Boton href="/nosotros" variante="outline">{t("info.button")}</Boton>
+      </div>
+    </div>
+
+    <!-- Imagen  -->
+    <div class="relative group">
+      <!-- Efecto de sombra/marco decorativo -->
+      <div
+        class="absolute -inset-4 bg-linear-to-r from-secundario to-acento rounded-3xl opacity-20 group-hover:opacity-30 blur-lg transition duration-500"
+      >
+      </div>
+      <div class="relative rounded-3xl overflow-hidden shadow-2xl aspect-4/3">
+        <img
+          src={IMAGE_URL}
+          alt={t("info.img.alt1")}
+          class="w-full h-full object-cover transform group-hover:scale-105 transition duration-700 ease-in-out"
+        />
+        <!-- Foto SEO en lugar de Badge flotante -->
+        <div
+          class="absolute bottom-6 left-6 w-32 h-32 rounded-xl overflow-hidden shadow-lg border-2 border-white/20 group-hover:scale-105 transition duration-500"
+        >
+          <img
+            src="/images/zonas/malaga.webp"
+            alt={t("info.img.alt2")}
+            class="w-full h-full object-cover"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

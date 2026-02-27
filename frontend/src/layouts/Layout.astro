@@ -1,0 +1,403 @@
+---
+import SeoHead from "../components/SeoHead.astro";
+import Boton from "../components/ui/Boton.astro";
+import Icon from "../components/ui/Icon.astro";
+import { getLangFromUrl, useTranslations } from "../i18n/utils";
+import { NAV_ITEMS, FOOTER_LINKS } from "../config/navigation";
+import "../styles/global.css";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const {
+  titulo,
+  descripcion,
+  imagen,
+  urlPrevia,
+  urlSiguiente,
+  faq,
+  breadcrumbs,
+  alternateLinks,
+} = Astro.props;
+
+// Helper para rutas localizadas
+const getPath = (href: string) => {
+  if (lang === "es") return href;
+  return `/${lang}${href}`;
+};
+
+// Base path sin prefijo de idioma (para el selector de idioma)
+const pathname = Astro.url.pathname;
+const basePath =
+  lang === "es" ? pathname : pathname.replace(new RegExp(`^/${lang}`), "") || "/";
+
+const getLangPath = (targetLang: "es" | "en" | "fr") =>
+  targetLang === "es"
+    ? basePath
+    : `/${targetLang}${basePath === "/" ? "" : basePath}`;
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <SeoHead
+      titulo={titulo}
+      descripcion={descripcion}
+      imagen={imagen}
+      urlPrevia={urlPrevia}
+      urlSiguiente={urlSiguiente}
+      faq={faq}
+      breadcrumbs={breadcrumbs}
+      alternateLinks={alternateLinks}
+    />
+    <!-- Preload critical fonts for LCP -->
+    <link
+      rel="preload"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap"
+      as="style"
+    />
+    <slot name="preload" />
+    <slot name="head" />
+  </head>
+  <body
+    class="bg-fondo-claro flex flex-col min-h-screen selection:bg-secundario/10 selection:text-secundario"
+  >
+    <!-- ── NAVEGACIÓN ──────────────────────────────────────────────── -->
+    <nav
+      class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-superficie"
+    >
+      <div class="contenedor-fluido">
+        <div class="flex justify-between items-center h-20">
+
+          <!-- Logo -->
+          <div class="shrink-0 flex items-center gap-2">
+            <Icon name="sun" class="w-7 h-7 text-sol" aria-hidden="true" />
+            <a
+              href={getPath("/")}
+              class="text-2xl font-bold bg-linear-to-r from-secundario to-acento bg-clip-text text-transparent hover:opacity-80 transition"
+            >
+              Costa del Sol
+            </a>
+          </div>
+
+          <!-- ── DESKTOP: Nav links + idioma + CTA ── -->
+          <div class="hidden md:flex items-center space-x-8">
+            {
+              NAV_ITEMS.map((item) => (
+                <a
+                  href={getPath(item.href)}
+                  class="text-texto-secundario hover:text-secundario font-medium transition duration-150"
+                >
+                  {t(item.key)}
+                </a>
+              ))
+            }
+
+            <!-- Selector de Idioma — Desktop (Banderas) -->
+            <nav
+              aria-label="Selector de idioma"
+              class="flex items-center gap-1.5 border-l border-superficie pl-6 ml-2"
+            >
+              <a
+                href={getLangPath("es")}
+                hreflang="es"
+                lang="es"
+                aria-label="Cambiar a Español"
+                aria-current={lang === "es" ? "true" : undefined}
+                class={`inline-flex items-center justify-center w-8 h-8 rounded-full transition-all duration-200 hover:scale-110 ${lang === "es" ? "ring-2 ring-secundario ring-offset-2 scale-110" : "opacity-60 hover:opacity-100"}`}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="w-5 h-5 rounded-full" aria-hidden="true">
+                  <path fill="#AA151B" d="M0 0h512v512H0z"/>
+                  <path fill="#F1BF00" d="M0 128h512v256H0z"/>
+                </svg>
+              </a>
+              <a
+                href={getLangPath("en")}
+                hreflang="en"
+                lang="en"
+                aria-label="Switch to English"
+                aria-current={lang === "en" ? "true" : undefined}
+                class={`inline-flex items-center justify-center w-8 h-8 rounded-full transition-all duration-200 hover:scale-110 ${lang === "en" ? "ring-2 ring-secundario ring-offset-2 scale-110" : "opacity-60 hover:opacity-100"}`}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 30" class="w-5 h-5 rounded-full" aria-hidden="true">
+                  <clipPath id="gb-clip-d"><path d="M0 0v30h60V0z"/></clipPath>
+                  <g clip-path="url(#gb-clip-d)">
+                    <path fill="#012169" d="M0 0v30h60V0z"/>
+                    <path stroke="#fff" stroke-width="6" d="m0 0 60 30m0-30L0 30"/>
+                    <path stroke="#C8102E" stroke-width="4" d="m0 0 60 30m0-30L0 30" clip-path="url(#gb-clip-d)"/>
+                    <path stroke="#fff" stroke-width="10" d="M30 0v30M0 15h60"/>
+                    <path stroke="#C8102E" stroke-width="6" d="M30 0v30M0 15h60"/>
+                  </g>
+                </svg>
+              </a>
+              <a
+                href={getLangPath("fr")}
+                hreflang="fr"
+                lang="fr"
+                aria-label="Passer en Français"
+                aria-current={lang === "fr" ? "true" : undefined}
+                class={`inline-flex items-center justify-center w-8 h-8 rounded-full transition-all duration-200 hover:scale-110 ${lang === "fr" ? "ring-2 ring-secundario ring-offset-2 scale-110" : "opacity-60 hover:opacity-100"}`}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 2" class="w-5 h-5 rounded-full" aria-hidden="true">
+                  <path fill="#002395" d="M0 0h1v2H0z"/>
+                  <path fill="#fff" d="M1 0h1v2H1z"/>
+                  <path fill="#ED2939" d="M2 0h1v2H2z"/>
+                </svg>
+              </a>
+            </nav>
+
+            <Boton
+              href={getPath("/contacto")}
+              variante="secundario"
+              tamano="peque"
+            >
+              {t("nav.reserve")}
+            </Boton>
+          </div>
+
+          <!-- ── MÓVIL: Botón hamburguesa ── -->
+          <button
+            id="menu-btn"
+            type="button"
+            aria-label="Abrir menú"
+            aria-expanded="false"
+            aria-controls="menu-movil"
+            class="md:hidden inline-flex items-center justify-center p-2 rounded-lg text-texto-secundario hover:text-secundario hover:bg-superficie transition"
+          >
+            <span id="icono-menu" aria-hidden="true">
+              <Icon name="menu" class="w-6 h-6" />
+            </span>
+            <span id="icono-cerrar" class="hidden" aria-hidden="true">
+              <Icon name="x" class="w-6 h-6" />
+            </span>
+          </button>
+
+        </div>
+      </div>
+
+      <!-- ── PANEL MENÚ MÓVIL ── -->
+      <div
+        id="menu-movil"
+        class="hidden absolute top-full left-0 right-0 bg-white border-b border-superficie shadow-xl"
+        role="dialog"
+        aria-label="Menú de navegación"
+      >
+        <div class="contenedor-fluido py-4">
+
+          <!-- Links de navegación -->
+          <nav>
+            <ul class="flex flex-col space-y-1">
+              {
+                NAV_ITEMS.map((item) => (
+                  <li>
+                    <a
+                      href={getPath(item.href)}
+                      class="menu-link flex items-center px-4 py-3 text-primario hover:bg-secundario/5 hover:text-secundario rounded-xl font-medium transition"
+                    >
+                      {t(item.key)}
+                    </a>
+                  </li>
+                ))
+              }
+            </ul>
+          </nav>
+
+          <!-- Selector de idioma móvil (Banderas) -->
+          <div class="flex items-center gap-3 px-4 py-3 mt-2 border-t border-superficie">
+            <nav aria-label="Selector de idioma" class="flex items-center gap-2">
+              <a
+                href={getLangPath("es")}
+                hreflang="es"
+                lang="es"
+                aria-label="Cambiar a Español"
+                aria-current={lang === "es" ? "true" : undefined}
+                class={`menu-link inline-flex items-center justify-center w-9 h-9 rounded-full transition-all duration-200 ${lang === "es" ? "ring-2 ring-secundario ring-offset-2 scale-110" : "opacity-60 hover:opacity-100 hover:scale-110"}`}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="w-6 h-6 rounded-full" aria-hidden="true">
+                  <path fill="#AA151B" d="M0 0h512v512H0z"/>
+                  <path fill="#F1BF00" d="M0 128h512v256H0z"/>
+                </svg>
+              </a>
+              <a
+                href={getLangPath("en")}
+                hreflang="en"
+                lang="en"
+                aria-label="Switch to English"
+                aria-current={lang === "en" ? "true" : undefined}
+                class={`menu-link inline-flex items-center justify-center w-9 h-9 rounded-full transition-all duration-200 ${lang === "en" ? "ring-2 ring-secundario ring-offset-2 scale-110" : "opacity-60 hover:opacity-100 hover:scale-110"}`}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 30" class="w-6 h-6 rounded-full" aria-hidden="true">
+                  <clipPath id="gb-clip-m"><path d="M0 0v30h60V0z"/></clipPath>
+                  <g clip-path="url(#gb-clip-m)">
+                    <path fill="#012169" d="M0 0v30h60V0z"/>
+                    <path stroke="#fff" stroke-width="6" d="m0 0 60 30m0-30L0 30"/>
+                    <path stroke="#C8102E" stroke-width="4" d="m0 0 60 30m0-30L0 30" clip-path="url(#gb-clip-m)"/>
+                    <path stroke="#fff" stroke-width="10" d="M30 0v30M0 15h60"/>
+                    <path stroke="#C8102E" stroke-width="6" d="M30 0v30M0 15h60"/>
+                  </g>
+                </svg>
+              </a>
+              <a
+                href={getLangPath("fr")}
+                hreflang="fr"
+                lang="fr"
+                aria-label="Passer en Français"
+                aria-current={lang === "fr" ? "true" : undefined}
+                class={`menu-link inline-flex items-center justify-center w-9 h-9 rounded-full transition-all duration-200 ${lang === "fr" ? "ring-2 ring-secundario ring-offset-2 scale-110" : "opacity-60 hover:opacity-100 hover:scale-110"}`}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 2" class="w-6 h-6 rounded-full" aria-hidden="true">
+                  <path fill="#002395" d="M0 0h1v2H0z"/>
+                  <path fill="#fff" d="M1 0h1v2H1z"/>
+                  <path fill="#ED2939" d="M2 0h1v2H2z"/>
+                </svg>
+              </a>
+            </nav>
+          </div>
+
+          <!-- CTA móvil -->
+          <div class="px-4 pt-2 pb-4 border-t border-superficie mt-2">
+            <Boton href={getPath("/contacto")} variante="primario" clase="w-full menu-link">
+              {t("nav.reserve")}
+            </Boton>
+          </div>
+
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-grow">
+      <slot />
+    </main>
+
+    <!-- ── FOOTER ──────────────────────────────────────────────────── -->
+    <footer class="bg-primario text-fondo-claro/80 border-t border-primario">
+      <div class="contenedor-fluido py-12">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+
+          <!-- Columna marca -->
+          <div class="col-span-1">
+            <Icon name="sun" class="w-8 h-8 text-sol mb-4" aria-hidden="true" />
+            <p class="text-sm leading-relaxed text-texto-secundario">
+              {t("hero.desc")}
+            </p>
+          </div>
+
+          <!-- Columna empresa -->
+          <div>
+            <h3 class="text-xl font-bold text-white mb-4">
+              {t("footer.company")}
+            </h3>
+            <ul class="space-y-2 text-fondo-claro/80">
+              {
+                FOOTER_LINKS.company.map((link) => (
+                  <li>
+                    <a
+                      href={getPath(link.href)}
+                      class="hover:text-acento transition"
+                    >
+                      {t(link.key as any)}
+                    </a>
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+
+          <!-- Columna destinos -->
+          <div>
+            <h3 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+              {t("destinations.title")}
+              <Icon name="compass" class="w-4 h-4 text-texto-secundario" aria-hidden="true" />
+            </h3>
+            <ul class="space-y-2 text-fondo-claro/80">
+              {
+                FOOTER_LINKS.destinations.map((dest) => (
+                  <li>
+                    <a
+                      href={getPath(dest.href)}
+                      class="hover:text-acento decoration-acento underline-offset-4 hover:underline transition"
+                    >
+                      {dest.label}
+                    </a>
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+
+          <!-- Columna contacto -->
+          <div>
+            <h3 class="text-xl font-bold text-white mb-4">
+              {t("footer.contact")}
+            </h3>
+            <p class="text-fondo-claro/80 flex items-center gap-2 mb-1">
+              <Icon name="mail" class="w-4 h-4 shrink-0" aria-hidden="true" />
+              info@costadelsol.com
+            </p>
+            <p class="text-fondo-claro/80 flex items-center gap-2 mb-4">
+              <Icon name="phone" class="w-4 h-4 shrink-0" aria-hidden="true" />
+              +34 612 345 678
+            </p>
+            <p class="text-sm text-texto-secundario italic flex items-start gap-2">
+              <Icon name="map-pin" class="w-4 h-4 shrink-0 mt-0.5" aria-hidden="true" />
+              <span>
+                Calle Larios 1, 29005 Málaga, España.<br />
+                Oficina registrada: B-12345678
+              </span>
+            </p>
+          </div>
+
+        </div>
+      </div>
+      <div
+        class="border-t border-primario mt-8 py-8 text-center text-texto-secundario"
+      >
+        <p>
+          &copy; {new Date().getFullYear()} Costa del Sol. {t("footer.rights")}
+        </p>
+      </div>
+    </footer>
+
+    <!-- ── SCRIPT MENÚ MÓVIL (inline, sin dependencias externas) ── -->
+    <script is:inline>
+      (function () {
+        var btn = document.getElementById("menu-btn");
+        var menu = document.getElementById("menu-movil");
+        var iconMenu = document.getElementById("icono-menu");
+        var iconCerrar = document.getElementById("icono-cerrar");
+
+        if (!btn || !menu) return;
+
+        function abrirMenu() {
+          menu.classList.remove("hidden");
+          btn.setAttribute("aria-expanded", "true");
+          iconMenu.classList.add("hidden");
+          iconCerrar.classList.remove("hidden");
+        }
+
+        function cerrarMenu() {
+          menu.classList.add("hidden");
+          btn.setAttribute("aria-expanded", "false");
+          iconMenu.classList.remove("hidden");
+          iconCerrar.classList.add("hidden");
+        }
+
+        btn.addEventListener("click", function () {
+          var estaAbierto = !menu.classList.contains("hidden");
+          estaAbierto ? cerrarMenu() : abrirMenu();
+        });
+
+        // Cerrar al hacer click en cualquier enlace del menú
+        menu.querySelectorAll(".menu-link").forEach(function (link) {
+          link.addEventListener("click", cerrarMenu);
+        });
+
+        // Cerrar con tecla Escape (accesibilidad)
+        document.addEventListener("keydown", function (e) {
+          if (e.key === "Escape") cerrarMenu();
+        });
+      })();
+    </script>
+  </body>
+</html>

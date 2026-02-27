@@ -1,0 +1,295 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Boton from "../components/ui/Boton.astro";
+import Icon from "../components/ui/Icon.astro";
+---
+
+<Layout
+  titulo="Publicar Propiedad | Alquileres Costa del Sol"
+  descripcion="Añade nuevas propiedades a la plataforma de Alquileres Costa del Sol directamente desde nuestro portal de gestión frontend."
+  breadcrumbs={[{ nombre: "Publicar Propiedad", url: "/nueva-propiedad" }]}
+>
+  <section class="bg-fondo-claro py-24 px-4 relative min-h-screen">
+    <!-- Fondos decorativos -->
+    <div
+      class="absolute top-0 right-0 w-[500px] h-[500px] bg-secundario/10 rounded-full blur-[100px] pointer-events-none"
+    >
+    </div>
+    
+    <div class="max-w-4xl mx-auto relative z-10">
+      <div class="text-center mb-12">
+        <h1 class="text-4xl md:text-5xl font-extrabold text-primario mb-4">
+          Publicar Nueva Propiedad
+        </h1>
+        <p class="text-texto-secundario text-lg max-w-2xl mx-auto">
+          Completa el siguiente formulario para dar de alta una nueva vivienda en nuestra plataforma. Todos los datos se sincronizarán directamente con nuestro sistema.
+        </p>
+      </div>
+
+      <div class="bg-white p-8 md:p-12 rounded-[2rem] shadow-xl border border-superficie relative">
+        <!-- Banner de mensajes -->
+        <div
+          id="status-banner"
+          class="hidden mb-8 p-4 rounded-xl flex items-start gap-3"
+        >
+          <div id="status-icon" class="shrink-0 mt-0.5"></div>
+          <div>
+            <h3 id="status-title" class="font-bold text-sm"></h3>
+            <p id="status-desc" class="text-sm mt-1"></p>
+          </div>
+        </div>
+
+        <form
+          id="form-propiedad"
+          class="space-y-8"
+          data-strapi-url={import.meta.env.PUBLIC_STRAPI_URL || "http://localhost:1337"}
+        >
+          <!-- 1. Datos Principales -->
+          <div>
+            <h2 class="text-xl font-bold text-primario mb-6 flex items-center gap-2 border-b border-superficie pb-2">
+              <Icon name="home" class="w-5 h-5 text-secundario" aria-hidden="true" />
+              Datos Principales
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="md:col-span-2">
+                <label for="title" class="block text-sm font-bold text-primario mb-2">Título del Anuncio *</label>
+                <input
+                  id="title"
+                  type="text"
+                  name="title"
+                  required
+                  class="w-full bg-fondo-claro border-transparent focus:border-secundario focus:bg-white rounded-xl px-5 py-4 focus:outline-none focus:ring-4 focus:ring-secundario/5 transition-all"
+                  placeholder="Ej. Villa de lujo frente al mar en Marbella"
+                />
+              </div>
+              
+              <div>
+                <label for="price" class="block text-sm font-bold text-primario mb-2">Precio por noche (€) *</label>
+                <input
+                  id="price"
+                  type="number"
+                  name="price"
+                  required
+                  min="1"
+                  class="w-full bg-fondo-claro border-transparent focus:border-secundario focus:bg-white rounded-xl px-5 py-4 focus:outline-none focus:ring-4 focus:ring-secundario/5 transition-all"
+                  placeholder="Ej. 150"
+                />
+              </div>
+
+              <div>
+                <label for="location" class="block text-sm font-bold text-primario mb-2">Ubicación (Texto) *</label>
+                <input
+                  id="location"
+                  type="text"
+                  name="location"
+                  required
+                  class="w-full bg-fondo-claro border-transparent focus:border-secundario focus:bg-white rounded-xl px-5 py-4 focus:outline-none focus:ring-4 focus:ring-secundario/5 transition-all"
+                  placeholder="Ej. Marbella Centro, Milla de Oro..."
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. Detalles de la Vivienda -->
+          <div>
+            <h2 class="text-xl font-bold text-primario mb-6 flex items-center gap-2 border-b border-superficie pb-2">
+              <Icon name="info" class="w-5 h-5 text-secundario" aria-hidden="true" />
+              Detalles de la Vivienda
+            </h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+              <div>
+                <label for="capacidad" class="block text-sm font-bold text-primario mb-2">Huéspedes *</label>
+                <input
+                  id="capacidad"
+                  type="number"
+                  name="capacidad"
+                  required
+                  min="1"
+                  class="w-full bg-fondo-claro border-transparent focus:border-secundario focus:bg-white rounded-xl px-4 py-3 focus:outline-none focus:ring-4 focus:ring-secundario/5 transition-all"
+                  placeholder="Ej. 4"
+                />
+              </div>
+              <div>
+                <label for="habitaciones" class="block text-sm font-bold text-primario mb-2">Habitaciones *</label>
+                <input
+                  id="habitaciones"
+                  type="number"
+                  name="habitaciones"
+                  required
+                  min="0"
+                  class="w-full bg-fondo-claro border-transparent focus:border-secundario focus:bg-white rounded-xl px-4 py-3 focus:outline-none focus:ring-4 focus:ring-secundario/5 transition-all"
+                  placeholder="Ej. 2"
+                />
+              </div>
+              <div>
+                <label for="banos" class="block text-sm font-bold text-primario mb-2">Baños</label>
+                <input
+                  id="banos"
+                  type="number"
+                  name="banos"
+                  min="0"
+                  class="w-full bg-fondo-claro border-transparent focus:border-secundario focus:bg-white rounded-xl px-4 py-3 focus:outline-none focus:ring-4 focus:ring-secundario/5 transition-all"
+                  placeholder="Ej. 1"
+                />
+              </div>
+              <div>
+                <label for="metros" class="block text-sm font-bold text-primario mb-2">Superficie (m²)</label>
+                <input
+                  id="metros"
+                  type="number"
+                  name="metros"
+                  min="10"
+                  class="w-full bg-fondo-claro border-transparent focus:border-secundario focus:bg-white rounded-xl px-4 py-3 focus:outline-none focus:ring-4 focus:ring-secundario/5 transition-all"
+                  placeholder="Ej. 80"
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. Servicios Incluidos -->
+          <div>
+            <h2 class="text-xl font-bold text-primario mb-6 flex items-center gap-2 border-b border-superficie pb-2">
+              <Icon name="check-circle" class="w-5 h-5 text-secundario" aria-hidden="true" />
+              Servicios Incluidos
+            </h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <label class="flex items-center gap-3 p-3 bg-fondo-claro rounded-xl cursor-pointer hover:bg-secundario/5 transition">
+                <input type="checkbox" name="wifi" class="w-5 h-5 text-secundario rounded focus:ring-secundario border-gray-300" />
+                <span class="text-sm font-medium text-primario">WiFi</span>
+              </label>
+              <label class="flex items-center gap-3 p-3 bg-fondo-claro rounded-xl cursor-pointer hover:bg-secundario/5 transition">
+                <input type="checkbox" name="ac" class="w-5 h-5 text-secundario rounded focus:ring-secundario border-gray-300" />
+                <span class="text-sm font-medium text-primario">Aire Acond.</span>
+              </label>
+              <label class="flex items-center gap-3 p-3 bg-fondo-claro rounded-xl cursor-pointer hover:bg-secundario/5 transition">
+                <input type="checkbox" name="parking" class="w-5 h-5 text-secundario rounded focus:ring-secundario border-gray-300" />
+                <span class="text-sm font-medium text-primario">Parking</span>
+              </label>
+              <label class="flex items-center gap-3 p-3 bg-fondo-claro rounded-xl cursor-pointer hover:bg-secundario/5 transition">
+                <input type="checkbox" name="mascotas" class="w-5 h-5 text-secundario rounded focus:ring-secundario border-gray-300" />
+                <span class="text-sm font-medium text-primario">Mascotas</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- 4. Descripción -->
+          <div>
+            <h2 class="text-xl font-bold text-primario mb-6 flex items-center gap-2 border-b border-superficie pb-2">
+              <Icon name="file-text" class="w-5 h-5 text-secundario" aria-hidden="true" />
+              Descripción Detallada
+            </h2>
+            <textarea
+              id="description"
+              name="description"
+              rows="5"
+              required
+              class="w-full bg-fondo-claro border-transparent focus:border-secundario focus:bg-white rounded-xl px-5 py-4 focus:outline-none focus:ring-4 focus:ring-secundario/5 transition-all"
+              placeholder="Describe los puntos fuertes de la propiedad, atracciones cercanas, ambiente del barrio..."
+            ></textarea>
+          </div>
+
+          <div class="pt-6 border-t border-superficie">
+            <Boton tipo="submit" clase="w-full py-5 text-lg shadow-marca" id="submit-btn">
+              Publicar Propiedad
+            </Boton>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <script is:inline>
+    const form = document.getElementById("form-propiedad");
+    const banner = document.getElementById("status-banner");
+    const bannerIcon = document.getElementById("status-icon");
+    const bannerTitle = document.getElementById("status-title");
+    const bannerDesc = document.getElementById("status-desc");
+    const submitBtn = document.getElementById("submit-btn");
+
+    // Función auxiliar para auto-generar slugs
+    const generarSlug = (texto) => {
+      return texto
+        .toString()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
+        .trim()
+        .replace(/\s+/g, "-")
+        .replace(/[^\w-]+/g, "")
+        .replace(/--+/g, "-");
+    };
+
+    function setStatus(type, title, desc) {
+      banner.className = "mb-8 p-4 rounded-xl flex items-start gap-3 " + 
+        (type === 'error' ? 'bg-red-50 text-red-800 border border-red-200' : 'bg-green-50 text-green-800 border border-green-200');
+      
+      bannerTitle.textContent = title;
+      bannerDesc.textContent = desc;
+      
+      bannerIcon.innerHTML = type === 'error' 
+        ? `<svg class="w-5 h-5 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>`
+        : `<svg class="w-5 h-5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`;
+      
+      banner.classList.remove("hidden");
+      banner.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      banner.classList.add("hidden");
+
+      const originalText = submitBtn.innerHTML;
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = "Publicando...";
+
+      // Recoger datos
+      const title = form.querySelector("[name='title']").value;
+      const slug = generarSlug(title);
+      
+      // Estructura adaptada al schema de Strapi (Rental)
+      const data = {
+        title: title,
+        slug: slug,
+        price: parseInt(form.querySelector("[name='price']").value),
+        location: form.querySelector("[name='location']").value,
+        description: form.querySelector("[name='description']").value,
+        detalles: {
+          capacidad: parseInt(form.querySelector("[name='capacidad']").value),
+          habitaciones: parseInt(form.querySelector("[name='habitaciones']").value),
+          banos: form.querySelector("[name='banos']").value ? parseInt(form.querySelector("[name='banos']").value) : null,
+          metros: form.querySelector("[name='metros']").value ? parseInt(form.querySelector("[name='metros']").value) : null,
+        },
+        Servicios: {
+          wifi: form.querySelector("[name='wifi']").checked,
+          aire_acondicionado: form.querySelector("[name='ac']").checked,
+          parking: form.querySelector("[name='parking']").checked,
+          mascotas: form.querySelector("[name='mascotas']").checked,
+        }
+      };
+
+      try {
+        const STRAPI_URL = form.dataset.strapiUrl || "http://localhost:1337";
+        const res = await fetch(`${STRAPI_URL}/api/rentals`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ data }), // Strapi API requiere envolver el payload en "data"
+        });
+
+        if (res.ok) {
+          setStatus('success', '¡Propiedad Publicada!', `La propiedad "${title}" se ha creado con éxito en la base de datos.`);
+          form.reset();
+        } else {
+          const errorData = await res.json().catch(() => ({}));
+          console.error("Error backend:", errorData);
+          setStatus('error', 'Error al publicar', 'El servidor rechazó los datos. Comprueba la API de Strapi (permisos de creación pública).');
+        }
+      } catch (error) {
+        console.error("Error de conexión:", error);
+        setStatus('error', 'Error de conexión', 'No se pudo conectar con el servidor. ¿Está Strapi encendido?');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalText;
+      }
+    });
+  </script>
+</Layout>

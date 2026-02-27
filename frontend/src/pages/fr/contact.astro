@@ -1,0 +1,149 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Boton from "../../components/ui/Boton.astro";
+import Badge from "../../components/ui/Badge.astro";
+import Icon from "../../components/ui/Icon.astro";
+import { useTranslations } from "../../i18n/utils";
+
+const t = useTranslations("fr");
+---
+
+<Layout
+  titulo={t('meta.contact.title')}
+  descripcion={t('meta.contact.desc')}
+  breadcrumbs={[{ nombre: "Contact", url: "/fr/contact" }]}
+>
+  <script
+    is:inline
+    type="application/ld+json"
+    set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "ContactPage",
+      mainEntity: {
+        "@type": "Organization",
+        name: "Locations Costa del Sol",
+        email: "alquilerescostadelsol2026@gmail.com",
+        telephone: "+34612345678",
+        contactPoint: {
+          "@type": "ContactPoint",
+          telephone: "+34612345678",
+          contactType: "customer service",
+          areaServed: "ES",
+          availableLanguage: ["es", "en", "fr"],
+        },
+        address: {
+          "@type": "PostalAddress",
+          streetAddress: "Calle Larios 1",
+          addressLocality: "Málaga",
+          postalCode: "29005",
+          addressCountry: "ES",
+        },
+      },
+    })}
+  />
+
+  <section class="bg-fondo-claro py-24 px-4 relative overflow-hidden">
+    <div class="absolute top-0 right-0 w-96 h-96 bg-secundario/5 rounded-full -mr-48 -mt-48 blur-3xl"></div>
+    <div class="absolute bottom-0 left-0 w-96 h-96 bg-acento/5 rounded-full -ml-48 -mb-48 blur-3xl"></div>
+
+    <div class="max-w-7xl mx-auto relative z-10">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+
+        <div>
+          <Badge variante="acento" clase="mb-6">Nous sommes là pour vous</Badge>
+          <h1 class="text-5xl font-extrabold text-primario mb-8 tracking-tight">
+            Parlons-en.<br />
+            <span class="text-secundario">À un clic près</span>
+          </h1>
+          <p class="text-texto-secundario mb-12 text-xl leading-relaxed font-light">
+            Des questions sur une propriété ou vous souhaitez que nous gérions votre location ?
+            Dites-nous ce dont vous avez besoin et notre équipe locale vous répondra sous 24 heures.
+          </p>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div class="flex items-start gap-4 p-6 bg-white rounded-2xl shadow-sm border border-superficie">
+              <div class="w-12 h-12 bg-secundario/10 rounded-xl flex items-center justify-center text-secundario shrink-0">
+                <Icon name="map-pin" class="w-5 h-5" aria-hidden="true" />
+              </div>
+              <div>
+                <p class="font-bold text-primario mb-1">Notre Bureau</p>
+                <p class="text-texto-secundario text-sm">Calle Larios 1, 29005 Málaga, Espagne</p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-4 p-6 bg-white rounded-2xl shadow-sm border border-superficie">
+              <div class="w-12 h-12 bg-secundario/10 rounded-xl flex items-center justify-center text-secundario shrink-0">
+                <Icon name="phone" class="w-5 h-5" aria-hidden="true" />
+              </div>
+              <div>
+                <p class="font-bold text-primario mb-1">Téléphone</p>
+                <a href="tel:+34612345678" class="text-secundario text-sm hover:underline">+34 612 345 678</a>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-4 p-6 bg-white rounded-2xl shadow-sm border border-superficie">
+              <div class="w-12 h-12 bg-secundario/10 rounded-xl flex items-center justify-center text-secundario shrink-0">
+                <Icon name="mail" class="w-5 h-5" aria-hidden="true" />
+              </div>
+              <div>
+                <p class="font-bold text-primario mb-1">E-mail</p>
+                <a href="mailto:alquilerescostadelsol2026@gmail.com" class="text-secundario text-sm hover:underline break-all">
+                  alquilerescostadelsol2026@gmail.com
+                </a>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-4 p-6 bg-white rounded-2xl shadow-sm border border-superficie">
+              <div class="w-12 h-12 bg-secundario/10 rounded-xl flex items-center justify-center text-secundario shrink-0">
+                <Icon name="clock" class="w-5 h-5" aria-hidden="true" />
+              </div>
+              <div>
+                <p class="font-bold text-primario mb-1">Horaires</p>
+                <p class="text-texto-secundario text-sm">Lun–Ven : 9h–18h</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-3xl shadow-xl p-8 border border-superficie">
+          <h2 class="text-2xl font-bold text-primario mb-8">Envoyez-nous un message</h2>
+          <form method="POST" action="/api/contact" class="space-y-6">
+            <div>
+              <label for="nombre" class="block text-sm font-semibold text-primario mb-2">Nom complet *</label>
+              <input type="text" id="nombre" name="nombre" required
+                class="w-full px-4 py-3 rounded-xl border border-superficie focus:ring-2 focus:ring-secundario focus:border-secundario outline-none transition bg-fondo-claro"
+                placeholder="Jean Dupont" />
+            </div>
+            <div>
+              <label for="email" class="block text-sm font-semibold text-primario mb-2">Adresse e-mail *</label>
+              <input type="email" id="email" name="email" required
+                class="w-full px-4 py-3 rounded-xl border border-superficie focus:ring-2 focus:ring-secundario focus:border-secundario outline-none transition bg-fondo-claro"
+                placeholder="jean@exemple.com" />
+            </div>
+            <div>
+              <label for="asunto" class="block text-sm font-semibold text-primario mb-2">Sujet</label>
+              <select id="asunto" name="asunto"
+                class="w-full px-4 py-3 rounded-xl border border-superficie focus:ring-2 focus:ring-secundario outline-none transition bg-fondo-claro">
+                <option value="">Sélectionnez un sujet...</option>
+                <option value="reserva">Réservation de vacances</option>
+                <option value="gestion">Gestion de propriété</option>
+                <option value="info">Informations générales</option>
+                <option value="otro">Autre</option>
+              </select>
+            </div>
+            <div>
+              <label for="mensaje" class="block text-sm font-semibold text-primario mb-2">Message *</label>
+              <textarea id="mensaje" name="mensaje" rows="5" required
+                class="w-full px-4 py-3 rounded-xl border border-superficie focus:ring-2 focus:ring-secundario focus:border-secundario outline-none transition bg-fondo-claro resize-none"
+                placeholder="Décrivez l'hébergement idéal pour vous..."></textarea>
+            </div>
+            <Boton type="submit" variante="primario" clase="w-full text-center">
+              Envoyer le message
+            </Boton>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </section>
+</Layout>

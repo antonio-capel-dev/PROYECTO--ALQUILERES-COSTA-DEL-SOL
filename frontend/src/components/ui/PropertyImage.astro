@@ -1,0 +1,99 @@
+---
+/**
+ * PropertyImage.astro — Componente canónico de imagen de propiedad.
+ *
+ * Acepta dos fuentes mutuamente excluyentes (prioridad: media > src > fallback):
+ *   · media  → objeto StrapiMedia completo (formats, dimensions, alt)
+ *   · src    → URL texto directa (JSON local, Unsplash seed)
+ *
+ * Nunca muestra una imagen rota: si `media` y `src` están vacíos usa `fallback`.
+ * Si la imagen carga pero falla en runtime (404 transitorio), `onerror` aplica `fallback`.
+ *
+ * Decisión de arquitectura: <img> semántico en lugar de <Image /> de Astro.
+ * Razón: Strapi ya genera formatos optimizados (thumbnail/small/medium/large).
+ *        <Image /> de Astro requeriría descargar cada imagen en build-time,
+ *        acoplando el build a la disponibilidad de Strapi.
+ */
+import type { StrapiMedia, PreferredFormat } from "../../utils/imagenes";
+import { resolveStrapiImage } from "../../utils/imagenes";
+
+interface Props {
+  /** Objeto media de Strapi (prioridad máxima) */
+  media?: StrapiMedia | null;
+  /** URL texto directa, e.g. desde JSON local o campo image_url de Strapi */
+  src?: string;
+  /** URL de fallback si `media` y `src` están vacíos, o si la imagen falla en runtime */
+  fallback: string;
+  /** Alt text base. Si `media.alternativeText` existe, tiene preferencia. */
+  alt: string;
+  /** Override de width (por defecto se usa el del formato de Strapi o 800) */
+  width?: number;
+  /** Override de height (por defecto se usa el del formato de Strapi o 600) */
+  height?: number;
+  /** Clases CSS para el elemento <img> */
+  class?: string;
+  /** lazy para imágenes fuera del viewport; eager para LCP (hero, above the fold) */
+  loading?: "lazy" | "eager";
+  /** fetchpriority: solo en la imagen LCP principal */
+  fetchpriority?: "high" | "low" | "auto";
+  /** Formato preferido de Strapi a usar para cards/thumbnails */
+  preferFormat?: PreferredFormat;
+}
+
+const {
+  media,
+  src,
+  fallback,
+  alt,
+  width: widthProp,
+  height: heightProp,
+  class: className = "",
+  loading = "lazy",
+  fetchpriority,
+  preferFormat = "medium",
+} = Astro.props;
+
+let resolvedSrc: string;
+let resolvedWidth: number;
+let resolvedHeight: number;
+let resolvedAlt: string;
+
+// DEV: visibilidad en el log de build cuando un rental no tiene imagen real.
+// No lanza error — el render continúa con el fallback determinista.
+if (import.meta.env.DEV && !media?.url && !src) {
+  console.warn(
+    `[PropertyImage] Sin fuente de imagen para "${alt}". ` +
+      `Usando fallback: ${fallback}`,
+  );
+}
+
+if (media?.url) {
+  const resolved = resolveStrapiImage(media, preferFormat);
+  resolvedSrc = resolved.src;
+  resolvedWidth = widthProp ?? resolved.width;
+  resolvedHeight = heightProp ?? resolved.height;
+  resolvedAlt = media.alternativeText || alt;
+} else if (src) {
+  resolvedSrc = src;
+  resolvedWidth = widthProp ?? 800;
+  resolvedHeight = heightProp ?? 600;
+  resolvedAlt = alt;
+} else {
+  resolvedSrc = fallback;
+  resolvedWidth = widthProp ?? 800;
+  resolvedHeight = heightProp ?? 600;
+  resolvedAlt = alt;
+}
+---
+
+<img
+  src={resolvedSrc}
+  alt={resolvedAlt}
+  width={resolvedWidth}
+  height={resolvedHeight}
+  loading={loading}
+  decoding="async"
+  fetchpriority={fetchpriority}
+  class={className}
+  onerror={`this.onerror=null;this.src='${fallback}';${fetchpriority ? `this.fetchpriority='${fetchpriority}'` : ""}`}
+/>

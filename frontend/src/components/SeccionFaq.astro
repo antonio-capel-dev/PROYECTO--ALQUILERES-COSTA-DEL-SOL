@@ -1,0 +1,105 @@
+---
+/**
+ * SeccionFaq.astro — FAQs obtenidas de Strapi (api::faq.faq).
+ *
+ * Acepta un filtro opcional por `pagina` ("home" | "zona" | "general").
+ * Si Strapi no responde o la colección está vacía, la sección no se renderiza.
+ *
+ * El Content Type FAQ en Strapi tiene:
+ *   · pregunta  (string, localizable)
+ *   · respuesta (text, localizable)
+ *   · orden     (integer) — para ordenar
+ *   · pagina    (enum: home | zona | general)
+ */
+
+interface Props {
+  /** Filtra FAQs por página. Sin valor → muestra todas las publicadas. */
+  pagina?: "home" | "zona" | "general";
+}
+
+const { pagina } = Astro.props;
+
+const STRAPI_URL = import.meta.env.PUBLIC_STRAPI_URL || "http://localhost:1337";
+
+interface Faq {
+  pregunta: string;
+  respuesta: string;
+  orden: number;
+}
+
+let faqs: Faq[] = [];
+
+try {
+  const params = new URLSearchParams({
+    "sort[0]": "orden:asc",
+    "pagination[pageSize]": "10",
+  });
+  if (pagina) {
+    params.set("filters[pagina][$eq]", pagina);
+  }
+
+  const res = await fetch(`${STRAPI_URL}/api/faqs?${params.toString()}`);
+  const json = await res.json();
+
+  faqs = (json.data ?? []).map((item: any) => ({
+    pregunta: item.pregunta ?? "",
+    respuesta: item.respuesta ?? "",
+    orden: item.orden ?? 0,
+  }));
+} catch {
+  // Strapi no disponible — la sección no se renderiza
+}
+---
+
+{
+  faqs.length > 0 && (
+    <section class="py-24 bg-fondo-claro">
+      <div class="max-w-4xl mx-auto px-6">
+        <div class="text-center mb-16">
+          <h2 class="text-3xl md:text-5xl font-bold text-primario mb-4">
+            Preguntas Frecuentes
+          </h2>
+          <p class="text-texto-secundario text-lg">
+            Todo lo que necesitas saber sobre tu próximo alquiler en la Costa
+            del Sol.
+          </p>
+        </div>
+
+        <div class="space-y-4">
+          {faqs.map((item) => (
+            <details class="group bg-white rounded-2xl border border-superficie p-6 transition-all duration-300 hover:shadow-md open:shadow-lg">
+              <summary class="flex justify-between items-center cursor-pointer list-none font-bold text-lg text-primario">
+                <span>{item.pregunta}</span>
+                <span class="text-secundario transition-transform duration-300 group-open:rotate-180">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                </span>
+              </summary>
+              <div class="mt-4 text-texto-secundario leading-relaxed prose prose-slate max-w-none">
+                <p>{item.respuesta}</p>
+              </div>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+<style>
+  details summary::-webkit-details-marker {
+    display: none;
+  }
+</style>

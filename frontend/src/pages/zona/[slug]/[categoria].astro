@@ -1,0 +1,159 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import FichaAlquiler from "../../../components/FichaAlquiler.astro";
+import HeroZona from "../../../components/HeroZona.astro";
+import Boton from "../../../components/ui/Boton.astro";
+import Breadcrumbs from "../../../components/ui/Breadcrumbs.astro";
+import { normalizarRentalStrapi } from "../../../utils/normalizadores";
+import { fetchPropiedades } from "../../../lib/zona/fetchPropiedades";
+import { getZonaSlug, getZonaNombre } from "../../../lib/zona/getZonaSlug";
+import { isInZona } from "../../../lib/zona/isInZona";
+
+// 1. GET STATIC PATHS (Combinatoria Zona * Categoria)
+export async function getStaticPaths() {
+  const categories = [
+    { slug: "lujo", nombre: "Lujo", seo: "Villas de Lujo y Aticos Premium" },
+    { slug: "familias", nombre: "Familias", seo: "Apartamentos Familiares y Seguros" },
+    { slug: "playa", nombre: "Playa", seo: "En Primera Linea de Playa" },
+    { slug: "golf", nombre: "Golf", seo: "Cerca de Campos de Golf" },
+    { slug: "casco-antiguo", nombre: "Casco Antiguo", seo: "En el Centro Historico" },
+  ];
+
+  const { data: propData } = await fetchPropiedades();
+
+  // Zonas dinámicas desde datos reales (no hardcodeadas)
+  const zonasMap = new Map<string, { slug: string; nombre: string }>();
+  propData.forEach((p: any) => {
+    const slug = getZonaSlug(p);
+    if (!slug) return;
+    if (!zonasMap.has(slug)) {
+      zonasMap.set(slug, { slug, nombre: getZonaNombre(p) });
+    }
+  });
+  const zones = Array.from(zonasMap.values());
+
+  return zones.flatMap((zona) =>
+    categories.map((cat) => ({
+      params: { slug: zona.slug, categoria: cat.slug },
+      props: { zona, categoria: cat, propData },
+    })),
+  );
+}
+
+const { zona, categoria, propData } = Astro.props;
+
+// Filtrado con isInZona (single source of truth) + criterio de categoría
+const filteredProps = propData.filter((p: any) => {
+  if (!isInZona(p, zona.slug)) return false;
+
+  const price = p.price ?? p.precio ?? 0;
+  const capacidad = p.detalles?.capacidad ?? p.capacidad ?? 0;
+  const desc = (p.description ?? p.descripcionCorta ?? "").toLowerCase();
+
+  if (categoria.slug === "lujo") return price > 150;
+  if (categoria.slug === "familias") return capacidad >= 4;
+  if (categoria.slug === "playa") return desc.includes("playa") || desc.includes("mar");
+
+  return true;
+});
+
+const seoTitle = `Alquiler ${categoria.seo} en ${zona.nombre} | Costa del Sol`;
+const seoDesc = `Descubre nuestra selección exclusiva de ${categoria.nombre.toLowerCase()} en ${zona.nombre}. Precios verificados y reserva directa.`;
+---
+
+<Layout
+  titulo={seoTitle}
+  descripcion={seoDesc}
+  breadcrumbs={[
+    { nombre: "Inicio", url: "/" },
+    { nombre: zona.nombre, url: `/zona/${zona.slug}` },
+    { nombre: categoria.nombre, url: `/zona/${zona.slug}/${categoria.slug}` },
+  ]}
+>
+  <div class="relative z-40 bg-fondo-claro border-b border-superficie shadow-xs">
+    <Breadcrumbs
+      items={[
+        { label: "Inicio", href: "/" },
+        { label: zona.nombre, href: `/zona/${zona.slug}` },
+        {
+          label: categoria.nombre,
+          href: `/zona/${zona.slug}/${categoria.slug}`,
+          active: true,
+        },
+      ]}
+      backLink={{ label: "Volver a la zona", href: `/zona/${zona.slug}` }}
+    />
+  </div>
+
+  <HeroZona nombre={`${zona.nombre} ${categoria.nombre}`} slug={zona.slug} />
+
+  <section class="contenedor-fluido py-16">
+    <div class="mb-12 text-center max-w-3xl mx-auto">
+      <h2 class="font-bold text-primario mb-4">
+        {categoria.seo} en {zona.nombre}
+      </h2>
+      <p class="text-texto-secundario text-lg">
+        Hemos seleccionado las mejores propiedades en {zona.nombre} pensando en
+        <strong>{categoria.nombre.toLowerCase()}</strong>. Disfruta de la Costa
+        del Sol a tu manera.
+      </p>
+    </div>
+
+    {
+      filteredProps.length > 0 ? (
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {filteredProps.map((prop: any) => {
+            return (
+              <FichaAlquiler
+                slug={prop.slug}
+                titulo={prop.titulo || prop.title || "Sin título"}
+                zona={prop.zona || prop.ubicacion?.nombre || zona.nombre}
+                precio={prop.precio || prop.price || 0}
+                capacidad={prop.capacidad || prop.detalles?.capacidad || 4}
+                habitaciones={prop.habitaciones ?? prop.detalles?.habitaciones}
+                image={prop.image}
+                image_url={prop.image_url}
+              />
+            );
+          })}
+        </div>
+      ) : (
+        <div class="surface text-center py-16 px-6">
+          <h3 class="font-bold text-primario mb-2">
+            Sin resultados para esta categoria
+          </h3>
+          <p class="text-texto-secundario max-w-md mx-auto mb-8">
+            No encontramos propiedades de tipo "{categoria.nombre}" en {zona.nombre} en este momento.
+          </p>
+          <Boton href={`/zona/${zona.slug}`} variante="primario">
+            Ver todas las propiedades en {zona.nombre}
+          </Boton>
+        </div>
+      )
+    }
+  </section>
+
+  <section class="bg-fondo-claro py-16 text-center border-t border-superficie">
+    <div class="contenedor-fluido">
+      <h3 class="font-bold text-primario mb-6">
+        Explora otras colecciones en {zona.nombre}
+      </h3>
+      <div class="flex flex-wrap justify-center gap-4">
+        {
+          ["lujo", "familias", "playa", "golf"].map(
+            (c) =>
+              c !== categoria.slug && (
+                <Boton
+                  href={`/zona/${zona.slug}/${c}`}
+                  variante="outline"
+                  tamano="peque"
+                >
+                  {c.charAt(0).toUpperCase() + c.slice(1)}
+                </Boton>
+              ),
+          )
+        }
+      </div>
+    </div>
+  </section>
+</Layout>

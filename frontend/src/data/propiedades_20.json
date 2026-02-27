@@ -1,0 +1,391 @@
+[
+  {
+    "id": 1,
+    "slug": "atico-marbella-vista-mar-2h-4p",
+    "titulo": "Alquiler vacacional: Ático con terraza y vistas al mar en Marbella, Costa del Sol",
+    "zona": "Marbella",
+    "tipo": "Ático",
+    "precio": 210,
+    "capacidad": 4,
+    "habitaciones": 2,
+    "banos": 2,
+    "metros": 95,
+    "descripcionCorta": "Ático luminoso con terraza amplia a 10 min de la playa. Ideal para parejas o familias.",
+    "image_url": "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80",
+    "amenities": [
+      "terraza",
+      "aire acondicionado",
+      "wifi",
+      "piscina comunitaria"
+    ]
+  },
+  {
+    "id": 2,
+    "slug": "apartamento-marbella-golden-mile-1h-2p",
+    "titulo": "Apartamento moderno en la Milla de Oro de Marbella - Alquiler Vacacional",
+    "zona": "Marbella",
+    "tipo": "Apartamento",
+    "precio": 145,
+    "capacidad": 2,
+    "habitaciones": 1,
+    "banos": 1,
+    "metros": 55,
+    "descripcionCorta": "Diseño contemporáneo con cocina equipada y parking. Perfecto para escapada de fin de semana.",
+    "image_url": "https://images.unsplash.com/photo-1574345719329-84737d91df5e?auto=format&fit=crop&w=1200&q=80",
+    "amenities": [
+      "parking",
+      "cocina equipada",
+      "wifi",
+      "ascensor"
+    ]
+  },
+  {
+    "id": 3,
+    "slug": "villa-marbella-piscina-4h-8p",
+    "titulo": "Villa privada con piscina cerca de Marbella, Costa del Sol",
+    "zona": "Marbella",
+    "tipo": "Villa",
+    "precio": 420,
+    "capacidad": 8,
+    "habitaciones": 4,
+    "banos": 3,
+    "metros": 210,
+    "descripcionCorta": "Villa para grupos con piscina, jardín y zona de barbacoa. Privacidad total.",
+    "image_url": "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=1200&q=80",
+    "amenities": [
+      "piscina privada",
+      "jardin",
+      "barbacoa",
+      "parking"
+    ]
+  },
+  {
+    "id": 4,
+    "slug": "estudio-marbella-casco-antiguo-0h-2p",
+    "titulo": "Estudio funcional en el casco antiguo de Marbella",
+    "zona": "Marbella",
+    "tipo": "Estudio",
+    "precio": 75,
+    "capacidad": 2,
+    "habitaciones": 0,
+    "banos": 1,
+    "metros": 32,
+    "descripcionCorta": "Ubicación céntrica, ideal para teletrabajo y escapadas. A pasos de restaurantes.",
+    "image_url": "https://images.unsplash.com/photo-1493809842364-78817add7ffb?auto=format&fit=crop&w=1200&q=80",
+    "amenities": [
+      "wifi",
+      "cocina",
+      "lavadora"
+    ]
+  },
+  {
+    "id": 5,
+    "slug": "duplex-marbella-nueva-andalucia-3h-6p",
+    "titulo": "Dúplex familiar en Nueva Andalucía, Marbella",
+    "zona": "Marbella",
+    "tipo": "Dúplex",
+    "precio": 195,
+    "capacidad": 6,
+    "habitaciones": 3,
+    "banos": 2,
+    "metros": 120,
+    "descripcionCorta": "Dúplex amplio con zona de trabajo y terraza. Cerca de supermercados y playas.",
+    "image_url": "https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=1200&q=80",
+    "amenities": [
+      "terraza",
+      "aire acondicionado",
+      "wifi",
+      "parking"
+    ]
+  },
+  {
+    "id": 6,
+    "slug": "apartamento-marbella-puerto-banus-2h-4p",
+    "titulo": "Apartamento cerca de Puerto Banús",
+    "zona": "Marbella",
+    "tipo": "Apartamento",
+    "precio": 185,
+    "capacidad": 4,
+    "habitaciones": 2,
+    "banos": 2,
+    "metros": 80,
+    "descripcionCorta": "A pocos minutos del puerto. Ideal para disfrutar de ocio y playa con comodidad.",
+    "image_url": "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=1200&q=80",
+    "amenities": [
+      "piscina comunitaria",
+      "wifi",
+      "ascensor",
+      "aire acondicionado"
+    ]
+  },
+  {
+    "id": 7,
+    "slug": "apartamento-malaga-centro-historico-1h-2p",
+    "titulo": "Apartamento en el Centro Histórico de Málaga",
+    "zona": "Málaga",
+    "tipo": "Apartamento",
+    "precio": 120,
+    "capacidad": 2,
+    "habitaciones": 1,
+    "banos": 1,
+    "metros": 48,
+    "descripcionCorta": "Cerca de museos y restaurantes. Perfecto para escapadas culturales.",
+    "image_url": "https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=1200&q=80",
+    "amenities": [
+      "wifi",
+      "cocina equipada",
+      "aire acondicionado"
+    ]
+  },
+  {
+    "id": 8,
+    "slug": "atico-malaga-terraza-2h-4p",
+    "titulo": "Ático con terraza en Málaga Centro - Alquiler Vacacional",
+    "zona": "Málaga",
+    "tipo": "Ático",
+    "precio": 175,
+    "capacidad": 4,
+    "habitaciones": 2,
+    "banos": 2,
+    "metros": 88,
+    "descripcionCorta": "Ático con luz natural y zona exterior. Muy bien comunicado con transporte público.",
+    "image_url": "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1200&q=80",
+    "amenities": [
+      "terraza",
+      "wifi",
+      "calefaccion",
+      "ascensor"
+    ]
+  },
+  {
+    "id": 9,
+    "slug": "estudio-malaga-soho-0h-2p",
+    "titulo": "Estudio minimalista en el Soho de Málaga",
+    "zona": "Málaga",
+    "tipo": "Estudio",
+    "precio": 65,
+    "capacidad": 2,
+    "habitaciones": 0,
+    "banos": 1,
+    "metros": 28,
+    "descripcionCorta": "Estudio compacto y funcional. Ideal para estancias cortas o teletrabajo.",
+    "image_url": "https://images.unsplash.com/photo-1554995207-c18c203602cb?auto=format&fit=crop&w=1200&q=80",
+    "amenities": [
+      "wifi",
+      "cocina",
+      "lavadora"
+    ]
+  },
+  {
+    "id": 10,
+    "slug": "apartamento-malaga-pedregalejo-2h-4p",
+    "titulo": "Apartamento cerca de la playa en Pedregalejo",
+    "zona": "Málaga",
+    "tipo": "Apartamento",
+    "precio": 135,
+    "capacidad": 4,
+    "habitaciones": 2,
+    "banos": 1,
+    "metros": 70,
+    "descripcionCorta": "Zona tranquila y familiar a pocos pasos del paseo marítimo.",
+    "image_url": "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=1200&q=80",
+    "amenities": [
+      "wifi",
+      "aire acondicionado",
+      "cocina equipada"
+    ]
+  },
+  {
+    "id": 11,
+    "slug": "casa-adosada-malaga-teatinos-3h-6p",
+    "titulo": "Casa adosada en Teatinos (Málaga)",
+    "zona": "Málaga",
+    "tipo": "Casa adosada",
+    "precio": 160,
+    "capacidad": 6,
+    "habitaciones": 3,
+    "banos": 2,
+    "metros": 130,
+    "descripcionCorta": "Casa cómoda para familias, con patio y buena conexión a universidades y centros comerciales.",
+    "image_url": "https://images.unsplash.com/photo-1600596542815-e32c8ec23fc9?auto=format&fit=crop&w=1200&q=80",
+    "amenities": [
+      "patio",
+      "parking",
+      "wifi",
+      "aire acondicionado"
+    ]
+  },
+  {
+    "id": 12,
+    "slug": "apartamento-benalmadena-puerto-marina-1h-3p",
+    "titulo": "Apartamento en Puerto Marina (Benalmádena, Costa del Sol)",
+    "zona": "Benalmádena",
+    "tipo": "Apartamento",
+    "precio": 115,
+    "capacidad": 3,
+    "habitaciones": 1,
+    "banos": 1,
+    "metros": 52,
+    "descripcionCorta": "A dos minutos del puerto. Perfecto para disfrutar de ocio y playa.",
+    "image_url": "https://images.unsplash.com/photo-1507089947368-19c1da9775ae?auto=format&fit=crop&w=1200&q=80",
+    "amenities": [
+      "wifi",
+      "ascensor",
+      "aire acondicionado"
+    ]
+  },
+  {
+    "id": 13,
+    "slug": "atico-benalmadena-vista-mar-2h-4p",
+    "titulo": "Ático con vistas en Benalmádena",
+    "zona": "Benalmádena",
+    "tipo": "Ático",
+    "precio": 170,
+    "capacidad": 4,
+    "habitaciones": 2,
+    "banos": 1,
+    "metros": 78,
+    "descripcionCorta": "Terraza y vistas despejadas. Urbanización con piscina.",
+    "image_url": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=1200&q=80",
+    "amenities": [
+      "terraza",
+      "piscina comunitaria",
+      "wifi"
+    ]
+  },
+  {
+    "id": 14,
+    "slug": "villa-benalmadena-piscina-3h-7p",
+    "titulo": "Villa con piscina y jardín en Benalmádena",
+    "zona": "Benalmádena",
+    "tipo": "Villa",
+    "precio": 350,
+    "capacidad": 7,
+    "habitaciones": 3,
+    "banos": 2,
+    "metros": 180,
+    "descripcionCorta": "Villa privada para grupos con piscina. Ideal para vacaciones en familia.",
+    "image_url": "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=1200&q=80",
+    "amenities": [
+      "piscina privada",
+      "jardin",
+      "barbacoa",
+      "parking"
+    ]
+  },
+  {
+    "id": 15,
+    "slug": "estudio-benalmadena-arroyo-miel-0h-2p",
+    "titulo": "Estudio económico en Arroyo de la Miel",
+    "zona": "Benalmádena",
+    "tipo": "Estudio",
+    "precio": 60,
+    "capacidad": 2,
+    "habitaciones": 0,
+    "banos": 1,
+    "metros": 25,
+    "descripcionCorta": "Cerca de tren y comercios. Ideal para presupuesto ajustado.",
+    "image_url": "https://images.unsplash.com/photo-1502005229762-cf1b2da7c5d6?auto=format&fit=crop&w=1200&q=80",
+    "amenities": [
+      "wifi",
+      "cocina"
+    ]
+  },
+  {
+    "id": 16,
+    "slug": "apartamento-torremolinos-la-carihuela-2h-4p",
+    "titulo": "Apartamento en La Carihuela (Torremolinos)",
+    "zona": "Torremolinos",
+    "tipo": "Apartamento",
+    "precio": 125,
+    "capacidad": 4,
+    "habitaciones": 2,
+    "banos": 1,
+    "metros": 68,
+    "descripcionCorta": "A 5 min de la playa. Equipado y cómodo para familias.",
+    "image_url": "https://images.unsplash.com/photo-1449247709967-d4461a6a6103?auto=format&fit=crop&w=1200&q=80",
+    "amenities": [
+      "wifi",
+      "aire acondicionado",
+      "cocina equipada"
+    ]
+  },
+  {
+    "id": 17,
+    "slug": "atico-torremolinos-playamar-1h-2p",
+    "titulo": "Ático romántico en Playamar (Torremolinos)",
+    "zona": "Torremolinos",
+    "tipo": "Ático",
+    "precio": 150,
+    "capacidad": 2,
+    "habitaciones": 1,
+    "banos": 1,
+    "metros": 50,
+    "descripcionCorta": "Terraza privada y ambiente tranquilo. Perfecto para parejas.",
+    "image_url": "https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1200&q=80",
+    "amenities": [
+      "terraza",
+      "wifi",
+      "aire acondicionado"
+    ]
+  },
+  {
+    "id": 18,
+    "slug": "apartamento-fuengirola-paseo-maritimo-2h-5p",
+    "titulo": "Apartamento en primera línea en Fuengirola",
+    "zona": "Fuengirola",
+    "tipo": "Apartamento",
+    "precio": 165,
+    "capacidad": 5,
+    "habitaciones": 2,
+    "banos": 2,
+    "metros": 85,
+    "descripcionCorta": "Primera línea con balcón. Excelente para vacaciones de verano.",
+    "image_url": "https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1200&q=80",
+    "amenities": [
+      "balcon",
+      "ascensor",
+      "wifi",
+      "aire acondicionado"
+    ]
+  },
+  {
+    "id": 19,
+    "slug": "casa-adosada-fuengirola-los-boliches-3h-6p",
+    "titulo": "Casa adosada en Los Boliches (Fuengirola)",
+    "zona": "Fuengirola",
+    "tipo": "Casa adosada",
+    "precio": 175,
+    "capacidad": 6,
+    "habitaciones": 3,
+    "banos": 2,
+    "metros": 140,
+    "descripcionCorta": "Espaciosa, con patio y zona de comedor exterior. Ideal para familias.",
+    "image_url": "https://images.unsplash.com/photo-1568605114967-8130f3a36994?auto=format&fit=crop&w=1200&q=80",
+    "amenities": [
+      "patio",
+      "parking",
+      "wifi"
+    ]
+  },
+  {
+    "id": 20,
+    "slug": "villa-torre-del-mar-piscina-3h-6p",
+    "titulo": "Villa tranquila con piscina en Torre del Mar",
+    "zona": "Torre del Mar",
+    "tipo": "Villa",
+    "precio": 320,
+    "capacidad": 6,
+    "habitaciones": 3,
+    "banos": 2,
+    "metros": 170,
+    "descripcionCorta": "Vacaciones relajadas con piscina privada y jardín. A pocos minutos del mar.",
+    "image_url": "https://images.unsplash.com/photo-1613977257363-707ba9348227?auto=format&fit=crop&w=1200&q=80",
+    "amenities": [
+      "piscina privada",
+      "jardin",
+      "barbacoa",
+      "wifi"
+    ]
+  }
+]
