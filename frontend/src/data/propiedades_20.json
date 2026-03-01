@@ -17,7 +17,9 @@
       "aire acondicionado",
       "wifi",
       "piscina comunitaria"
-    ]
+    ],
+    "lat": 36.505,
+    "lng": -4.891
   },
   {
     "id": 2,
@@ -37,7 +39,9 @@
       "cocina equipada",
       "wifi",
       "ascensor"
-    ]
+    ],
+    "lat": 36.512,
+    "lng": -4.886
   },
   {
     "id": 3,
@@ -57,7 +61,9 @@
       "jardin",
       "barbacoa",
       "parking"
-    ]
+    ],
+    "lat": 36.519,
+    "lng": -4.881
   },
   {
     "id": 4,
@@ -76,7 +82,9 @@
       "wifi",
       "cocina",
       "lavadora"
-    ]
+    ],
+    "lat": 36.511,
+    "lng": -4.876
   },
   {
     "id": 5,
@@ -96,7 +104,9 @@
       "aire acondicionado",
       "wifi",
       "parking"
-    ]
+    ],
+    "lat": 36.518,
+    "lng": -4.887
   },
   {
     "id": 6,
@@ -116,7 +126,9 @@
       "wifi",
       "ascensor",
       "aire acondicionado"
-    ]
+    ],
+    "lat": 36.525,
+    "lng": -4.882
   },
   {
     "id": 7,
@@ -135,7 +147,9 @@
       "wifi",
       "cocina equipada",
       "aire acondicionado"
-    ]
+    ],
+    "lat": 36.7163,
+    "lng": -4.4274
   },
   {
     "id": 8,
@@ -155,7 +169,9 @@
       "wifi",
       "calefaccion",
       "ascensor"
-    ]
+    ],
+    "lat": 36.7233,
+    "lng": -4.4224
   },
   {
     "id": 9,
@@ -174,7 +190,9 @@
       "wifi",
       "cocina",
       "lavadora"
-    ]
+    ],
+    "lat": 36.7303,
+    "lng": -4.4174
   },
   {
     "id": 10,
@@ -193,7 +211,9 @@
       "wifi",
       "aire acondicionado",
       "cocina equipada"
-    ]
+    ],
+    "lat": 36.7223,
+    "lng": -4.4124
   },
   {
     "id": 11,
@@ -213,7 +233,9 @@
       "parking",
       "wifi",
       "aire acondicionado"
-    ]
+    ],
+    "lat": 36.7293,
+    "lng": -4.4234
   },
   {
     "id": 12,
@@ -232,7 +254,9 @@
       "wifi",
       "ascensor",
       "aire acondicionado"
-    ]
+    ],
+    "lat": 36.5917,
+    "lng": -4.542
   },
   {
     "id": 13,
@@ -246,12 +270,14 @@
     "banos": 1,
     "metros": 78,
     "descripcionCorta": "Terraza y vistas despejadas. Urbanización con piscina.",
-    "image_url": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=1200&q=80",
+    "image_url": "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=80",
     "amenities": [
       "terraza",
       "piscina comunitaria",
       "wifi"
-    ]
+    ],
+    "lat": 36.5987,
+    "lng": -4.537
   },
   {
     "id": 14,
@@ -271,7 +297,9 @@
       "jardin",
       "barbacoa",
       "parking"
-    ]
+    ],
+    "lat": 36.6057,
+    "lng": -4.532
   },
   {
     "id": 15,
@@ -289,7 +317,9 @@
     "amenities": [
       "wifi",
       "cocina"
-    ]
+    ],
+    "lat": 36.5977,
+    "lng": -4.527
   },
   {
     "id": 16,
@@ -308,7 +338,9 @@
       "wifi",
       "aire acondicionado",
       "cocina equipada"
-    ]
+    ],
+    "lat": 36.6169,
+    "lng": -4.5067
   },
   {
     "id": 17,
@@ -327,7 +359,9 @@
       "terraza",
       "wifi",
       "aire acondicionado"
-    ]
+    ],
+    "lat": 36.6239,
+    "lng": -4.5017
   },
   {
     "id": 18,
@@ -347,7 +381,9 @@
       "ascensor",
       "wifi",
       "aire acondicionado"
-    ]
+    ],
+    "lat": 36.534,
+    "lng": -4.63
   },
   {
     "id": 19,
@@ -366,7 +402,9 @@
       "patio",
       "parking",
       "wifi"
-    ]
+    ],
+    "lat": 36.541,
+    "lng": -4.625
   },
   {
     "id": 20,
@@ -386,6 +424,8 @@
       "jardin",
       "barbacoa",
       "wifi"
-    ]
+    ],
+    "lat": 36.7358,
+    "lng": -4.0991
   }
 ]

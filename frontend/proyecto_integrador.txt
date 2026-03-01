@@ -1,0 +1,38 @@
+Proyecto Integrador Profesional ­ DAW 2
+Carrera: Desarrollo de Aplicaciones Web ­ Segundo Año Asignaturas integradas:
+· Desarrollo Web en Entorno Cliente · Diseño de Interface Web · Posicionamiento Web
+1. CONTEXTO Una empresa digital contrata a su equipo de desarrollo para crear un sitio web profesional desacoplado, optimizado para SEO y preparado para producción. El cliente exige:
+· Arquitectura moderna · Backend Headless · Frontend desacoplado · Buen rendimiento · SEO técnico correcto · Experiencia de usuario profesional · Diseño escalable y reutilizable El proyecto se plantea como una simulación real de empresa. No es una práctica aislada, sino un desarrollo integral que debe responder a criterios profesionales.
+2. OBJETIVO Desarrollar un sitio web profesional utilizando:
+· Strapi como CMS Headless · Astro como framework de frontend · Tailwind CSS como sistema de estilos · Criterios reales de SEO On-Page y SEO Técnico
+
+El resultado debe demostrar integración de contenidos técnicos, organización, criterio profesional y capacidad de reutilización estructural.
+3. MODELO DE PRODUCTO (ELECCIÓN OBLIGATORIA) Cada equipo deberá elegir uno de los siguientes modelos:
+1. Plataforma de Cursos 2. Catálogo de Libros 3. Plataforma de Eventos 4. Catálogo de Productos Tecnológicos 5. Plataforma de Reseñas (películas, videojuegos o aplicaciones) 6. Marketplace de Perfiles Profesionales No se permiten otros modelos sin aprobación previa. Independientemente del modelo elegido, la arquitectura deberá permitir: · Sistema de categorías · Buscador · Filtros · Ordenación · Paginación · Blog relacionado
+4. ESTRUCTURA MÍNIMA DEL SITIO El proyecto deberá incluir como mínimo:
+· Página principal · Listado de productos o contenidos · Página individual · Sistema de categorías · Blog dinámico · Página de contacto
+
+· Sitemap.xml · Robots.txt Todo el contenido deberá gestionarse desde Strapi y consumirse dinámicamente desde Astro. No se permite contenido hardcodeado.
+5. REQUISITOS TÉCNICOS OBLIGATORIOS Backend (Strapi)
+· Modelado correcto de datos · Relaciones entre entidades · Slugs dinámicos · Campo SEO estructurado · Gestión coherente de contenido Frontend (Astro + Tailwind) · Consumo de API con async/await · Manejo de estados (loading, error y success) · Renderizado dinámico · Componentización real · Layout reutilizable · Diseño responsive profesional
+6. APLICACIÓN OBLIGATORIA DE CONTENIDOS DE CLASE El proyecto debe evidenciar la aplicación real de los siguientes conceptos trabajados durante el año:
+· Desestructuración de objetos provenientes del JSON. · Uso coherente de métodos de array (map, filter, sort, slice, etc). · Manejo adecuado de asincronía con async/await y try/catch. · Uso de expresiones regulares en buscador y validaciones. · Normalización de texto cuando corresponda.
+
+La mera presencia de estos elementos no garantiza la puntuación completa. Se evaluará la calidad y coherencia de su aplicación.
+7. FUNCIONALIDADES MÍNIMAS OBLIGATORIAS · Implementación de estado loading profesional. · Buscador dinámico con expresiones regulares. · Filtro por categorías. · Ordenación coherente. · Paginación funcional. · Validación de formulario con expresiones regulares y feedback visual. · Cálculo automático de tiempo de lectura en artículos.
+8. SISTEMA DE ESTILOS REUTILIZABLE El proyecto debe implementar un sistema de diseño escalable. Requisitos mínimos:
+· Uso de variables globales en :root. · Integración coherente con Tailwind mediante extensión del archivo de
+configuración. · Componentes reutilizables (Button, Card, Section, Container, Layout). · Sistema de espaciado consistente. El diseño debe poder adaptarse a otra empresa modificando únicamente variables, colores y tipografía, sin rehacer la estructura.
+9. SEO ON-PAGE Cada página deberá incluir:
+· H1 único · Jerarquía correcta de encabezados · Meta title optimizado · Meta description estratégica
+
+· URLs amigables · Enlazado interno coherente · Atributos ALT descriptivos
+10. SEO TÉCNICO · Sitemap.xml funcional · Robots.txt correcto · HTML semántico · Arquitectura limpia · Optimización básica de imágenes · Estructura sin duplicidades innecesarias
+11. ENTREGABLES · Repositorio GitHub · Acceso funcional a Strapi · Documento PDF explicativo donde se detalle: o Arquitectura elegida o Aplicación de contenidos técnicos o Sistema de estilos o Estrategia SEO aplicada · URL desplegada (opcional)
+12. CRITERIOS DE EVALUACIÓN La evaluación no se basará en una lista de verificación aislada, sino en la calidad global del desempeño. Cumplir los requisitos mínimos representa el nivel básico de aprobación. La puntuación máxima se alcanzará cuando el proyecto demuestre coherencia, solidez técnica, criterio profesional y valor agregado al proyecto.
+
+Consideración Final
+La implementación superficial de un requisito no garantiza la puntuación completa. Se evaluará la calidad de aplicación, la coherencia estructural y el criterio profesional demostrado.
+Cumplir lo mínimo permite aprobar. Demostrar solidez y pensamiento profesional permite alcanzar la máxima calificación.
+
+

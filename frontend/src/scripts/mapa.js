@@ -12,23 +12,42 @@
 
 // Tokens de color del sistema (--color-marca-* de global.css)
 const COLOR = {
-  titulo:    '#0f172a', // --color-marca-oscura
+  titulo: '#0f172a', // --color-marca-oscura
   subtitulo: '#64748b', // slate-500 (neutro)
-  precio:    '#2563eb', // --color-marca-primaria
-  enlace:    '#2563eb', // --color-marca-primaria
+  precio: '#2563eb', // --color-marca-primaria
+  enlace: '#2563eb', // --color-marca-primaria
 };
 
-/** Coordenadas de fallback por zona — se usan si el item no trae lat/lng */
+/** Coordenadas de fallback por zona (claves normalizadas sin acentos ni mayúsculas) */
 const COORDS_ZONA = {
-  'Marbella':     [36.5100, -4.8850],
-  'Málaga':       [36.7213, -4.4214],
-  'Benalmádena':  [36.5967, -4.5360],
-  'Torremolinos': [36.6219, -4.5007],
-  'Fuengirola':   [36.5390, -4.6240],
-  'Estepona':     [36.4279, -5.1459],
+  'marbella': [36.5100, -4.8850],
+  'malaga': [36.7213, -4.4214],
+  'benalmadena': [36.5967, -4.5360],
+  'torremolinos': [36.6219, -4.5007],
+  'fuengirola': [36.5390, -4.6240],
+  'estepona': [36.4279, -5.1459],
+  'torre-del-mar': [36.7408, -4.0931],
+  'torre del mar': [36.7408, -4.0931],
+  'nerja': [36.7580, -3.8770],
+  'mijas': [36.5960, -4.6370],
+  'rincon-de-la-victoria': [36.7167, -4.2833],
+  'rincon de la victoria': [36.7167, -4.2833],
+  'torrox': [36.7561, -3.9525],
+  'manilva': [36.3772, -5.2519],
+  'casares': [36.4431, -5.2731],
+  'san-pedro-de-alcantara': [36.4862, -4.9863],
+  'san pedro de alcantara': [36.4862, -4.9863],
 };
 
 const COORDS_DEFAULT = [36.55, -4.70];
+
+/**
+ * Normaliza un string para búsqueda en el diccionario de zonas
+ */
+function normalizeStr(str) {
+  if (!str) return '';
+  return str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
+}
 
 /**
  * Devuelve [lat, lng] para una propiedad.
@@ -36,7 +55,8 @@ const COORDS_DEFAULT = [36.55, -4.70];
  */
 function obtenerCoordenadas(prop) {
   if (prop.lat && prop.lng) return [prop.lat, prop.lng];
-  return COORDS_ZONA[prop.zona] ?? COORDS_DEFAULT;
+  const zonaNorm = normalizeStr(prop.zona);
+  return COORDS_ZONA[zonaNorm] ?? COORDS_DEFAULT;
 }
 
 /**

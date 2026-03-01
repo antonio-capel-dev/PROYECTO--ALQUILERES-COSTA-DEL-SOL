@@ -7,6 +7,7 @@ const DOM = {
     ZONA: "filtro-ciudad",
     VIAJEROS: "filtro-viajeros",
     PRECIO: "filtro-precio",
+    ORDENAR: "filtro-ordenar",
   },
   UI: {
     CONTADOR: "contador-resultados",
@@ -56,6 +57,7 @@ const INITIAL_STATE = {
     zona: "",
     viajeros: 0,
     precioMax: null,
+    ordenar: "",
   },
   status: "IDLE", // 'IDLE' | 'FILTERING' | 'EMPTY' | 'SUCCESS'
   resultados: 0,
@@ -84,32 +86,44 @@ const filtrarPropiedades = (dataset, filtros) => {
   const regexTexto = crearRegex(filtros.texto);
   const zonaNorm = normalizar(filtros.zona);
 
-  return dataset.filter((p) => {
+  const filtrados = dataset.filter((p) => {
     // 1. Filtro Texto (Regex sobre titulo o zona)
     const matchTexto =
       !filtros.texto || regexTexto.test(p.titulo) || regexTexto.test(p.zona);
 
     // 2. Filtro Zona (Exacta)
-    const matchZona = !filtros.zona || normalizar(p.zona).includes(zonaNorm); // includes permite flexibilidad "Málaga" en "Málaga Centro"
+    const matchZona = !filtros.zona || normalizar(p.zona).includes(zonaNorm);
 
     // 3. Filtro Precio (Rango 0 - Max)
     const matchPrecio =
       filtros.precioMax === null || p.precio <= filtros.precioMax;
 
-    // 4. Filtro Capacidad (Mínimo)
+    // 4. Filtro Capacidad (Minimo)
     const matchViajeros = p.capacidad >= filtros.viajeros;
 
-    // Combinación AND (Filtros restrictivos)
     return matchTexto && matchZona && matchPrecio && matchViajeros;
   });
+
+  // 5. Ordenacion inmutable con spread + sort
+  if (filtros.ordenar === "precio-asc") {
+    return [...filtrados].sort((a, b) => a.precio - b.precio);
+  }
+  if (filtros.ordenar === "precio-desc") {
+    return [...filtrados].sort((a, b) => b.precio - a.precio);
+  }
+
+  return filtrados;
 };
 
 // ── VIEW (Render Layer) ─────────────────────────────────────────────────────
 
 const actualizarContador = (n) => {
   const el = document.getElementById(DOM.UI.CONTADOR);
-  if (el)
-    el.textContent = `${n} ${n === 1 ? "propiedad encontrada" : "propiedades encontradas"}`;
+  if (el) {
+    const one = el.dataset.countOne || "propiedad encontrada";
+    const many = el.dataset.countMany || "propiedades encontradas";
+    el.textContent = `${n} ${n === 1 ? one : many}`;
+  }
 };
 
 const actualizarVisibilidad = (slugsVisibles) => {
@@ -137,6 +151,20 @@ const render = (state, dataset) => {
   actualizarVisibilidad(slugsVisibles);
   actualizarContador(resultados.length);
 
+  // 3. Reordenar nodos del DOM segun el orden calculado
+  if (state.filtros.ordenar) {
+    const contenedor = document.getElementById(DOM.UI.LISTA);
+    if (contenedor) {
+      const slugOrder = resultados.map((p) => p.slug);
+      const items = Array.from(contenedor.querySelectorAll(DOM.UI.ITEMS));
+      const sorted = [...items].sort(
+        (a, b) =>
+          slugOrder.indexOf(a.dataset.slug) -
+          slugOrder.indexOf(b.dataset.slug),
+      );
+      sorted.forEach((el) => contenedor.appendChild(el));
+    }
+  }
 };
 
 // ── INTENT (Event Handling) ─────────────────────────────────────────────────
@@ -165,11 +193,12 @@ export default function inicializarFiltros() {
     );
     const precioRaw = document.getElementById(DOM.INPUTS.PRECIO)?.value;
     const precioMax = precioRaw ? Number(precioRaw) : null;
+    const ordenar = document.getElementById(DOM.INPUTS.ORDENAR)?.value || "";
 
     // Dispatch Action
     store.dispatch({
       status: "FILTERING",
-      filtros: { texto, zona, viajeros, precioMax },
+      filtros: { texto, zona, viajeros, precioMax, ordenar },
     });
   };
 

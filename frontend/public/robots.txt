@@ -1,7 +1,22 @@
+# Alquileres Costa del Sol — robots.txt
+# Production: https://alquileres-costadelsol.com/robots.txt
+
 User-agent: *
 Allow: /
+
+# Block admin, API, and internal Astro assets
 Disallow: /admin/
 Disallow: /api/
 Disallow: /_astro/
 
+# Block URL parameters (duplicate content prevention)
+Disallow: /*?*
+
+# Block legacy duplicate paths (redirected via astro.config.mjs)
+Disallow: /alquiler-malaga
+Disallow: /alquiler-marbella
+Disallow: /alquiler-nerja
+Disallow: /en/propiedad/
+
+# Sitemap index (references sub-sitemaps for properties, zones, pages)
 Sitemap: https://alquileres-costadelsol.com/sitemap-index.xml

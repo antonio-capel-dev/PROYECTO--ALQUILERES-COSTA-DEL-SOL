@@ -1,27 +1,37 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import Breadcrumbs from "../../components/ui/Breadcrumbs.astro";
+import Hero from "../../components/ui/Hero.astro";
+import Boton from "../../components/ui/Boton.astro";
 import { getLangFromUrl, useTranslations } from "../../i18n/utils";
+import guiasFallback from "../../data/guias_seed.json";
 
 export async function getStaticPaths() {
-  const STRAPI_URL = import.meta.env.PUBLIC_STRAPI_URL || "http://localhost:1337";
+  const STRAPI_URL =
+    import.meta.env.PUBLIC_STRAPI_URL || "http://localhost:1337";
 
   let guias = [];
   try {
     const res = await fetch(
       `${STRAPI_URL}/api/guias?` +
-      `filters[publicada][$eq]=true&` +
-      `populate[imagen_portada][fields][0]=url&` +
-      `populate[imagen_portada][fields][1]=formats&` +
-      `populate[zona_relacionada][fields][0]=nombre&` +
-      `populate[zona_relacionada][fields][1]=slug&` +
-      `populate[seo][populate]=ogImage&` +
-      `locale=es`
+        `filters[publicada][$eq]=true&` +
+        `populate[imagen_portada][fields][0]=url&` +
+        `populate[imagen_portada][fields][1]=formats&` +
+        `populate[zona_relacionada][fields][0]=nombre&` +
+        `populate[zona_relacionada][fields][1]=slug&` +
+        `populate[seo][populate]=ogImage&` +
+        `locale=es`,
     );
     const json = await res.json();
     guias = json.data || [];
   } catch (e) {
     console.error("Error fetching guias for static paths:", e);
+    guias = guiasFallback;
+  }
+
+  // Fallback: if Strapi returned empty, use local seed
+  if (guias.length === 0) {
+    guias = guiasFallback;
   }
 
   return guias.map((guia: any) => ({
@@ -34,9 +44,73 @@ const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 const { guia } = Astro.props;
 
-const seoTitle = guia.seo?.metaTitle || guia.titulo || "Guía Costa del Sol";
-const seoDescription = guia.seo?.metaDescription || guia.extracto || "Guía completa sobre alquileres en Costa del Sol";
-const ogImage = guia.seo?.ogImage?.url || guia.imagen_portada?.url || "/images/og-default.jpg";
+const seoTitle =
+  guia.seo?.metaTitle ||
+  `${guia.titulo} | Guia Costa del Sol ${new Date().getFullYear()}`;
+const seoDescription =
+  guia.seo?.metaDescription ||
+  guia.extracto ||
+  `Guia completa sobre alquileres vacacionales en la Costa del Sol. Consejos de expertos locales ${new Date().getFullYear()}.`;
+const ogImage =
+  guia.seo?.ogImage?.url ||
+  guia.imagen_portada?.url ||
+  "/images/og-default.jpg";
+
+// Tiempo de lectura: strip HTML, split por espacios, 200 palabras/min
+const textoPlano = (guia.contenido || "").replace(/<[^>]*>/g, "");
+const minLectura =
+  Math.ceil(textoPlano.split(/\s+/).filter(Boolean).length / 200) || 1;
+
+// Fecha de publicacion formateada
+const fechaPublicacion = guia.publishedAt || guia.createdAt;
+const fechaFormateada = fechaPublicacion
+  ? new Date(fechaPublicacion).toLocaleDateString("es-ES", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    })
+  : null;
+
+// JSON-LD Article schema for E-E-A-T
+const articleSchema = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  headline: guia.titulo,
+  description: seoDescription,
+  image: ogImage.startsWith("http")
+    ? ogImage
+    : `https://alquileres-costadelsol.com${ogImage}`,
+  datePublished: guia.publishedAt || guia.createdAt || new Date().toISOString(),
+  dateModified: guia.updatedAt || new Date().toISOString(),
+  author: {
+    "@type": "Organization",
+    name: "Alquileres Costa del Sol",
+    url: "https://alquileres-costadelsol.com",
+  },
+  publisher: {
+    "@type": "Organization",
+    name: "Alquileres Costa del Sol",
+    logo: {
+      "@type": "ImageObject",
+      url: "https://alquileres-costadelsol.com/favicon.svg",
+    },
+  },
+  mainEntityOfPage: {
+    "@type": "WebPage",
+    "@id": `https://alquileres-costadelsol.com/guia/${guia.slug}`,
+  },
+  wordCount: textoPlano.split(/\s+/).filter(Boolean).length,
+  timeRequired: `PT${minLectura}M`,
+  about: {
+    "@type": "Place",
+    name: "Costa del Sol",
+    address: {
+      "@type": "PostalAddress",
+      addressRegion: "Malaga",
+      addressCountry: "ES",
+    },
+  },
+};
 ---
 
 <Layout
@@ -44,54 +118,309 @@ const ogImage = guia.seo?.ogImage?.url || guia.imagen_portada?.url || "/images/o
   descripcion={seoDescription}
   imagen={ogImage}
   breadcrumbs={[
-    { nombre: "Guías", url: "/guias" },
+    { nombre: "Inicio", url: "/" },
     { nombre: guia.titulo, url: `/guia/${guia.slug}` },
   ]}
 >
-  <Breadcrumbs
-    items={[
-      { label: t("property.breadcrumb.home"), href: "/" },
-      { label: "Guías", href: "/guias" },
-      { label: guia.titulo, href: Astro.url.pathname, active: true },
-    ]}
+  <script
+    type="application/ld+json"
+    set:html={JSON.stringify(articleSchema)}
+    slot="head"
   />
 
-  <article class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-    {guia.imagen_portada && (
-      <div class="mb-8 rounded-3xl overflow-hidden">
-        <img
-          src={guia.imagen_portada.url}
-          alt={guia.imagen_portada.alternativeText || guia.titulo}
-          class="w-full h-auto"
-          loading="eager"
-        />
+  {/* NAVEGACION */}
+  <div class="relative z-40 bg-fondo-claro border-b border-superficie">
+    <Breadcrumbs
+      items={[
+        { label: t("property.breadcrumb.home"), href: "/" },
+        { label: "Guias", href: "#guias" },
+        { label: guia.titulo, href: Astro.url.pathname, active: true },
+      ]}
+      backLink={{ label: "Volver", href: "/" }}
+    />
+  </div>
+
+  {/* 1. HERO COMPACTO (igual que Zona) */}
+  <Hero
+    titulo={guia.titulo}
+    subtitulo={guia.extracto || ""}
+    imagen={guia.imagen_portada?.url
+      ? guia.imagen_portada.url.startsWith("http")
+        ? guia.imagen_portada.url
+        : `https://alquileres-costadelsol.com${guia.imagen_portada.url}`
+      : "/images/hero-home.jpg"}
+    badge={guia.zona_relacionada?.nombre
+      ? `Guia: ${guia.zona_relacionada.nombre}`
+      : "Guia de Expertos"}
+    altura="banner"
+  />
+
+  {/* 2. STATS BAND (Bg Primario idéntico a Zonas) */}
+  <div class="bg-primario text-white">
+    <div class="contenedor-fluido py-3 md:py-5">
+      <div class="flex flex-wrap items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+          <div
+            class="w-8 h-8 rounded-full bg-secundario/20 flex items-center justify-center shrink-0"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="w-4 h-4 text-secundario"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path
+                d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"
+              ></path>
+            </svg>
+          </div>
+          {guia.zona_relacionada ? (
+            <a href={`/zona/${guia.zona_relacionada.slug}`} class="font-bold text-lg hover:text-sol transition-colors">
+              {guia.zona_relacionada.nombre}
+            </a>
+          ) : (
+            <span class="font-bold text-lg">Guia de Expertos</span>
+          )}
+          <span class="hidden sm:inline text-white/40">|</span>
+          <span class="text-white/70 text-sm hidden sm:block">Costa del Sol</span>
+        </div>
+
+        <div class="flex items-center gap-6">
+          <div class="text-center">
+            <div class="text-xl font-bold text-sol">{minLectura}</div>
+            <div class="text-xs text-white/60 uppercase tracking-wide">
+              Minutos
+            </div>
+          </div>
+          {fechaFormateada && (
+            <div class="hidden sm:block text-center">
+              <div class="text-sm font-semibold text-white/80">{fechaFormateada}</div>
+              <div class="text-xs text-white/60 uppercase tracking-wide">Publicado</div>
+            </div>
+          )}
+          {
+            guia.zona_relacionada && (
+              <div class="hidden sm:flex items-center gap-2 bg-secundario/20 rounded-full px-4 py-1.5">
+                <div class="w-2 h-2 rounded-full bg-secundario animate-pulse" />
+                <span class="text-xs font-semibold text-secundario uppercase tracking-wide">
+                  {guia.zona_relacionada.nombre}
+                </span>
+              </div>
+            )
+          }
+        </div>
       </div>
-    )}
-
-    <h1 class="text-4xl md:text-5xl font-extrabold text-primario mb-6">
-      {guia.titulo}
-    </h1>
-
-    {guia.extracto && (
-      <p class="text-xl text-texto-secundario mb-8 leading-relaxed">
-        {guia.extracto}
-      </p>
-    )}
-
-    <div class="prose prose-slate lg:prose-lg max-w-none">
-      <Fragment set:html={guia.contenido} />
     </div>
+  </div>
 
-    {guia.cta_texto && guia.cta_url && (
-      <div class="mt-12 bg-primario rounded-3xl p-8 text-center">
-        <h2 class="text-2xl font-bold text-white mb-4">{guia.cta_texto}</h2>
-        <a
-          href={guia.cta_url}
-          class="inline-block bg-white text-primario px-8 py-3 rounded-full font-semibold hover:bg-fondo-claro transition-colors"
-        >
-          Ver propiedades
-        </a>
+  <section class="bg-fondo-claro section-md">
+    <div class="contenedor-fluido">
+      {/* 3. LAYOUT 2 COLUMNAS (1fr_320px) Igual que Zonas */}
+      <div class="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-10 items-start">
+        {/* COLUMNA PRINCIPAL */}
+        <article class="w-full">
+          {/* BADGE ZONA RELACIONADA */}
+          {guia.zona_relacionada && (
+            <div class="mb-6">
+              <a
+                href={`/zona/${guia.zona_relacionada.slug}`}
+                class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-secundario/10 text-secundario text-xs font-semibold uppercase tracking-wide hover:bg-secundario/20 transition-colors"
+              >
+                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                </svg>
+                {guia.zona_relacionada.nombre}
+              </a>
+            </div>
+          )}
+
+          {
+            guia.extracto && (
+              <p class="text-lg md:text-xl text-texto-secundario leading-relaxed mb-10 pl-5 border-l-4 border-sol">
+                {guia.extracto}
+              </p>
+            )
+          }
+
+          <div
+            class="prose prose-slate prose-lg max-w-none text-texto-secundario prose-headings:text-primario prose-a:text-secundario hover:prose-a:text-primario prose-img:rounded-2xl prose-img:border prose-img:border-superficie mb-10"
+          >
+            <Fragment set:html={guia.contenido} />
+          </div>
+
+          {/* CTA FINAL */}
+          <div class="mt-12 bg-primario rounded-2xl p-8 md:p-10 text-center">
+            <h3 class="text-2xl md:text-3xl font-bold text-white mb-3">
+              {guia.zona_relacionada
+                ? `Descubre ${guia.zona_relacionada.nombre}`
+                : "Encuentra tu alojamiento ideal"}
+            </h3>
+            <p class="text-white/70 mb-8 max-w-lg mx-auto">
+              {guia.zona_relacionada
+                ? `Explora los mejores alojamientos vacacionales en ${guia.zona_relacionada.nombre}, Costa del Sol.`
+                : "Explora los mejores alojamientos vacacionales en la Costa del Sol. Reserva directa sin comisiones."}
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+              <Boton
+                href={guia.cta_url ||
+                  (guia.zona_relacionada
+                    ? `/zona/${guia.zona_relacionada.slug}`
+                    : "/propiedades")}
+                variante="secundario"
+                tamano="medio"
+                clase="font-bold shadow-lg"
+              >
+                {guia.cta_texto || "Ver alojamientos"}
+              </Boton>
+              <Boton
+                href="/contacto"
+                variante="outline"
+                tamano="medio"
+                clase="border-white/30 text-white hover:bg-white/10"
+              >
+                Contactar
+              </Boton>
+            </div>
+          </div>
+        </article>
+
+        {/* 4. SIDEBAR STICKY */}
+        <aside class="lg:sticky lg:top-24 space-y-4">
+          {/* Panel Oscuro Info CTA (Igual que Zonas) */}
+          <div class="bg-primario rounded-2xl p-6 text-white">
+            <h4 class="text-xl font-bold mb-1 leading-snug">
+              {
+                guia.zona_relacionada
+                  ? `¿Viajas a ${guia.zona_relacionada.nombre}?`
+                  : "¿Preparando tu viaje?"
+              }
+            </h4>
+            <p class="text-white/60 text-sm mb-6">
+              {guia.zona_relacionada
+                ? `Costa del Sol | ${guia.zona_relacionada.nombre}`
+                : "Costa del Sol | Alquiler vacacional"}
+            </p>
+
+            {/* Tiempo de lectura destacado */}
+            <div class="mb-6">
+              <div class="bg-white/10 rounded-xl p-3 text-center">
+                <div class="text-2xl font-bold text-sol">{minLectura} min</div>
+                <div class="text-xs text-white/60 mt-0.5">Tiempo de lectura</div>
+              </div>
+            </div>
+
+            <ul class="space-y-3 mb-6 text-sm">
+              <li class="flex items-center gap-3">
+                <div
+                  class="w-5 h-5 rounded-full bg-secundario/30 flex items-center justify-center shrink-0"
+                >
+                  <svg
+                    class="w-3 h-3 text-secundario"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    ><path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M5 13l4 4L19 7"></path></svg
+                  >
+                </div>
+                <span class="text-white/80">Pago 100% seguro y directo</span>
+              </li>
+              <li class="flex items-center gap-3">
+                <div
+                  class="w-5 h-5 rounded-full bg-secundario/30 flex items-center justify-center shrink-0"
+                >
+                  <svg
+                    class="w-3 h-3 text-secundario"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    ><path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M5 13l4 4L19 7"></path></svg
+                  >
+                </div>
+                <span class="text-white/80">Gestión profesional 24h</span>
+              </li>
+              <li class="flex items-center gap-3">
+                <div
+                  class="w-5 h-5 rounded-full bg-secundario/30 flex items-center justify-center shrink-0"
+                >
+                  <svg
+                    class="w-3 h-3 text-secundario"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    ><path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M5 13l4 4L19 7"></path></svg
+                  >
+                </div>
+                <span class="text-white/80">Mejor precio garantizado</span>
+              </li>
+            </ul>
+
+            <Boton
+              href={guia.cta_url ||
+                (guia.zona_relacionada
+                  ? `/zona/${guia.zona_relacionada.slug}`
+                  : "/zonas")}
+              variante="secundario"
+              tamano="peque"
+              clase="w-full font-bold shadow-lg"
+            >
+              {guia.cta_texto || "Ver alojamientos"}
+            </Boton>
+          </div>
+
+          {/* Panel zona relacionada */}
+          {guia.zona_relacionada && (
+            <a
+              href={`/zona/${guia.zona_relacionada.slug}`}
+              class="block border border-superficie rounded-2xl p-5 bg-white hover:border-secundario/30 hover:shadow-md transition-all duration-300 group"
+            >
+              <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-full bg-secundario/10 flex items-center justify-center shrink-0">
+                  <svg class="w-4 h-4 text-secundario" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                  </svg>
+                </div>
+                <div>
+                  <p class="text-sm font-bold text-primario group-hover:text-secundario transition-colors">{guia.zona_relacionada.nombre}</p>
+                  <p class="text-xs text-texto-secundario">Ver zona y alojamientos</p>
+                </div>
+              </div>
+            </a>
+          )}
+
+          {/* Panel Contacto */}
+          <div class="border border-superficie rounded-2xl p-5 bg-white">
+            <p class="text-sm text-texto-secundario mb-3 font-medium">
+              ¿Tienes dudas sobre los destinos?
+            </p>
+            <Boton
+              href="/contacto"
+              variante="outline"
+              tamano="peque"
+              clase="w-full"
+            >
+              Contactar con el equipo
+            </Boton>
+          </div>
+        </aside>
       </div>
-    )}
-  </article>
+    </div>
+  </section>
 </Layout>

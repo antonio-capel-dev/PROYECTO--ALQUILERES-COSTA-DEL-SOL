@@ -1,8 +1,8 @@
 ---
 /**
- * /fr/property/[slug] — Version française des pages de détail de propriété.
- * HTML séparé au moment du build → Google indexe en français.
- * Hreflang auto-généré dans SeoHead.astro.
+ * /en/property/[slug] — English property detail pages.
+ * Separate HTML at build-time → Google indexes in English.
+ * Hreflang auto-generated in SeoHead.astro.
  */
 import Layout from "../../../layouts/Layout.astro";
 import Boton from "../../../components/ui/Boton.astro";
@@ -14,7 +14,7 @@ import { resolveStrapiImage } from "../../../utils/imagenes";
 import { fallbackPorSlug } from "../../../config/zonas";
 import { useTranslations } from "../../../i18n/utils";
 
-const t = useTranslations("fr");
+const t = useTranslations("en");
 
 interface Rental {
   title: string;
@@ -51,7 +51,7 @@ export async function getStaticPaths() {
     const json = await res.json();
     rentals = json.data || [];
   } catch (e) {
-    console.error("Error fetching rentals for FR /property paths:", e);
+    console.error("Error fetching rentals for EN /property paths:", e);
   }
 
   // Fallback: JSON local si Strapi no devuelve datos
@@ -74,13 +74,30 @@ export async function getStaticPaths() {
         banos: p.banos,
         metros: p.metros,
       },
+      Servicios: p.amenities
+        ? {
+            wifi: p.amenities.includes("wifi"),
+            aire_acondicionado: p.amenities.includes("aire_acondicionado"),
+            parking: p.amenities.includes("parking"),
+            mascotas: p.amenities.includes("mascotas"),
+          }
+        : undefined,
     }));
   }
 
-  return rentals.map((rental: Rental) => ({
-    params: { slug: rental.slug },
-    props: { rental },
-  }));
+  return rentals.map((rental: Rental) => {
+    const similares = rentals
+      .filter(
+        (r: any) =>
+          r.ubicacion?.slug === rental.ubicacion?.slug &&
+          r.slug !== rental.slug,
+      )
+      .slice(0, 3);
+    return {
+      params: { slug: rental.slug },
+      props: { rental, similares },
+    };
+  });
 }
 
 const { rental } = Astro.props as { rental: Rental };
@@ -88,8 +105,8 @@ const detalles = rental.detalles;
 const servicios = rental.Servicios;
 const ubicacion = rental.ubicacion;
 
-const seoTitle = `${rental.title} à partir de €${rental.price} | Locations Costa del Sol`;
-const seoDesc = `Réservez ${rental.title} à ${ubicacion?.nombre || "Costa del Sol"}. Hébergement premium pour ${detalles?.capacidad || 4} personnes. Meilleur prix garanti !`;
+const seoTitle = `${rental.title} from €${rental.price}/night | ${ubicacion?.nombre || "Costa del Sol"} ${new Date().getFullYear()}`;
+const seoDesc = `Book ${rental.title} in ${ubicacion?.nombre || "Costa del Sol"}. ${detalles?.habitaciones ? detalles.habitaciones + " bedrooms, " : ""}${detalles?.capacidad || 4} guests. From €${rental.price}/night. Direct booking, no fees.`;
 
 const fallbackImg = fallbackPorSlug(rental.slug);
 const ogImageUrl = rental.image
@@ -104,26 +121,27 @@ const ogImageUrl = rental.image
   breadcrumbs={[
     {
       nombre: ubicacion?.nombre || "Costa del Sol",
-      url: `/fr/zone/${ubicacion?.slug || ""}`,
+      url: `/en/zone/${ubicacion?.slug || ""}`,
     },
-    { nombre: rental.title, url: `/fr/property/${rental.slug}` },
+    { nombre: rental.title, url: `/en/property/${rental.slug}` },
   ]}
 >
   <div class="relative z-40 bg-white border-b border-superficie shadow-xs">
     <Breadcrumbs
       items={[
-        { label: t("property.breadcrumb.home"), href: "/fr" },
+        { label: t("property.breadcrumb.home"), href: "/en" },
         {
           label: ubicacion?.nombre || "Costa del Sol",
-          href: `/fr/zone/${ubicacion?.slug || ""}`,
+          href: `/en/zone/${ubicacion?.slug || ""}`,
         },
         { label: rental.title, href: Astro.url.pathname, active: true },
       ]}
-      backLink={{ label: t("property.back"), href: "/fr" }}
+      backLink={{ label: t("property.back"), href: "/en" }}
     />
   </div>
 
   <article class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <!-- Hero image -->
     <div class="rounded-2xl overflow-hidden mb-10 aspect-video">
       <PropertyImage
         media={rental.image}
@@ -134,6 +152,7 @@ const ogImageUrl = rental.image
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+      <!-- Main content -->
       <div class="lg:col-span-2">
         <div class="mb-2">
           <Badge variante="acento"
@@ -144,6 +163,7 @@ const ogImageUrl = rental.image
           {rental.title}
         </h1>
 
+        <!-- Details grid -->
         <div
           class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8 p-6 bg-fondo-claro rounded-2xl border border-superficie"
         >
@@ -195,6 +215,7 @@ const ogImageUrl = rental.image
           }
         </div>
 
+        <!-- Description -->
         {
           rental.description && (
             <div class="mb-8">
@@ -208,10 +229,11 @@ const ogImageUrl = rental.image
           )
         }
 
+        <!-- Amenities -->
         {
           servicios && (
             <div class="mb-8">
-              <h2 class="text-xl font-bold text-primario mb-4">Équipements</h2>
+              <h2 class="text-xl font-bold text-primario mb-4">Amenities</h2>
               <div class="flex flex-wrap gap-3">
                 {servicios.wifi && (
                   <Badge variante="acento">
@@ -237,6 +259,7 @@ const ogImageUrl = rental.image
         }
       </div>
 
+      <!-- Booking sidebar -->
       <aside class="lg:col-span-1">
         <div
           class="sticky top-28 bg-white rounded-2xl border border-superficie shadow-lg p-6"
@@ -249,26 +272,83 @@ const ogImageUrl = rental.image
             >
           </p>
           <p class="text-sm text-texto-secundario mb-6">
-            TVA incluse · Réservation directe
+            VAT included · Direct booking
           </p>
           <h3 class="text-lg font-bold text-primario mb-2">
-            {t("property.cta.title")}{rental.title} ?
+            {t("property.cta.title")}{rental.title}?
           </h3>
           <p class="text-texto-secundario text-sm mb-6">
             {t("property.cta.desc")}
           </p>
           <Boton
-            href="/fr/contact"
+            href="/en/contact"
             variante="primario"
             clase="w-full text-center"
           >
             {t("property.cta.btn")}
           </Boton>
-          <Boton href="/fr" variante="outline" clase="w-full text-center mt-3">
+          <Boton href="/en" variante="outline" clase="w-full text-center mt-3">
             {t("property.back")}
           </Boton>
         </div>
       </aside>
     </div>
+    <!-- Link to parent zone (internal linking) -->
+    {
+      ubicacion?.slug && (
+        <section class="mb-16 bg-fondo-claro rounded-2xl p-8 border border-superficie">
+          <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div>
+              <h2 class="text-xl font-bold text-primario mb-2">
+                Discover more properties in {ubicacion.nombre}
+              </h2>
+              <p class="text-texto-secundario">
+                Browse all apartments and villas available in {ubicacion.nombre}
+                , Costa del Sol.
+              </p>
+            </div>
+            <a
+              href={`/en/zone/${ubicacion.slug}`}
+              class="shrink-0 inline-flex items-center gap-2 bg-secundario text-white px-6 py-3 rounded-full font-semibold hover:bg-secundario/90 transition"
+            >
+              Rentals in {ubicacion.nombre}
+              <span aria-hidden="true">&rarr;</span>
+            </a>
+          </div>
+        </section>
+      )
+    }
+
+    <!-- Similar properties -->
+    {
+      Astro.props.similares && Astro.props.similares.length > 0 && (
+        <section class="mb-16">
+          <h2 class="text-2xl font-bold text-primario mb-6">
+            Similar properties in {ubicacion?.nombre || "the area"}
+          </h2>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {Astro.props.similares.map((similar: any) => (
+              <a
+                href={`/en/property/${similar.slug}`}
+                class="group bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all"
+              >
+                <div class="aspect-4/3 bg-superficie overflow-hidden">
+                  <div class="w-full h-full bg-gradient-to-br from-primario/10 to-secundario/10" />
+                </div>
+                <div class="p-4">
+                  <h3 class="font-bold text-primario mb-2 line-clamp-2">
+                    {similar.title}
+                  </h3>
+                  <p class="text-2xl font-bold text-secundario">
+                    {similar.price}&euro;
+                    <span class="text-sm text-texto-secundario">/night</span>
+                  </p>
+                </div>
+              </a>
+            ))}
+          </div>
+        </section>
+      )
+    }
   </article>
 </Layout>

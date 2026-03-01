@@ -50,7 +50,7 @@ export async function getStaticPaths() {
   const STRAPI_URL =
     import.meta.env.PUBLIC_STRAPI_URL || "http://localhost:1337";
 
-  let rentals = [];
+  let rentals: any[] = [];
   try {
     const res = await fetch(
       `${STRAPI_URL}/api/rentals?` +
@@ -66,6 +66,32 @@ export async function getStaticPaths() {
     rentals = json.data || [];
   } catch (e) {
     console.error("Error fetching rentals for static paths:", e);
+  }
+
+  // Fallback: JSON local si Strapi no devuelve datos
+  if (rentals.length === 0) {
+    const { default: propiedades20 } = await import("../../data/propiedades_20.json");
+    const { normalizarSlug } = await import("../../lib/zona/getZonaSlug");
+    rentals = (propiedades20 as any[]).map((p: any) => ({
+      title: p.titulo,
+      slug: p.slug,
+      price: p.precio,
+      description: p.descripcionCorta || "",
+      image_url: p.image_url,
+      ubicacion: p.zona ? { nombre: p.zona, slug: normalizarSlug(p.zona) } : undefined,
+      detalles: {
+        capacidad: p.capacidad,
+        habitaciones: p.habitaciones,
+        banos: p.banos,
+        metros: p.metros,
+      },
+      Servicios: p.amenities ? {
+        wifi: p.amenities.includes("wifi"),
+        aire_acondicionado: p.amenities.includes("aire_acondicionado"),
+        parking: p.amenities.includes("parking"),
+        mascotas: p.amenities.includes("mascotas"),
+      } : undefined,
+    }));
   }
 
   return rentals.map((rental: Rental) => {
@@ -93,10 +119,10 @@ const ubicacion = rental.ubicacion;
 
 const seoTitle =
   rental.metaTitle ||
-  `${rental.title} desde ${rental.price}€ | Alquileres Costa del Sol`;
+  `${rental.title} desde ${rental.price}€/noche | ${ubicacion?.nombre || "Costa del Sol"} ${new Date().getFullYear()}`;
 const seoDescription =
   rental.metaDescription ||
-  `Reserva ${rental.title} en ${rental.ubicacion?.nombre || "Costa del Sol"}. Alojamiento premium con capacidad para ${detalles?.capacidad || 4} personas. ¡Mejor precio garantizado!`;
+  `Reserva ${rental.title} en ${ubicacion?.nombre || "Costa del Sol"}. ${detalles?.habitaciones ? detalles.habitaciones + " hab, " : ""}${detalles?.capacidad || 4} huespedes. Desde ${rental.price}€/noche. Reserva directa sin comisiones.`;
 
 // Fallback determinista por slug: cada propiedad muestra su propia imagen de respaldo
 // en lugar del fallback global de zona (que era la misma foto para todos los rentals).
@@ -297,26 +323,10 @@ const lodgingSchema = {
         {
           servicios && (
             <div class="flex flex-wrap gap-3 mb-10">
-              {servicios.wifi && (
-                <span class="inline-flex items-center gap-1.5 bg-superficie text-primario px-3 py-1.5 rounded-full text-sm font-medium border border-superficie">
-                  {t("property.amenities.wifi")}
-                </span>
-              )}
-              {servicios.aire_acondicionado && (
-                <span class="inline-flex items-center gap-1.5 bg-superficie text-primario px-3 py-1.5 rounded-full text-sm font-medium border border-superficie">
-                  {t("property.amenities.ac")}
-                </span>
-              )}
-              {servicios.parking && (
-                <span class="inline-flex items-center gap-1.5 bg-superficie text-primario px-3 py-1.5 rounded-full text-sm font-medium border border-superficie">
-                  {t("property.amenities.parking")}
-                </span>
-              )}
-              {servicios.mascotas && (
-                <span class="inline-flex items-center gap-1.5 bg-superficie text-primario px-3 py-1.5 rounded-full text-sm font-medium border border-superficie">
-                  {t("property.amenities.pets")}
-                </span>
-              )}
+              {servicios.wifi && <Badge variante="acento">{t("property.amenities.wifi")}</Badge>}
+              {servicios.aire_acondicionado && <Badge variante="acento">{t("property.amenities.ac")}</Badge>}
+              {servicios.parking && <Badge variante="acento">{t("property.amenities.parking")}</Badge>}
+              {servicios.mascotas && <Badge variante="acento">{t("property.amenities.pets")}</Badge>}
             </div>
           )
         }
@@ -342,6 +352,29 @@ const lodgingSchema = {
         </section>
       )
     }
+
+    <!-- Enlace a zona padre (internal linking SEO) -->
+    {ubicacion?.slug && (
+      <section class="mb-16 bg-fondo-claro rounded-2xl p-8 border border-superficie">
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div>
+            <h2 class="text-xl font-bold text-primario mb-2">
+              Descubre mas alojamientos en {ubicacion.nombre}
+            </h2>
+            <p class="text-texto-secundario">
+              Explora todos los apartamentos y villas disponibles en {ubicacion.nombre}, Costa del Sol.
+            </p>
+          </div>
+          <a
+            href={`/zona/${ubicacion.slug}`}
+            class="shrink-0 inline-flex items-center gap-2 bg-secundario text-white px-6 py-3 rounded-full font-semibold hover:bg-secundario/90 transition"
+          >
+            Alquiler en {ubicacion.nombre}
+            <span aria-hidden="true">&rarr;</span>
+          </a>
+        </div>
+      </section>
+    )}
 
     <!-- Propiedades similares -->
     {

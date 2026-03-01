@@ -24,6 +24,10 @@
             "type": "text",
             "required": true,
             "maxLength": 2000
+        },
+        "asunto": {
+            "type": "string",
+            "maxLength": 200
         }
     }
 }

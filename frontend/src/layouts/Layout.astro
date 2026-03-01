@@ -20,21 +20,124 @@ const {
   alternateLinks,
 } = Astro.props;
 
-// Helper para rutas localizadas
-const getPath = (href: string) => {
-  if (lang === "es") return href;
-  return `/${lang}${href}`;
+const LOCALIZED_MAP: Record<string, Record<string, string>> = {
+  en: {
+    "/nosotros": "/about",
+    "/contacto": "/contact",
+    "/zonas": "/destinations",
+  },
+  fr: {
+    "/nosotros": "/about",
+    "/contacto": "/contact",
+    "/zonas": "/destinations",
+  },
+};
+const REVERSE_MAP_PREFIX: Record<string, string> = {
+  "/zone/": "/zona/",
+  "/property/": "/propiedad/",
+  "/guide/": "/guia/",
+};
+const REVERSE_MAP: Record<string, string> = {
+  "/about": "/nosotros",
+  "/contact": "/contacto",
+  "/destinations": "/zonas",
 };
 
-// Base path sin prefijo de idioma (para el selector de idioma)
-const pathname = Astro.url.pathname;
-const basePath =
-  lang === "es" ? pathname : pathname.replace(new RegExp(`^/${lang}`), "") || "/";
+// Prefix-based route translations for dynamic pages
+const PREFIX_TRANSLATIONS: Record<string, Record<string, string>> = {
+  en: { "/zona/": "/zone/", "/propiedad/": "/property/", "/guia/": "/guide/" },
+  fr: { "/zona/": "/zone/", "/propiedad/": "/property/", "/guia/": "/guide/" },
+};
 
-const getLangPath = (targetLang: "es" | "en" | "fr") =>
-  targetLang === "es"
-    ? basePath
-    : `/${targetLang}${basePath === "/" ? "" : basePath}`;
+// Helper para rutas localizadas en Navbar / Footer
+// Only translates paths that actually have EN/FR page equivalents.
+// Pages without i18n versions (legal, guias, propiedades, categorias) keep the Spanish URL.
+const getPath = (href: string) => {
+  if (lang === "es") return href;
+  if (href.startsWith("/#")) return `/${lang}${href}`;
+  // Exact match (e.g. /nosotros -> /en/about)
+  const exactMatch = LOCALIZED_MAP[lang]?.[href];
+  if (exactMatch) return `/${lang}${exactMatch}`;
+  // Prefix-based translation for paths with i18n pages
+  const prefixes = PREFIX_TRANSLATIONS[lang] || {};
+  for (const [from, to] of Object.entries(prefixes)) {
+    if (href.startsWith(from)) {
+      // zona/[slug]/[categoria] does NOT have i18n pages — only zona/[slug]
+      const rest = href.slice(from.length);
+      const segments = rest.split("/").filter(Boolean);
+      if (from === "/zona/" && segments.length > 1) return href; // categoria: stay Spanish
+      if (from === "/guia/") return href; // guias: no i18n pages exist
+      return `/${lang}${href.replace(from, to)}`;
+    }
+  }
+  // No translation found — keep Spanish URL (page does not exist in EN/FR)
+  return href;
+};
+
+// Base path en español (para usarlo como pivote en el selector de idioma)
+// Strip trailing slash for consistent matching (except root "/")
+const rawPathname = Astro.url.pathname;
+const pathname: string =
+  rawPathname === "/" ? "/" : rawPathname.replace(/\/$/, "");
+let basePathEs =
+  lang === "es"
+    ? pathname
+    : pathname.replace(new RegExp(`^/${lang}`), "") || "/";
+if (lang !== "es") {
+  if (REVERSE_MAP[basePathEs]) {
+    basePathEs = REVERSE_MAP[basePathEs];
+  } else {
+    // Prefix-based reverse mapping (e.g., /en/zone/malaga -> /zona/malaga)
+    for (const [from, to] of Object.entries(REVERSE_MAP_PREFIX)) {
+      if (basePathEs.startsWith(from)) {
+        basePathEs = basePathEs.replace(from, to);
+        break;
+      }
+    }
+  }
+}
+
+const REVERSE_PREFIX: Record<string, string> = {
+  "/zone/": "/zona/",
+  "/property/": "/propiedad/",
+  "/guide/": "/guia/",
+};
+
+// Pages/prefixes that only exist in ES (no EN/FR version)
+const ES_ONLY = [
+  "/propiedades/",
+  "/legal/",
+  "/guia/",
+  "/nueva-propiedad",
+  "/404",
+];
+
+const getLangPath = (targetLang: "es" | "en" | "fr") => {
+  if (targetLang === "es") return basePathEs;
+  // ES-only pages: always link to Spanish version
+  for (const prefix of ES_ONLY) {
+    if (basePathEs.startsWith(prefix)) return basePathEs;
+  }
+  // Zone category pages (/zona/slug/cat) are ES-only
+  if (basePathEs.startsWith("/zona/")) {
+    const segments = basePathEs
+      .slice("/zona/".length)
+      .split("/")
+      .filter(Boolean);
+    if (segments.length > 1) return basePathEs;
+  }
+  // Exact match first
+  const exactMatch = LOCALIZED_MAP[targetLang]?.[basePathEs];
+  if (exactMatch) return `/${targetLang}${exactMatch}`;
+  // Prefix-based translation
+  const prefixes = PREFIX_TRANSLATIONS[targetLang] || {};
+  for (const [from, to] of Object.entries(prefixes)) {
+    if (basePathEs.startsWith(from)) {
+      return `/${targetLang}${basePathEs.replace(from, to)}`;
+    }
+  }
+  return `/${targetLang}${basePathEs === "/" ? "" : basePathEs}`;
+};
 ---
 
 <!doctype html>
@@ -68,7 +171,6 @@ const getLangPath = (targetLang: "es" | "en" | "fr") =>
     >
       <div class="contenedor-fluido">
         <div class="flex justify-between items-center h-20">
-
           <!-- Logo -->
           <div class="shrink-0 flex items-center gap-2">
             <Icon name="sun" class="w-7 h-7 text-sol" aria-hidden="true" />
@@ -86,7 +188,7 @@ const getLangPath = (targetLang: "es" | "en" | "fr") =>
               NAV_ITEMS.map((item) => (
                 <a
                   href={getPath(item.href)}
-                  class="text-texto-secundario hover:text-secundario font-medium transition duration-150"
+                  class="text-texto-secundario hover:text-secundario active:opacity-70 font-medium transition duration-150"
                 >
                   {t(item.key)}
                 </a>
@@ -106,9 +208,14 @@ const getLangPath = (targetLang: "es" | "en" | "fr") =>
                 aria-current={lang === "es" ? "true" : undefined}
                 class={`inline-flex items-center justify-center w-8 h-8 rounded-full transition-all duration-200 hover:scale-110 ${lang === "es" ? "ring-2 ring-secundario ring-offset-2 scale-110" : "opacity-60 hover:opacity-100"}`}
               >
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="w-5 h-5 rounded-full" aria-hidden="true">
-                  <path fill="#AA151B" d="M0 0h512v512H0z"/>
-                  <path fill="#F1BF00" d="M0 128h512v256H0z"/>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 512 512"
+                  class="w-5 h-5 rounded-full"
+                  aria-hidden="true"
+                >
+                  <path fill="#AA151B" d="M0 0h512v512H0z"></path>
+                  <path fill="#F1BF00" d="M0 128h512v256H0z"></path>
                 </svg>
               </a>
               <a
@@ -119,14 +226,30 @@ const getLangPath = (targetLang: "es" | "en" | "fr") =>
                 aria-current={lang === "en" ? "true" : undefined}
                 class={`inline-flex items-center justify-center w-8 h-8 rounded-full transition-all duration-200 hover:scale-110 ${lang === "en" ? "ring-2 ring-secundario ring-offset-2 scale-110" : "opacity-60 hover:opacity-100"}`}
               >
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 30" class="w-5 h-5 rounded-full" aria-hidden="true">
-                  <clipPath id="gb-clip-d"><path d="M0 0v30h60V0z"/></clipPath>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 60 30"
+                  class="w-5 h-5 rounded-full"
+                  aria-hidden="true"
+                >
+                  <clipPath id="gb-clip-d"
+                    ><path d="M0 0v30h60V0z"></path></clipPath
+                  >
                   <g clip-path="url(#gb-clip-d)">
-                    <path fill="#012169" d="M0 0v30h60V0z"/>
-                    <path stroke="#fff" stroke-width="6" d="m0 0 60 30m0-30L0 30"/>
-                    <path stroke="#C8102E" stroke-width="4" d="m0 0 60 30m0-30L0 30" clip-path="url(#gb-clip-d)"/>
-                    <path stroke="#fff" stroke-width="10" d="M30 0v30M0 15h60"/>
-                    <path stroke="#C8102E" stroke-width="6" d="M30 0v30M0 15h60"/>
+                    <path fill="#012169" d="M0 0v30h60V0z"></path>
+                    <path
+                      stroke="#fff"
+                      stroke-width="6"
+                      d="m0 0 60 30m0-30L0 30"></path>
+                    <path
+                      stroke="#C8102E"
+                      stroke-width="4"
+                      d="m0 0 60 30m0-30L0 30"
+                      clip-path="url(#gb-clip-d)"></path>
+                    <path stroke="#fff" stroke-width="10" d="M30 0v30M0 15h60"
+                    ></path>
+                    <path stroke="#C8102E" stroke-width="6" d="M30 0v30M0 15h60"
+                    ></path>
                   </g>
                 </svg>
               </a>
@@ -138,10 +261,15 @@ const getLangPath = (targetLang: "es" | "en" | "fr") =>
                 aria-current={lang === "fr" ? "true" : undefined}
                 class={`inline-flex items-center justify-center w-8 h-8 rounded-full transition-all duration-200 hover:scale-110 ${lang === "fr" ? "ring-2 ring-secundario ring-offset-2 scale-110" : "opacity-60 hover:opacity-100"}`}
               >
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 2" class="w-5 h-5 rounded-full" aria-hidden="true">
-                  <path fill="#002395" d="M0 0h1v2H0z"/>
-                  <path fill="#fff" d="M1 0h1v2H1z"/>
-                  <path fill="#ED2939" d="M2 0h1v2H2z"/>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 3 2"
+                  class="w-5 h-5 rounded-full"
+                  aria-hidden="true"
+                >
+                  <path fill="#002395" d="M0 0h1v2H0z"></path>
+                  <path fill="#fff" d="M1 0h1v2H1z"></path>
+                  <path fill="#ED2939" d="M2 0h1v2H2z"></path>
                 </svg>
               </a>
             </nav>
@@ -171,7 +299,6 @@ const getLangPath = (targetLang: "es" | "en" | "fr") =>
               <Icon name="x" class="w-6 h-6" />
             </span>
           </button>
-
         </div>
       </div>
 
@@ -183,7 +310,6 @@ const getLangPath = (targetLang: "es" | "en" | "fr") =>
         aria-label="Menú de navegación"
       >
         <div class="contenedor-fluido py-4">
-
           <!-- Links de navegación -->
           <nav>
             <ul class="flex flex-col space-y-1">
@@ -192,7 +318,7 @@ const getLangPath = (targetLang: "es" | "en" | "fr") =>
                   <li>
                     <a
                       href={getPath(item.href)}
-                      class="menu-link flex items-center px-4 py-3 text-primario hover:bg-secundario/5 hover:text-secundario rounded-xl font-medium transition"
+                      class="menu-link flex items-center px-4 py-3 text-primario hover:bg-secundario/5 hover:text-secundario active:opacity-70 rounded-xl font-medium transition"
                     >
                       {t(item.key)}
                     </a>
@@ -203,8 +329,13 @@ const getLangPath = (targetLang: "es" | "en" | "fr") =>
           </nav>
 
           <!-- Selector de idioma móvil (Banderas) -->
-          <div class="flex items-center gap-3 px-4 py-3 mt-2 border-t border-superficie">
-            <nav aria-label="Selector de idioma" class="flex items-center gap-2">
+          <div
+            class="flex items-center gap-3 px-4 py-3 mt-2 border-t border-superficie"
+          >
+            <nav
+              aria-label="Selector de idioma"
+              class="flex items-center gap-2"
+            >
               <a
                 href={getLangPath("es")}
                 hreflang="es"
@@ -213,9 +344,14 @@ const getLangPath = (targetLang: "es" | "en" | "fr") =>
                 aria-current={lang === "es" ? "true" : undefined}
                 class={`menu-link inline-flex items-center justify-center w-9 h-9 rounded-full transition-all duration-200 ${lang === "es" ? "ring-2 ring-secundario ring-offset-2 scale-110" : "opacity-60 hover:opacity-100 hover:scale-110"}`}
               >
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="w-6 h-6 rounded-full" aria-hidden="true">
-                  <path fill="#AA151B" d="M0 0h512v512H0z"/>
-                  <path fill="#F1BF00" d="M0 128h512v256H0z"/>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 512 512"
+                  class="w-6 h-6 rounded-full"
+                  aria-hidden="true"
+                >
+                  <path fill="#AA151B" d="M0 0h512v512H0z"></path>
+                  <path fill="#F1BF00" d="M0 128h512v256H0z"></path>
                 </svg>
               </a>
               <a
@@ -226,14 +362,30 @@ const getLangPath = (targetLang: "es" | "en" | "fr") =>
                 aria-current={lang === "en" ? "true" : undefined}
                 class={`menu-link inline-flex items-center justify-center w-9 h-9 rounded-full transition-all duration-200 ${lang === "en" ? "ring-2 ring-secundario ring-offset-2 scale-110" : "opacity-60 hover:opacity-100 hover:scale-110"}`}
               >
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 30" class="w-6 h-6 rounded-full" aria-hidden="true">
-                  <clipPath id="gb-clip-m"><path d="M0 0v30h60V0z"/></clipPath>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 60 30"
+                  class="w-6 h-6 rounded-full"
+                  aria-hidden="true"
+                >
+                  <clipPath id="gb-clip-m"
+                    ><path d="M0 0v30h60V0z"></path></clipPath
+                  >
                   <g clip-path="url(#gb-clip-m)">
-                    <path fill="#012169" d="M0 0v30h60V0z"/>
-                    <path stroke="#fff" stroke-width="6" d="m0 0 60 30m0-30L0 30"/>
-                    <path stroke="#C8102E" stroke-width="4" d="m0 0 60 30m0-30L0 30" clip-path="url(#gb-clip-m)"/>
-                    <path stroke="#fff" stroke-width="10" d="M30 0v30M0 15h60"/>
-                    <path stroke="#C8102E" stroke-width="6" d="M30 0v30M0 15h60"/>
+                    <path fill="#012169" d="M0 0v30h60V0z"></path>
+                    <path
+                      stroke="#fff"
+                      stroke-width="6"
+                      d="m0 0 60 30m0-30L0 30"></path>
+                    <path
+                      stroke="#C8102E"
+                      stroke-width="4"
+                      d="m0 0 60 30m0-30L0 30"
+                      clip-path="url(#gb-clip-m)"></path>
+                    <path stroke="#fff" stroke-width="10" d="M30 0v30M0 15h60"
+                    ></path>
+                    <path stroke="#C8102E" stroke-width="6" d="M30 0v30M0 15h60"
+                    ></path>
                   </g>
                 </svg>
               </a>
@@ -245,10 +397,15 @@ const getLangPath = (targetLang: "es" | "en" | "fr") =>
                 aria-current={lang === "fr" ? "true" : undefined}
                 class={`menu-link inline-flex items-center justify-center w-9 h-9 rounded-full transition-all duration-200 ${lang === "fr" ? "ring-2 ring-secundario ring-offset-2 scale-110" : "opacity-60 hover:opacity-100 hover:scale-110"}`}
               >
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 2" class="w-6 h-6 rounded-full" aria-hidden="true">
-                  <path fill="#002395" d="M0 0h1v2H0z"/>
-                  <path fill="#fff" d="M1 0h1v2H1z"/>
-                  <path fill="#ED2939" d="M2 0h1v2H2z"/>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 3 2"
+                  class="w-6 h-6 rounded-full"
+                  aria-hidden="true"
+                >
+                  <path fill="#002395" d="M0 0h1v2H0z"></path>
+                  <path fill="#fff" d="M1 0h1v2H1z"></path>
+                  <path fill="#ED2939" d="M2 0h1v2H2z"></path>
                 </svg>
               </a>
             </nav>
@@ -256,11 +413,14 @@ const getLangPath = (targetLang: "es" | "en" | "fr") =>
 
           <!-- CTA móvil -->
           <div class="px-4 pt-2 pb-4 border-t border-superficie mt-2">
-            <Boton href={getPath("/contacto")} variante="primario" clase="w-full menu-link">
+            <Boton
+              href={getPath("/contacto")}
+              variante="primario"
+              clase="w-full menu-link"
+            >
               {t("nav.reserve")}
             </Boton>
           </div>
-
         </div>
       </div>
     </nav>
@@ -273,8 +433,7 @@ const getLangPath = (targetLang: "es" | "en" | "fr") =>
     <!-- ── FOOTER ──────────────────────────────────────────────────── -->
     <footer class="bg-primario text-fondo-claro/80 border-t border-primario">
       <div class="contenedor-fluido py-12">
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-8">
           <!-- Columna marca -->
           <div class="col-span-1">
             <Icon name="sun" class="w-8 h-8 text-sol mb-4" aria-hidden="true" />
@@ -285,7 +444,7 @@ const getLangPath = (targetLang: "es" | "en" | "fr") =>
 
           <!-- Columna empresa -->
           <div>
-            <h3 class="text-xl font-bold text-white mb-4">
+            <h3 class="font-bold text-white mb-4">
               {t("footer.company")}
             </h3>
             <ul class="space-y-2 text-fondo-claro/80">
@@ -306,9 +465,13 @@ const getLangPath = (targetLang: "es" | "en" | "fr") =>
 
           <!-- Columna destinos -->
           <div>
-            <h3 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+            <h3 class="font-bold text-white mb-4 flex items-center gap-2">
               {t("destinations.title")}
-              <Icon name="compass" class="w-4 h-4 text-texto-secundario" aria-hidden="true" />
+              <Icon
+                name="compass"
+                class="w-4 h-4 text-texto-secundario"
+                aria-hidden="true"
+              />
             </h3>
             <ul class="space-y-2 text-fondo-claro/80">
               {
@@ -326,9 +489,32 @@ const getLangPath = (targetLang: "es" | "en" | "fr") =>
             </ul>
           </div>
 
+          <!-- Columna guias (SEO hub) -->
+          {
+            FOOTER_LINKS.guides && FOOTER_LINKS.guides.length > 0 && (
+              <div>
+                <h3 class="font-bold text-white mb-4">
+                  {t("footer.guides") || "Guias"}
+                </h3>
+                <ul class="space-y-2 text-fondo-claro/80">
+                  {FOOTER_LINKS.guides.map((guide: any) => (
+                    <li>
+                      <a
+                        href={getPath(guide.href)}
+                        class="hover:text-acento decoration-acento underline-offset-4 hover:underline transition"
+                      >
+                        {guide.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )
+          }
+
           <!-- Columna contacto -->
           <div>
-            <h3 class="text-xl font-bold text-white mb-4">
+            <h3 class="font-bold text-white mb-4">
               {t("footer.contact")}
             </h3>
             <p class="text-fondo-claro/80 flex items-center gap-2 mb-1">
@@ -339,15 +525,20 @@ const getLangPath = (targetLang: "es" | "en" | "fr") =>
               <Icon name="phone" class="w-4 h-4 shrink-0" aria-hidden="true" />
               +34 612 345 678
             </p>
-            <p class="text-sm text-texto-secundario italic flex items-start gap-2">
-              <Icon name="map-pin" class="w-4 h-4 shrink-0 mt-0.5" aria-hidden="true" />
+            <p
+              class="text-sm text-texto-secundario italic flex items-start gap-2"
+            >
+              <Icon
+                name="map-pin"
+                class="w-4 h-4 shrink-0 mt-0.5"
+                aria-hidden="true"
+              />
               <span>
                 Calle Larios 1, 29005 Málaga, España.<br />
                 Oficina registrada: B-12345678
               </span>
             </p>
           </div>
-
         </div>
       </div>
       <div

@@ -31,7 +31,7 @@ import Icon from "../components/ui/Icon.astro";
         },
         address: {
           "@type": "PostalAddress",
-          streetAddress: "Avenida Andalucía 42",
+          streetAddress: "Calle Larios, 1",
           addressLocality: "Málaga",
           postalCode: "29002",
           addressCountry: "ES",
@@ -52,18 +52,16 @@ import Icon from "../components/ui/Icon.astro";
     </div>
 
     <div class="max-w-7xl mx-auto relative z-10">
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 items-center">
         <!-- Info de contacto -->
         <div>
           <Badge variante="acento" clase="mb-6">Estamos aquí para ti</Badge>
           <h1
-            class="text-5xl font-extrabold text-primario mb-8 tracking-tight"
+            class="text-3xl md:text-5xl font-extrabold text-primario mb-8 tracking-tight"
           >
-            ¿Hablamos? Estamos <br /><span class="text-secundario"
-              >a un solo clic</span
-            >
+            ¿Hablamos? Estamos <span class="text-secundario">a un solo clic</span>
           </h1>
-          <p class="text-texto-secundario mb-12 text-xl leading-relaxed font-light">
+          <p class="text-texto-secundario mb-12 text-lg md:text-xl leading-relaxed font-normal md:font-light">
             ¿Tienes dudas sobre una propiedad o quieres que gestionemos tu
             alquiler? Cuéntanos qué necesitas y nuestro equipo local te
             responderá en menos de 24 horas.
@@ -81,21 +79,21 @@ import Icon from "../components/ui/Icon.astro";
               <div>
                 <h3 class="font-bold text-primario">Visítanos</h3>
                 <p class="text-texto-secundario text-sm leading-relaxed">
-                  Avenida Andalucía número 42 <br />Málaga, 29002
+                  Calle Larios, 1 <br />Málaga, 29005
                 </p>
               </div>
             </div>
             <div
-              class="flex items-start gap-4 p-6 bg-white rounded-2xl shadow-sm border border-superficie"
+              class="flex items-start gap-4 p-6 bg-white rounded-2xl shadow-sm border border-superficie overflow-hidden"
             >
               <div
-                class="w-12 h-12 bg-secundario/10 rounded-xl flex items-center justify-center text-secundario"
+                class="w-12 h-12 bg-secundario/10 rounded-xl flex items-center justify-center text-secundario shrink-0"
               >
                 <Icon name="mail" class="w-5 h-5" aria-hidden="true" />
               </div>
-              <div>
+              <div class="min-w-0">
                 <h3 class="font-bold text-primario">Escríbenos</h3>
-                <p class="text-texto-secundario text-sm leading-relaxed">
+                <p class="text-texto-secundario text-sm leading-relaxed break-all">
                   alquilerescostadelsol2026@gmail.com
                 </p>
               </div>
@@ -154,7 +152,7 @@ import Icon from "../components/ui/Icon.astro";
                     placeholder="Ej. Ana García"
                   />
                 </div>
-                <div>
+                <div class="min-w-0">
                   <label
                     for="campo-email"
                     class="block text-sm font-bold text-primario mb-2"
@@ -170,6 +168,24 @@ import Icon from "../components/ui/Icon.astro";
                     placeholder="ana@email.com"
                   />
                 </div>
+              </div>
+              <div>
+                <label
+                  for="campo-asunto"
+                  class="block text-sm font-bold text-primario mb-2"
+                  >Asunto</label
+                >
+                <select
+                  id="campo-asunto"
+                  name="asunto"
+                  class="w-full bg-fondo-claro border-transparent focus:border-secundario focus:bg-white rounded-xl px-5 py-4 focus:outline-none focus:ring-4 focus:ring-secundario/5 transition-all duration-300"
+                >
+                  <option value="">Selecciona un asunto...</option>
+                  <option value="reserva">Reserva vacacional</option>
+                  <option value="gestion">Gestión de propiedad</option>
+                  <option value="info">Información general</option>
+                  <option value="otro">Otro</option>
+                </select>
               </div>
               <div>
                 <label
@@ -264,7 +280,8 @@ import Icon from "../components/ui/Icon.astro";
       btn.innerHTML =
         '<span class="flex items-center justify-center gap-2"><svg class="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Enviando...</span>';
 
-      const data = { nombre, email, mensaje };
+      const asunto = form.querySelector("[name='asunto']").value.trim();
+      const data = { nombre, email, asunto, mensaje };
 
       try {
         const STRAPI_URL = form.dataset.strapiUrl || "http://localhost:1337";

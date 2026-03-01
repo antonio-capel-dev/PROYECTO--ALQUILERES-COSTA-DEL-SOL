@@ -1,8 +1,8 @@
 ---
 /**
- * /fr/zone/[slug] — Version française des pages de détail par zone.
- * HTML séparé généré au moment du build → Google indexe en français.
- * Hreflang auto-généré dans SeoHead.astro.
+ * /en/zone/[slug] — English version of zone detail pages.
+ * Separate HTML generated at build-time → Google indexes in English.
+ * Hreflang auto-generated in SeoHead.astro.
  */
 import Layout from "../../../layouts/Layout.astro";
 import FichaAlquiler from "../../../components/FichaAlquiler.astro";
@@ -19,7 +19,7 @@ import { fetchPropiedades } from "../../../lib/zona/fetchPropiedades";
 import { getZonaSlug, getZonaNombre } from "../../../lib/zona/getZonaSlug";
 import { isInZona } from "../../../lib/zona/isInZona";
 
-const t = useTranslations("fr");
+const t = useTranslations("en");
 const ts = (key: any, zone: string) => t(key).replace('{zone}', zone);
 
 export async function getStaticPaths() {
@@ -28,12 +28,12 @@ export async function getStaticPaths() {
 
 const { zona, propiedades, todasLasZonas } = Astro.props;
 
-const seoTitle = `Location Vacances à ${zona.nombre} | Costa del Sol`;
-const seoDesc = `Découvrez les meilleurs appartements et villas à ${zona.nombre}. Prix vérifiés. Réservation directe. Sans frais cachés.`;
+// seoTitle moved below count
+// seoDesc moved below count
 
 const breadcrumbConfig = [
-  { label: "Accueil", href: "/fr" },
-  { label: "Destinations", href: "/fr/destinations" },
+  { label: "Home", href: "/en" },
+  { label: "Destinations", href: "/en/destinations" },
   { label: zona.nombre, href: Astro.url.pathname, active: true },
 ];
 
@@ -42,7 +42,10 @@ const otrasZonas = (todasLasZonas || [])
   .slice(0, 3);
 
 const count = propiedades.length;
-const contenidoZona = getContenidoZona(zona.slug, zona.nombre, "fr");
+
+const seoTitle = `${zona.nombre} Holiday Rentals ${new Date().getFullYear()} | Apartments & Villas Costa del Sol`;
+const seoDesc = `${count > 0 ? count + ' verified properties' : 'Properties'} in ${zona.nombre}, Costa del Sol. Direct booking with no fees. Best price guaranteed ${new Date().getFullYear()}.`;
+const contenidoZona = getContenidoZona(zona.slug, zona.nombre, "en");
 const faqItems = contenidoZona.faqs;
 ---
 
@@ -50,14 +53,14 @@ const faqItems = contenidoZona.faqs;
   titulo={seoTitle}
   descripcion={seoDesc}
   breadcrumbs={[
-    { nombre: "Accueil", url: "/fr" },
-    { nombre: zona.nombre, url: `/fr/zone/${zona.slug}` },
+    { nombre: "Home", url: "/en" },
+    { nombre: zona.nombre, url: `/en/zone/${zona.slug}` },
   ]}
 >
   <div class="relative z-40 bg-fondo-claro border-b border-superficie">
     <Breadcrumbs
       items={breadcrumbConfig}
-      backLink={{ label: "Retour aux destinations", href: "/fr/destinations" }}
+      backLink={{ label: "Back to destinations", href: "/en/destinations" }}
     />
   </div>
 
@@ -86,18 +89,18 @@ const faqItems = contenidoZona.faqs;
         <div class="flex items-center gap-6">
           <div class="text-center">
             <div class="text-xl font-bold text-sol">{count}</div>
-            <div class="text-xs text-white/60 uppercase tracking-wide">logements</div>
+            <div class="text-xs text-white/60 uppercase tracking-wide">properties</div>
           </div>
           <div class="flex items-center gap-2 bg-secundario/20 rounded-full px-4 py-1.5">
             <div class="w-2 h-2 rounded-full bg-secundario animate-pulse"></div>
-            <span class="text-xs font-semibold text-secundario uppercase tracking-wide">Verifie</span>
+            <span class="text-xs font-semibold text-secundario uppercase tracking-wide">Verified</span>
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  {/* Contenu SEO — Français */}
+  {/* SEO Rich Content — English */}
   <section class="bg-fondo-claro section-md">
     <div class="contenedor-fluido">
       <div class="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-10 items-start">
@@ -145,11 +148,11 @@ const faqItems = contenidoZona.faqs;
         <aside class="lg:sticky lg:top-24 space-y-4">
           <div class="bg-primario rounded-2xl p-6 text-white">
             <h4 class="text-lg font-bold mb-1">{zona.nombre}</h4>
-            <p class="text-white/60 text-sm mb-6">Costa del Sol | Location vacances</p>
+            <p class="text-white/60 text-sm mb-6">Costa del Sol | Holiday rentals</p>
             <div class="mb-6">
               <div class="bg-white/10 rounded-xl p-3 text-center">
                 <div class="text-2xl font-bold text-sol">{count}</div>
-                <div class="text-xs text-white/60 mt-0.5">Logements disponibles</div>
+                <div class="text-xs text-white/60 mt-0.5">Available properties</div>
               </div>
             </div>
             <ul class="space-y-3 mb-6 text-sm">
@@ -159,7 +162,7 @@ const faqItems = contenidoZona.faqs;
                     <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
                   </svg>
                 </div>
-                <span class="text-white/80">Prix verifies sans surprises</span>
+                <span class="text-white/80">Verified prices, no hidden fees</span>
               </li>
               <li class="flex items-center gap-3">
                 <div class="w-5 h-5 rounded-full bg-secundario/30 flex items-center justify-center shrink-0">
@@ -167,7 +170,7 @@ const faqItems = contenidoZona.faqs;
                     <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
                   </svg>
                 </div>
-                <span class="text-white/80">Service personnalise 24h</span>
+                <span class="text-white/80">Personal support 24h</span>
               </li>
               <li class="flex items-center gap-3">
                 <div class="w-5 h-5 rounded-full bg-secundario/30 flex items-center justify-center shrink-0">
@@ -175,17 +178,17 @@ const faqItems = contenidoZona.faqs;
                     <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
                   </svg>
                 </div>
-                <span class="text-white/80">Reservation directe sans intermediaires</span>
+                <span class="text-white/80">Direct booking, no intermediaries</span>
               </li>
             </ul>
-            <Boton href="/fr/contact" variante="primario" tamano="peque" clase="w-full">
-              Verifier disponibilite
+            <Boton href="/en/contact" variante="primario" tamano="peque" clase="w-full">
+              Check availability
             </Boton>
           </div>
           <div class="border border-superficie rounded-2xl p-5 bg-white">
-            <p class="text-sm text-texto-secundario mb-3 font-medium">Vous cherchez quelque chose?</p>
-            <Boton href="/fr/destinations" variante="outline" tamano="peque" clase="w-full">
-              Voir tous les logements
+            <p class="text-sm text-texto-secundario mb-3 font-medium">Looking for something specific?</p>
+            <Boton href="/en/destinations" variante="outline" tamano="peque" clase="w-full">
+              View all destinations
             </Boton>
           </div>
         </aside>
@@ -193,7 +196,7 @@ const faqItems = contenidoZona.faqs;
     </div>
   </section>
 
-  {/* Annonces de propriétés */}
+  {/* Property Listings */}
   <section class="bg-fondo-claro section-md">
     <div class="contenedor-fluido">
       <div class="flex items-center justify-between mb-8 border-b border-superficie pb-4">
@@ -201,7 +204,7 @@ const faqItems = contenidoZona.faqs;
           {ts('zone.listings.h2', zona.nombre)}
         </h2>
         <span class="text-sm text-texto-secundario font-semibold">
-          {count} {count === 1 ? "résultat" : "résultats"}
+          {count} {count === 1 ? "result" : "results"}
         </span>
       </div>
 
@@ -212,7 +215,7 @@ const faqItems = contenidoZona.faqs;
               return (
                 <FichaAlquiler
                   slug={prop.slug}
-                  titulo={prop.titulo || prop.title || "Sans titre"}
+                  titulo={prop.titulo || prop.title || "Untitled"}
                   zona={prop.zona || prop.ubicacion?.nombre || zona.nombre}
                   precio={prop.precio || prop.price || 0}
                   capacidad={prop.capacidad || prop.detalles?.capacidad || 4}
@@ -231,7 +234,7 @@ const faqItems = contenidoZona.faqs;
             <p class="text-texto-secundario max-w-md mx-auto mb-6">
               {t('zone.empty.desc')}
             </p>
-            <Boton href="/fr/destinations" variante="primario">
+            <Boton href="/en/destinations" variante="primario">
               {t('zone.empty.btn')}
             </Boton>
           </div>
@@ -243,7 +246,7 @@ const faqItems = contenidoZona.faqs;
   {faqItems && faqItems.length > 0 && (
     <section class="section-md bg-fondo-claro">
       <div class="contenedor-fluido max-w-3xl mx-auto">
-        <h2 class="font-bold text-primario mb-8 text-center">Questions Fréquemment Posées</h2>
+        <h2 class="font-bold text-primario mb-8 text-center">Frequently Asked Questions</h2>
         <div class="space-y-4">
           {faqItems.map((item: any) => (
             <details class="surface p-5 rounded-xl group">
@@ -274,7 +277,7 @@ const faqItems = contenidoZona.faqs;
     </section>
   )}
 
-  {/* Liens internes */}
+  {/* Internal Linking */}
   <section class="section-md border-t border-superficie">
     <div class="contenedor-fluido">
       <h3 class="font-bold text-primario mb-8 text-center">

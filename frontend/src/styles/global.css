@@ -4,25 +4,32 @@
 
 @theme {
   /* PALETA CROMÁTICA MEDITERRÁNEA (Fuente única de verdad) */
-  --color-primario:         #1e293b; /* Azul pizarra cálido   — fondos / tipografía (más luz que #0f172a) */
-  --color-secundario:       #0891b2; /* Cyan mediterráneo     — CTAs / botones (más vivo y luminoso) */
-  --color-acento:           #06b6d4; /* Cielo abierto         — highlights / interacción */
-  --color-fondo-claro:      #f8fafc; /* Blanco limpio         — fondos de sección */
+  --color-primario:         #1a2744; /* Azul noche profundo   — fondos / tipografía premium */
+  --color-secundario:       #0e7490; /* Cyan profundo         — CTAs / botones (más profundo, premium) */
+  --color-acento:           #0284c7; /* Blue-600              — links / botones secundarios */
+  --color-fondo-claro:      #f7f6f3; /* Blanco roto cálido    — fondos de sección sin frialdad */
   --color-fondo-oscuro:     #0f172a; /* Azul noche            — hero / footer */
-  --color-texto-secundario: #64748b; /* Gris uniforme         — texto de apoyo */
-  --color-superficie:       #e2e8f0; /* Gris suave            — bordes visibles pero elegantes */
+  --color-texto-secundario: #5a6a7a; /* Gris azulado refinado — texto de apoyo */
+  --color-superficie:       #e8e6e1; /* Beige suave           — bordes coherentes con fondo cálido */
   --color-sol:              #f59e0b; /* Ámbar cálido          — icono logo / detalles solares */
 
   /* TIPOGRAFÍA */
   --font-sans: "Inter", system-ui, -apple-system, sans-serif;
 
   /* SOMBRAS */
-  --sombra-marca: 0 10px 15px -3px rgba(8, 145, 178, 0.10), 0 4px 6px -2px rgba(8, 145, 178, 0.05);
+  --sombra-marca: 0 10px 15px -3px rgba(14, 116, 144, 0.10), 0 4px 6px -2px rgba(14, 116, 144, 0.05);
   --sombra-suave: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
 
   /* ANIMACIONES */
   --ease-fluido: cubic-bezier(0.4, 0, 0.2, 1);
   --animate-fade-in-up: fadeInUp 0.5s ease-out forwards;
+
+  /* TOKENS DE LAYOUT */
+  --shadow-card: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --shadow-card-hover: 0 10px 25px -5px rgb(0 0 0 / 0.15), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --radius-card: 1rem;
+  --radius-btn: 0.625rem;
+  --spacing-section: clamp(3rem, 6vw, 5rem);
 
   @keyframes fadeInUp {
     from { opacity: 0; transform: translateY(20px); }
@@ -53,19 +60,22 @@
 
   /* TIPOGRAFÍA FLUIDA */
   h1 {
-    @apply font-extrabold tracking-tight text-primario;
+    @apply font-extrabold text-primario;
+    letter-spacing: -0.03em;
     font-size: clamp(2.5rem, 5vw + 1rem, 4.5rem);
     line-height: 1.1;
   }
 
   h2 {
-    @apply font-bold tracking-tight text-primario;
+    @apply font-bold text-primario;
+    letter-spacing: -0.02em;
     font-size: clamp(2rem, 4vw + 1rem, 3rem);
     line-height: 1.2;
   }
 
   h3 {
     @apply font-bold text-primario;
+    letter-spacing: -0.01em;
     font-size: clamp(1.5rem, 3vw + 1rem, 2.25rem);
   }
 
@@ -76,6 +86,16 @@
   p {
     @apply leading-relaxed text-texto-secundario;
     font-size: clamp(1rem, 0.5vw + 0.875rem, 1.125rem);
+  }
+
+  /* Focus ring global — accesibilidad AA */
+  a:focus-visible,
+  button:focus-visible,
+  [role="button"]:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible {
+    @apply outline-none ring-2 ring-secundario ring-offset-2;
   }
 }
 
@@ -157,5 +177,31 @@
 
   .surface-alt {
     @apply bg-fondo-claro rounded-2xl border border-superficie/40;
+  }
+
+  /* Skeleton de carga — UX profesional */
+  .skeleton-pulse {
+    @apply animate-pulse bg-superficie rounded-lg;
+  }
+
+  /* Input base — formularios consistentes */
+  .input-base {
+    @apply w-full rounded-[var(--radius-btn)] border border-superficie bg-white px-4 py-2.5 text-sm text-primario placeholder:text-texto-secundario transition;
+  }
+
+  /* Badge base — reutilizable */
+  /* Eyebrow — etiqueta superior a titulos */
+  .eyebrow {
+    @apply text-xs font-semibold uppercase text-secundario;
+    letter-spacing: 0.15em;
+  }
+
+  /* Balance — titulos con text-wrap balance */
+  .texto-balance {
+    text-wrap: balance;
+  }
+
+  .badge-base {
+    @apply inline-block px-3 py-1 rounded-full text-xs font-semibold tracking-wide uppercase border backdrop-blur-sm;
   }
 }

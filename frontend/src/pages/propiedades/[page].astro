@@ -41,15 +41,19 @@ const { page } = Astro.props;
 const { data: properties } = page;
 
 // SEO Metadata
-const title = `Todas las Propiedades - Página ${page.currentPage} | Alquileres Costa del Sol`;
-const description = `Explora nuestra colección completa de alquileres vacacionales en la Costa del Sol. Página ${page.currentPage}. Pisos, villas y apartamentos verificados.`;
+const title = page.currentPage === 1
+  ? `Alquileres Costa del Sol ${new Date().getFullYear()} | Todas las Propiedades Verificadas`
+  : `Alquileres Costa del Sol | Pagina ${page.currentPage} de ${page.lastPage}`;
+const description = page.currentPage === 1
+  ? `Catalogo completo de apartamentos y villas en la Costa del Sol. Precios verificados, reserva directa. ${page.total} propiedades disponibles.`
+  : `Pagina ${page.currentPage} de ${page.lastPage}. Consulta todas las propiedades vacacionales en la Costa del Sol. Apartamentos, villas y pisos.`;
 ---
 
 <Layout
   titulo={title}
   descripcion={description}
-  urlPrevia={page.url.prev}
-  urlSiguiente={page.url.next}
+  urlPrevia={page.url.prev ? `https://alquileres-costadelsol.com${page.url.prev}` : undefined}
+  urlSiguiente={page.url.next ? `https://alquileres-costadelsol.com${page.url.next}` : undefined}
 >
   <!-- Hero / Header -->
   <section class="bg-primario py-20 px-6 text-center">
@@ -57,7 +61,7 @@ const description = `Explora nuestra colección completa de alquileres vacaciona
       Catálogo Completo
     </h1>
     <p class="text-fondo-claro/80 text-lg">
-      Descubre todas nuestras opciones disponibles para tus próximas vacaciones.
+      Consulta todas las opciones disponibles para tus próximas vacaciones.
     </p>
   </section>
 

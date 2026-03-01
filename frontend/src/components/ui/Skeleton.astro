@@ -1,0 +1,11 @@
+---
+interface Props { lines?: number; class?: string; }
+const { lines = 3, class: cls = "" } = Astro.props;
+---
+
+<div class={"space-y-3 " + cls} aria-hidden="true">
+  <div class="skeleton-pulse h-6 w-3/4"></div>
+  {lines > 1 && <div class="skeleton-pulse h-4 w-full"></div>}
+  {lines > 2 && <div class="skeleton-pulse h-4 w-5/6"></div>}
+  {lines > 3 && <div class="skeleton-pulse h-4 w-2/3"></div>}
+</div>

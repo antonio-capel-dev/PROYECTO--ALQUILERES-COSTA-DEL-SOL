@@ -5,6 +5,7 @@ import HeroZona from "../../../components/HeroZona.astro";
 import Boton from "../../../components/ui/Boton.astro";
 import Breadcrumbs from "../../../components/ui/Breadcrumbs.astro";
 import { normalizarRentalStrapi } from "../../../utils/normalizadores";
+import { buildZonasConPropiedades } from "../../../lib/zona/buildZonas";
 import { fetchPropiedades } from "../../../lib/zona/fetchPropiedades";
 import { getZonaSlug, getZonaNombre } from "../../../lib/zona/getZonaSlug";
 import { isInZona } from "../../../lib/zona/isInZona";
@@ -30,6 +31,13 @@ export async function getStaticPaths() {
       zonasMap.set(slug, { slug, nombre: getZonaNombre(p) });
     }
   });
+  // Fusionar zonas de config
+  const { IMAGENES_ZONA } = await import("../../../config/zonas");
+  for (const slug of Object.keys(IMAGENES_ZONA)) {
+    if (!zonasMap.has(slug)) {
+      zonasMap.set(slug, { slug, nombre: slug.charAt(0).toUpperCase() + slug.slice(1) });
+    }
+  }
   const zones = Array.from(zonasMap.values());
 
   return zones.flatMap((zona) =>

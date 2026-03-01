@@ -2,6 +2,7 @@
 import { IMAGENES_ZONA, IMAGEN_ZONA_FALLBACK } from "../config/zonas";
 import { buildStrapiUrl } from "../utils/imagenes";
 import Hero from "./ui/Hero.astro";
+import { getLangFromUrl, useTranslations } from "../i18n/utils";
 
 interface Props {
   nombre: string;
@@ -11,6 +12,8 @@ interface Props {
 }
 
 const { nombre, slug, imagen, propiedadesCount } = Astro.props;
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 
 const cleanSlug = slug?.toLowerCase().trim();
 
@@ -26,7 +29,7 @@ if (IMAGENES_ZONA[cleanSlug]) {
 
 const subtitulo =
   propiedadesCount !== undefined
-    ? `${propiedadesCount} alojamientos disponibles`
+    ? t('zone.hero.available').replace('{count}', String(propiedadesCount))
     : undefined;
 ---
 
@@ -34,6 +37,6 @@ const subtitulo =
   titulo={nombre}
   imagen={bgImage}
   subtitulo={subtitulo}
-  badge="Destino Costa del Sol"
+  badge={t('zone.hero.badge')}
   altura="banner"
 />

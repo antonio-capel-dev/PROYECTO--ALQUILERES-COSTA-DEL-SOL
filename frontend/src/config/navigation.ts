@@ -12,13 +12,21 @@ export const FOOTER_LINKS = {
   company: [
     { key: 'nav.about', href: '/nosotros' },
     { key: 'footer.contact', href: '/contacto' },
-    { key: 'footer.privacy', href: '/politica-privacidad' },
+    { key: 'footer.privacy', href: '/legal/politica-privacidad' },
   ],
   destinations: [
-    { label: 'Marbella', href: '/alquiler-marbella' },
-    { label: 'Málaga', href: '/alquiler-malaga' },
-    { label: 'Nerja', href: '/alquiler-nerja' },
-    { label: 'M. Centro Histórico', href: '/malaga-centro-historico' },
-    { label: 'Marbella Familias', href: '/marbella-familias' },
+    { label: 'Alquiler en Marbella', href: '/zona/marbella' },
+    { label: 'Alquiler en Malaga', href: '/zona/malaga' },
+    { label: 'Alquiler en Nerja', href: '/zona/nerja' },
+    { label: 'Alquiler en Torremolinos', href: '/zona/torremolinos' },
+    { label: 'Alquiler en Fuengirola', href: '/zona/fuengirola' },
+    { label: 'Alquiler en Benalmadena', href: '/zona/benalmadena' },
+    { label: 'Alquiler en Estepona', href: '/zona/estepona' },
+    { label: 'Alquiler en Torre del Mar', href: '/zona/torre-del-mar' },
+  ],
+  guides: [
+    { label: 'Guia Costa del Sol', href: '/guia/guia-completa-alquilar-costa-del-sol' },
+    { label: 'Mejores apartamentos Torre del Mar', href: '/guia/mejores-apartamentos-torre-del-mar-familias' },
+    { label: 'Que ver en Nerja', href: '/guia/que-ver-nerja-playas-alquileres' },
   ]
 };

@@ -26,12 +26,17 @@ const {
 } = Astro.props;
 ---
 
-<section class="relative min-h-[90vh] flex items-center overflow-hidden">
-  {/* Imagen de fondo */}
-  <div
-    class="absolute inset-0 bg-cover bg-center z-0"
-    style={`background-image: url('${imagen}');`}
-  ></div>
+<section class="relative min-h-[60vh] md:min-h-[90vh] flex items-center overflow-hidden">
+  {/* Imagen de fondo — <img> real para LCP, fetchpriority y srcset */}
+  <img
+    src={imagen}
+    alt="Hero Costa del Sol"
+    width="1920"
+    height="1080"
+    loading="eager"
+    fetchpriority="high"
+    class="absolute inset-0 w-full h-full object-cover z-0"
+  />
 
   {/* Overlay mediterráneo único — profundo / náutico / elegante */}
   <div

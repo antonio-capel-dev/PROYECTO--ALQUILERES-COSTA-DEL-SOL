@@ -107,9 +107,13 @@ const t = useTranslations("en");
         </div>
 
         <!-- Contact form -->
-        <div class="bg-white rounded-3xl shadow-xl p-8 border border-superficie">
+        <div id="form-wrapper-en" class="bg-white rounded-3xl shadow-xl p-8 border border-superficie">
           <h2 class="text-2xl font-bold text-primario mb-8">Send us a message</h2>
-          <form method="POST" action="/api/contact" class="space-y-6">
+          <div id="form-error-en" role="alert" aria-live="assertive" class="hidden mb-6 flex items-start gap-3 bg-red-50 border border-red-200 text-red-700 rounded-xl px-4 py-3 text-sm">
+            <svg class="w-5 h-5 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <span id="form-error-text-en">An error occurred. Please try again.</span>
+          </div>
+          <form id="form-en" class="space-y-6" data-strapi-url={import.meta.env.PUBLIC_STRAPI_URL || "http://localhost:1337"} novalidate>
             <div>
               <label for="nombre" class="block text-sm font-semibold text-primario mb-2">Full Name *</label>
               <input type="text" id="nombre" name="nombre" required
@@ -139,6 +143,7 @@ const t = useTranslations("en");
                 class="w-full px-4 py-3 rounded-xl border border-superficie focus:ring-2 focus:ring-secundario focus:border-secundario outline-none transition bg-fondo-claro resize-none"
                 placeholder="Tell us about your ideal accommodation..."></textarea>
             </div>
+            <input type="text" name="website" class="hidden" tabindex="-1" autocomplete="off" />
             <Boton type="submit" variante="primario" clase="w-full text-center">
               Send Message
             </Boton>
@@ -148,4 +153,77 @@ const t = useTranslations("en");
       </div>
     </div>
   </section>
+
+<script>
+  const form = document.getElementById("form-en");
+  const wrapper = document.getElementById("form-wrapper-en");
+  const errorBanner = document.getElementById("form-error-en");
+  const errorText = document.getElementById("form-error-text-en");
+
+  function mostrarError(msg) {
+    errorText.textContent = msg;
+    errorBanner.classList.remove("hidden");
+    errorBanner.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }
+  function ocultarError() { errorBanner.classList.add("hidden"); }
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    ocultarError();
+    const btn = form.querySelector("button[type='submit']");
+    const btnText = btn.innerHTML;
+    const honeypot = form.querySelector("input[name='website']");
+    if (honeypot && honeypot.value.trim() !== "") return;
+    const nombre = form.querySelector("[name='nombre']").value.trim();
+    const email = form.querySelector("[name='email']").value.trim();
+    const mensaje = form.querySelector("[name='mensaje']").value.trim();
+    if (!nombre || !email || !mensaje) {
+      mostrarError("Please fill in all required fields.");
+      return;
+    }
+    if (nombre.length > 100) {
+      mostrarError("The name cannot exceed 100 characters.");
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      mostrarError("Please enter a valid email address.");
+      return;
+    }
+    if (mensaje.length > 2000) {
+      mostrarError("The message cannot exceed 2000 characters.");
+      return;
+    }
+    btn.disabled = true;
+    btn.innerHTML = '<span class="flex items-center justify-center gap-2"><svg class="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Sending...</span>';
+    const asunto = form.querySelector("[name='asunto']") ? form.querySelector("[name='asunto']").value.trim() : '';
+    const data = { nombre, email, asunto, mensaje };
+    try {
+      const STRAPI_URL = form.dataset.strapiUrl || "http://localhost:1337";
+      const res = await fetch(`${STRAPI_URL}/api/contactos`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ data }),
+      });
+      if (res.ok) {
+        wrapper.innerHTML = `
+          <div class="text-center p-8">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-16 h-16 text-green-500 mx-auto mb-6"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>
+            <h2 class="text-2xl font-bold text-primario mb-4">Message received</h2>
+            <p class="text-texto-secundario mb-8">Thank you, <strong>${data.nombre}</strong>. We will contact you within 24 hours at <strong>${data.email}</strong>.</p>
+            <a href="/en" class="inline-block bg-secundario text-white px-8 py-4 rounded-xl font-bold hover:opacity-90 transition-opacity">Back to Home</a>
+          </div>
+        `;
+      } else {
+        mostrarError("Message could not be sent. Please check that the server is active and try again.");
+        btn.disabled = false;
+        btn.innerHTML = btnText;
+      }
+    } catch (err) {
+      mostrarError("Connection error. Make sure you have internet and try again.");
+      btn.disabled = false;
+      btn.innerHTML = btnText;
+    }
+  });
+</script>
+
 </Layout>

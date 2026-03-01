@@ -42,6 +42,36 @@ export default {
           strapi.log.warn(`⚠️ Seed file not found at ${dataPath}`);
         }
       }
+
+
+    // ── Seed Guias ──────────────────────────────────────────────────
+    try {
+      const guiaCount = await strapi.documents('api::guia.guia').count();
+
+      if (guiaCount === 0) {
+        strapi.log.info('Seeding Guias...');
+
+        const fsGuia = await import('fs');
+        const pathGuia = await import('path');
+        const guiaPath = pathGuia.join(process.cwd(), 'data', 'seed-guias.json');
+
+        if (fsGuia.existsSync(guiaPath)) {
+          const guiaData = JSON.parse(fsGuia.readFileSync(guiaPath, 'utf-8'));
+
+          for (const guia of guiaData) {
+            await strapi.documents('api::guia.guia').create({
+              data: guia,
+              status: 'published',
+            });
+          }
+          strapi.log.info('Guias seeding completed!');
+        } else {
+          strapi.log.warn('Guia seed file not found at ' + guiaPath);
+        }
+      }
+    } catch (guiaError) {
+      strapi.log.error('Guia seeding failed:', guiaError);
+    }
     } catch (error) {
       strapi.log.error('❌ Seeding failed:', error);
     }

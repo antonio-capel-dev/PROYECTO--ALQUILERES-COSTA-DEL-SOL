@@ -1,5 +1,15 @@
 ---
+/**
+ * SeoHead.astro — Centralized SEO <head> component.
+ * 
+ * Handles: canonical, hreflang (via i18n route map), Open Graph, Twitter,
+ * JSON-LD schema (@graph: WebSite + SearchAction, Organization, BreadcrumbList).
+ * 
+ * Page-specific schemas (LodgingBusiness, FAQPage, Article) are injected
+ * via the <slot name="head" /> in Layout.astro — NOT here.
+ */
 import { getLangFromUrl } from "../i18n/utils";
+import { buildHreflangLinks } from "../config/i18n-routes";
 
 export interface Props {
   titulo?: string;
@@ -15,9 +25,13 @@ export interface Props {
   alternateLinks?: { lang: string; url: string }[];
 }
 
+const SITE_BASE = "https://alquileres-costadelsol.com";
+const SITE_NAME = "Alquileres Costa del Sol";
+const TWITTER_HANDLE = "@alquileres_costasol";
+
 const {
   titulo = "Alquileres Costa del Sol | Apartamentos y Pisos Vacacionales",
-  descripcion = "Encuentra tu alquiler ideal en la Costa del Sol. Apartamentos en Marbella, pisos en Málaga, y casas vacacionales al mejor precio.",
+  descripcion = "Encuentra tu alquiler ideal en la Costa del Sol. Apartamentos en Marbella, pisos en Malaga, y casas vacacionales al mejor precio.",
   imagen = "/images/og-default.jpg",
   urlCanonica = new URL(Astro.url.pathname, Astro.site),
   robots = "index, follow",
@@ -31,34 +45,136 @@ const {
 
 const lang = getLangFromUrl(Astro.url);
 
-// Auto-genera hreflang si no se pasan links explícitos
-// Extrae el path base sin el prefijo de idioma para construir las 3 URLs
-const siteBase = "https://alquileres-costadelsol.com";
-const currentPath = Astro.url.pathname;
-const basePath =
-  lang === "es"
-    ? currentPath
-    : currentPath.replace(new RegExp(`^/${lang}`), "") || "/";
-const pathSuffix = basePath === "/" ? "" : basePath;
-
+// ── Hreflang: uses the i18n route map for correct cross-language linking ──
 const effectiveAlternateLinks =
   alternateLinks.length > 0
     ? alternateLinks
-    : [
-        { lang: "x-default", url: `${siteBase}${pathSuffix || "/"}` },
-        { lang: "es", url: `${siteBase}${pathSuffix || "/"}` },
-        { lang: "en", url: `${siteBase}/en${pathSuffix}` },
-        { lang: "fr", url: `${siteBase}/fr${pathSuffix}` },
-      ];
+    : buildHreflangLinks(Astro.url.pathname, lang, SITE_BASE);
+
 const OG_LOCALE: Record<string, string> = {
   es: "es_ES",
-  en: "en_US",
+  en: "en_GB",
   fr: "fr_FR",
 };
 const ogLocale = OG_LOCALE[lang] ?? "es_ES";
 
-const siteName = "Alquileres Costa del Sol";
-const twitterHandle = "@alquileres_costasol";
+// ── Breadcrumb i18n: localize "Inicio" / "Home" / "Accueil" ──
+const HOME_LABELS: Record<string, string> = {
+  es: "Inicio",
+  en: "Home",
+  fr: "Accueil",
+};
+const homeLabel = HOME_LABELS[lang] ?? "Inicio";
+const homePath = lang === "es" ? "/" : `/${lang}`;
+
+// ── JSON-LD Schema Graph ──
+// Only emit Organization + RealEstateAgent on home page to avoid bloat
+const isHome = Astro.url.pathname === "/" || Astro.url.pathname === "/en" || Astro.url.pathname === "/en/" || Astro.url.pathname === "/fr" || Astro.url.pathname === "/fr/";
+
+const schemaGraph: any[] = [
+  // WebSite — always present, includes SearchAction (sitelinks searchbox)
+  {
+    "@type": "WebSite",
+    "@id": `${SITE_BASE}/#website`,
+    url: SITE_BASE,
+    name: SITE_NAME,
+    description: "Plataforma lider de alquileres vacacionales en Malaga y Costa del Sol.",
+    inLanguage: lang === "es" ? "es-ES" : lang === "en" ? "en-GB" : "fr-FR",
+    potentialAction: {
+      "@type": "SearchAction",
+      target: {
+        "@type": "EntryPoint",
+        urlTemplate: `${SITE_BASE}/#rentals?q={search_term_string}`,
+      },
+      "query-input": "required name=search_term_string",
+    },
+  },
+  // BreadcrumbList — always present
+  {
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: homeLabel,
+        item: `${SITE_BASE}${homePath}`,
+      },
+      ...breadcrumbs.map((b: any, i: number) => ({
+        "@type": "ListItem",
+        position: i + 2,
+        name: b.nombre,
+        item: b.url.startsWith("http")
+          ? b.url
+          : `${SITE_BASE}${b.url}`,
+      })),
+    ],
+  },
+];
+
+// Organization + RealEstateAgent — only on home to reduce noise
+if (isHome) {
+  schemaGraph.push(
+    {
+      "@type": "Organization",
+      "@id": `${SITE_BASE}/#organization`,
+      name: SITE_NAME,
+      url: SITE_BASE,
+      logo: {
+        "@type": "ImageObject",
+        url: `${SITE_BASE}/favicon.svg`,
+      },
+      sameAs: [
+        "https://twitter.com/alquileres_costasol",
+        "https://www.instagram.com/alquileres_costasol",
+      ],
+    },
+    {
+      "@type": "RealEstateAgent",
+      "@id": `${SITE_BASE}/#business`,
+      name: SITE_NAME,
+      image: `${SITE_BASE}/favicon.svg`,
+      url: SITE_BASE,
+      telephone: "+34612345678",
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: "Calle Larios 1",
+        addressLocality: "Malaga",
+        postalCode: "29005",
+        addressCountry: "ES",
+      },
+      geo: {
+        "@type": "GeoCoordinates",
+        latitude: 36.7212,
+        longitude: -4.4217,
+      },
+      openingHoursSpecification: {
+        "@type": "OpeningHoursSpecification",
+        dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+        opens: "09:00",
+        closes: "18:00",
+      },
+      sameAs: [
+        "https://twitter.com/alquileres_costasol",
+        "https://www.instagram.com/alquileres_costasol",
+      ],
+    },
+  );
+}
+
+// FAQPage — only if FAQ data is provided
+if (faq.length > 0) {
+  schemaGraph.push({
+    "@type": "FAQPage",
+    mainEntity: faq.map((f: any) => ({
+      "@type": "Question",
+      name: f.pregunta,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: f.respuesta,
+      },
+    })),
+  });
+}
 ---
 
 <!-- Metadatos globales -->
@@ -67,12 +183,12 @@ const twitterHandle = "@alquileres_costasol";
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <meta name="generator" content={Astro.generator} />
 
-<!--url canonical  -->
+<!-- Canonical URL (self-referencing) -->
 <link rel="canonical" href={urlCanonica} />
 {urlPrevia && <link rel="prev" href={urlPrevia} />}
 {urlSiguiente && <link rel="next" href={urlSiguiente} />}
 
-<!-- Hreflang Tags — generados automáticamente si no se pasan manualmente -->
+<!-- Hreflang Tags — generated from i18n route map (never points to 404) -->
 {
   effectiveAlternateLinks.map((link) => (
     <link rel="alternate" hreflang={link.lang} href={link.url} />
@@ -85,113 +201,30 @@ const twitterHandle = "@alquileres_costasol";
 <meta name="author" content="Antonio Capel" />
 <meta name="robots" content={robots} />
 
+<!-- Open Graph -->
 <meta property="og:type" content={tipo} />
 <meta property="og:url" content={Astro.url} />
 <meta property="og:title" content={titulo} />
 <meta property="og:description" content={descripcion} />
 <meta property="og:image" content={new URL(imagen, Astro.url)} />
-<meta property="og:site_name" content={siteName} />
+<meta property="og:site_name" content={SITE_NAME} />
 <meta property="og:locale" content={ogLocale} />
 
-<!-- Twitter -->
+<!-- Twitter Card -->
 <meta property="twitter:card" content="summary_large_image" />
 <meta property="twitter:url" content={Astro.url} />
 <meta property="twitter:title" content={titulo} />
 <meta property="twitter:description" content={descripcion} />
 <meta property="twitter:image" content={new URL(imagen, Astro.url)} />
-<meta property="twitter:creator" content={twitterHandle} />
+<meta property="twitter:creator" content={TWITTER_HANDLE} />
 
 <link rel="sitemap" href="/sitemap-index.xml" />
 
-<!-- JSON-LD Schema: The Secret Sauce for Google -->
+<!-- JSON-LD Schema Graph -->
 <script
   type="application/ld+json"
   set:html={JSON.stringify({
     "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "WebSite",
-        "@id": "https://alquileres-costadelsol.com/#website",
-        url: "https://alquileres-costadelsol.com",
-        name: "Alquileres Costa del Sol",
-        description:
-          "Marketplace líder de alquileres en Málaga y Costa del Sol.",
-        inLanguage: "es-ES",
-      },
-      {
-        "@type": "Organization",
-        "@id": "https://alquileres-costadelsol.com/#organization",
-        name: "Alquileres Costa del Sol",
-        url: "https://alquileres-costadelsol.com",
-        logo: {
-          "@type": "ImageObject",
-          url: "https://alquileres-costadelsol.com/favicon.svg",
-        },
-        sameAs: [
-          "https://twitter.com/alquileres_costasol",
-          "https://www.instagram.com/alquileres_costasol",
-        ],
-      },
-      {
-        "@type": "RealEstateAgent",
-        "@id": "https://alquileres-costadelsol.com/#business",
-        name: "Alquileres Costa del Sol",
-        image: "https://alquileres-costadelsol.com/favicon.svg",
-        url: "https://alquileres-costadelsol.com",
-        telephone: "+34612345678",
-        address: {
-          "@type": "PostalAddress",
-          streetAddress: "Calle Larios 1",
-          addressLocality: "Málaga",
-          postalCode: "29005",
-          addressCountry: "ES",
-        },
-        geo: {
-          "@type": "GeoCoordinates",
-          latitude: 36.7212,
-          longitude: -4.4217,
-        },
-        openingHoursSpecification: {
-          "@type": "OpeningHoursSpecification",
-          dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-          opens: "09:00",
-          closes: "18:00",
-        },
-        sameAs: [
-          "https://twitter.com/alquileres_costasol",
-          "https://www.instagram.com/alquileres_costasol",
-        ],
-      },
-      {
-        "@type": "BreadcrumbList",
-        itemListElement: [
-          {
-            "@type": "ListItem",
-            position: 1,
-            name: "Inicio",
-            item: "https://alquileres-costadelsol.com",
-          },
-          ...breadcrumbs.map((b, i) => ({
-            "@type": "ListItem",
-            position: i + 2,
-            name: b.nombre,
-            item: b.url.startsWith("http")
-              ? b.url
-              : `https://alquileres-costadelsol.com${b.url}`,
-          })),
-        ],
-      },
-      faq.length > 0 && {
-        "@type": "FAQPage",
-        mainEntity: faq.map((f) => ({
-          "@type": "Question",
-          name: f.pregunta,
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: f.respuesta,
-          },
-        })),
-      },
-    ].filter(Boolean),
+    "@graph": schemaGraph,
   })}
 />

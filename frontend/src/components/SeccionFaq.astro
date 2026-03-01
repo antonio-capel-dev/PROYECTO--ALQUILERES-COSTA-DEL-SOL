@@ -18,6 +18,9 @@ interface Props {
 }
 
 const { pagina } = Astro.props;
+import { getLangFromUrl, useTranslations } from "../i18n/utils";
+const _lang = getLangFromUrl(Astro.url);
+const tFaq = useTranslations(_lang);
 
 const STRAPI_URL = import.meta.env.PUBLIC_STRAPI_URL || "http://localhost:1337";
 
@@ -56,19 +59,18 @@ try {
     <section class="py-24 bg-fondo-claro">
       <div class="max-w-4xl mx-auto px-6">
         <div class="text-center mb-16">
-          <h2 class="text-3xl md:text-5xl font-bold text-primario mb-4">
-            Preguntas Frecuentes
+          <h2 class="font-bold text-primario mb-4">
+            {tFaq("faq.title")}
           </h2>
           <p class="text-texto-secundario text-lg">
-            Todo lo que necesitas saber sobre tu próximo alquiler en la Costa
-            del Sol.
+            {tFaq("faq.desc")}
           </p>
         </div>
 
         <div class="space-y-4">
           {faqs.map((item) => (
             <details class="group bg-white rounded-2xl border border-superficie p-6 transition-all duration-300 hover:shadow-md open:shadow-lg">
-              <summary class="flex justify-between items-center cursor-pointer list-none font-bold text-lg text-primario">
+              <summary class="flex justify-between items-center cursor-pointer list-none font-bold text-lg text-primario min-h-[48px]">
                 <span>{item.pregunta}</span>
                 <span class="text-secundario transition-transform duration-300 group-open:rotate-180">
                   <svg

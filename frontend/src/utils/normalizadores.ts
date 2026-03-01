@@ -28,6 +28,9 @@ export type Propiedad = {
   image?: StrapiMedia;
   /** URL directa — exclusivo del seed JSON local (propiedades_20.json). */
   image_url?: string;
+  /** Coordenadas para mapa interactivo */
+  lat?: number;
+  lng?: number;
 };
 
 // ── Normalizadores ────────────────────────────────────────────────────────────
@@ -60,6 +63,9 @@ export function normalizarRentalStrapi(r: any): Propiedad {
     // Preservamos el objeto media completo — PropertyImage extrae formats/dimensions/alt.
     image: r.image ?? undefined,
     // image_url no existe en el schema de Strapi: no se mapea.
+    // Coordenadas para mapa
+    lat: r.lat ?? r.detalles?.lat,
+    lng: r.lng ?? r.detalles?.lng,
   };
 }
 
@@ -75,5 +81,7 @@ export function normalizarRentalLocal(p: any): Propiedad {
     capacidad: p.capacidad,
     habitaciones: p.habitaciones,
     image_url: p.image_url,
+    lat: p.lat,
+    lng: p.lng,
   };
 }

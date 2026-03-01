@@ -7,56 +7,69 @@ const t = useTranslations(lang);
 
 const STRAPI_URL = import.meta.env.PUBLIC_STRAPI_URL || "http://localhost:1337";
 
+// Testimonios estáticos de respaldo (siempre se muestran si Strapi falla)
+const testimoniosFallback = [
+  { nombre: "María López", origen: "Madrid, España", texto: "Una experiencia increíble. El apartamento era exactamente como en las fotos y el equipo estuvo disponible en todo momento. Repetiremos sin duda." },
+  { nombre: "James Wilson", origen: "London, UK", texto: "Perfect location, spotless apartment and an incredibly helpful team. The best rental experience we've had in Spain. Highly recommended!" },
+  { nombre: "Sophie Dubois", origen: "Paris, France", texto: "Appartement magnifique avec vue sur la mer. L'équipe a été très réactive et professionnelle. Nous reviendrons l'année prochaine." },
+];
+
 let testimonios: any[] = [];
+let usandoFallback = false;
 try {
   // STRAPI_URL sigue siendo necesaria para la URL del fetch
   const res = await fetch(`${STRAPI_URL}/api/testimonios?populate[foto][fields][0]=url&populate[foto][fields][1]=formats`);
   const json = await res.json();
   testimonios = json.data || [];
 } catch {
-  // Strapi no disponible — sección no se renderiza
+  // Strapi no disponible — usar fallback estático
+}
+// Si Strapi no devolvió testimonios, usar los estáticos
+if (testimonios.length === 0) {
+  usandoFallback = true;
 }
 ---
 
-{
-  testimonios.length > 0 && (
-    <section class="py-24 bg-fondo-claro relative overflow-hidden">
-      <div class="contenedor-fluido relative z-10">
-        <div class="text-center mb-16">
-          <span class="text-secundario font-semibold tracking-wider uppercase text-sm">
-            {t("reviews.badge")}
-          </span>
-          <h2 class="text-3xl md:text-5xl font-bold text-primario mt-3 mb-6">
-            {t("reviews.title")}
-          </h2>
-          <p class="text-texto-secundario max-w-2xl mx-auto text-lg">
-            {t("reviews.desc")}
-          </p>
-        </div>
+<section class="py-24 bg-fondo-claro relative overflow-hidden">
+  <div class="contenedor-fluido relative z-10">
+    <div class="text-center mb-16">
+      <span class="text-secundario font-semibold tracking-wider uppercase text-sm">
+        {t("reviews.badge")}
+      </span>
+      <h2 class="font-bold text-primario mt-3 mb-6">
+        {t("reviews.title")}
+      </h2>
+      <p class="text-texto-secundario max-w-2xl mx-auto text-lg">
+        {t("reviews.desc")}
+      </p>
+    </div>
 
-        <div class="grid-responsive">
-          {testimonios.map((item: any) => (
-            <div class="bg-white p-8 rounded-2xl shadow-sm hover:shadow-xl transition-shadow duration-300 border border-superficie flex flex-col h-full">
-              <div class="flex items-center gap-4 mb-6">
-                {item.foto?.url && (
-                  <img
-                    src={buildStrapiUrl(item.foto.url)}
-                    alt={`Foto de ${item.nombre}`}
-                    class="w-16 h-16 rounded-full object-cover border-2 border-secundario/20"
-                  />
-                )}
-                <div>
-                  <h3 class="font-bold text-primario text-lg">{item.nombre}</h3>
-                  {item.origen && (
-                    <p class="text-texto-secundario text-sm">{item.origen}</p>
-                  )}
-                </div>
+    <div class="grid-responsive">
+      {(usandoFallback ? testimoniosFallback : testimonios).map((item: any) => (
+        <div class="bg-white p-8 rounded-2xl shadow-sm hover:shadow-xl transition-shadow duration-300 border border-superficie flex flex-col h-full">
+          <div class="flex items-center gap-4 mb-6">
+            {!usandoFallback && item.foto?.url && (
+              <img
+                src={buildStrapiUrl(item.foto.url)}
+                alt={`Foto de ${item.nombre}`}
+                class="w-16 h-16 rounded-full object-cover border-2 border-secundario/20"
+              />
+            )}
+            {(usandoFallback || !item.foto?.url) && (
+              <div class="w-16 h-16 rounded-full bg-secundario/10 flex items-center justify-center text-secundario font-bold text-xl shrink-0">
+                {item.nombre.charAt(0)}
               </div>
-              <p class="text-texto-secundario italic leading-relaxed grow">"{item.texto}"</p>
+            )}
+            <div>
+              <h3 class="font-bold text-primario text-lg">{item.nombre}</h3>
+              {item.origen && (
+                <p class="text-texto-secundario text-sm">{item.origen}</p>
+              )}
             </div>
-          ))}
+          </div>
+          <p class="text-texto-secundario italic leading-relaxed grow">"{item.texto}"</p>
         </div>
-      </div>
-    </section>
-  )
-}
+      ))}
+    </div>
+  </div>
+</section>

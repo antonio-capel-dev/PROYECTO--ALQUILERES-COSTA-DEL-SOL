@@ -38,12 +38,14 @@ const data =
 
 // ── Dataset mínimo para filtros.js (slug + criterios de filtrado) ─
 // titulo incluido para que mapa.js pueda mostrarlo en el popup
-const dataset = data.map(({ slug, zona, precio, capacidad, titulo }) => ({
+const dataset = data.map(({ slug, zona, precio, capacidad, titulo, lat, lng }) => ({
   slug,
   zona,
   precio,
   capacidad,
   titulo,
+  lat,
+  lng,
 }));
 
 ---
@@ -90,6 +92,8 @@ const dataset = data.map(({ slug, zona, precio, capacidad, titulo }) => ({
         </p>
         <p class="text-sm text-secundario font-semibold mt-1">
           <span id="contador-resultados"
+            data-count-one={t('count.one')}
+            data-count-many={t('count.many')}
             >{data.length}
             {
               data.length === 1
@@ -112,6 +116,8 @@ const dataset = data.map(({ slug, zona, precio, capacidad, titulo }) => ({
 
     {/* Carrusel horizontal — scroll-snap nativo CSS, sin librerías */}
     <div class="relative">
+      {/* Gradiente derecho — solo en móvil: indica scroll horizontal disponible */}
+      <div class="pointer-events-none absolute right-0 top-0 h-full w-12 bg-gradient-to-l from-fondo-claro to-transparent z-10 md:hidden"></div>
       {/* Flecha anterior — oculta en móvil (el usuario desliza con el dedo) */}
       <button
         id="btn-prev"
@@ -183,12 +189,13 @@ const dataset = data.map(({ slug, zona, precio, capacidad, titulo }) => ({
   </section>
 
   <!-- Top Destinos: SEO Silos (Linking Strategy) -->
-  <section class="py-16 bg-white border-b border-superficie">
+  <section class="py-16 bg-fondo-claro border-t-4 border-sol/20">
     <div class="contenedor-fluido">
       <div
         class="flex flex-col md:flex-row justify-between items-end mb-10 gap-6"
       >
         <div>
+          <p class="eyebrow mb-3">Costa del Sol</p>
           <h2 class="text-3xl font-bold text-primario mb-2">
             {t("destinations.title")}
           </h2>
@@ -369,7 +376,7 @@ const dataset = data.map(({ slug, zona, precio, capacidad, titulo }) => ({
 
   /* Altura responsiva del mapa Leaflet */
   #mapa-propiedades {
-    height: 320px; /* móvil */
+    height: 380px; /* móvil */
   }
   @media (min-width: 768px) {
     #mapa-propiedades {

@@ -43,6 +43,7 @@ module.exports = {
               <div style="background: #f9fafb; padding: 20px; border-radius: 8px; margin: 20px 0;">
                 <p style="margin: 0 0 10px 0;"><strong>Nombre:</strong> ${esc(result.nombre)}</p>
                 <p style="margin: 0 0 10px 0;"><strong>Email:</strong> ${esc(result.email)}</p>
+                <p style="margin: 0 0 10px 0;"><strong>Asunto:</strong> ${esc(result.asunto || 'No especificado')}</p>
                 <p style="margin: 10px 0 5px 0;"><strong>Mensaje:</strong></p>
                 <div style="font-style: italic; color: #4b5563; border-left: 4px solid #0ea5e9; padding-left: 15px;">
                   ${esc(result.mensaje)}
