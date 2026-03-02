@@ -1,0 +1,25 @@
+---
+interface Props {
+  src: string;
+  alt: string;
+  class?: string;
+  fallbackSrc?: string;
+  loading?: "eager" | "lazy";
+}
+
+const {
+  src,
+  alt,
+  class: className,
+  fallbackSrc = "/images/zonas/hero-costa-del-sol.webp",
+  loading = "lazy",
+} = Astro.props;
+---
+
+<img
+  src={src}
+  alt={alt}
+  class={className}
+  loading={loading}
+  onerror={`this.onerror=null; this.src='${fallbackSrc}';`}
+/>

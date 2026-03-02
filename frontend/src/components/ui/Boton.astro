@@ -1,0 +1,64 @@
+---
+interface Props {
+  href?: string;
+  variante?: "primario" | "secundario" | "acento" | "outline" | "fantasma";
+  tamano?: "peque" | "medio" | "grande";
+  clase?: string;
+  tipo?: "button" | "submit" | "reset";
+  target?: "_blank" | "_self" | "_parent" | "_top";
+  onclick?: string;
+  disabled?: boolean;
+}
+
+const {
+  href,
+  variante = "primario",
+  tamano = "medio",
+  clase = "",
+  tipo = "button",
+  target,
+  onclick,
+  disabled = false,
+  ...rest
+} = Astro.props;
+
+const variantes = {
+  primario:   "boton-primario",
+  secundario: "boton-secundario",
+  acento:     "boton-acento",
+  outline:    "boton-outline",
+  fantasma:   "boton-fantasma",
+};
+
+const tamanos = {
+  peque: "boton-peque",
+  medio: "boton-medio",
+  grande: "boton-grande",
+};
+
+const estilos = `boton ${variantes[variante]} ${tamanos[tamano]} ${disabled ? "opacity-50 cursor-not-allowed pointer-events-none" : ""} ${clase}`;
+---
+
+{
+  href ? (
+    <a
+      href={href}
+      class={estilos}
+      target={target}
+      rel={target === "_blank" ? "noopener noreferrer" : undefined}
+      {...rest}
+    >
+      <slot />
+    </a>
+  ) : (
+    <button
+      type={tipo}
+      class={estilos}
+      onclick={onclick}
+      disabled={disabled}
+      {...rest}
+    >
+      <slot />
+    </button>
+  )
+}

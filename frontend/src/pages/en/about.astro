@@ -1,0 +1,171 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import SeccionInfo from "../../components/SeccionInfo.astro";
+import { useTranslations } from "../../i18n/utils";
+
+const t = useTranslations("en");
+---
+
+<Layout
+  titulo={t('meta.about.title')}
+  descripcion={t('meta.about.desc')}
+  breadcrumbs={[{ nombre: "About Us", url: "/en/about" }]}
+>
+  <script
+    type="application/ld+json"
+    set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "AboutPage",
+      mainEntity: {
+        "@type": "Organization",
+        name: "Costa del Sol Rentals",
+        foundingDate: "2010",
+        founder: {
+          "@type": "Person",
+          name: "Antonio Capel",
+          jobTitle: "CEO & Founder",
+        },
+        description: "Holiday rental experts in Malaga and Costa del Sol since 2010.",
+        knowsAbout: ["Holiday Rentals", "Property Management", "Costa del Sol Tourism"],
+      },
+    })}
+  />
+
+  <!-- Hero -->
+  <section class="relative bg-primario py-20 px-6">
+    <div class="max-w-4xl mx-auto text-center relative z-10">
+      <h1 class="text-4xl md:text-5xl font-bold text-white mb-6">
+        More than rentals, we create
+        <span class="bg-linear-to-r from-secundario to-acento bg-clip-text text-transparent">
+          unforgettable experiences
+        </span>
+      </h1>
+      <p class="text-xl text-fondo-claro/80 max-w-2xl mx-auto leading-relaxed">
+        We are your local host on the Costa del Sol. Experts in connecting property owners
+        with discerning travellers for over a decade.
+      </p>
+    </div>
+    <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
+  </section>
+
+  <!-- Our Story -->
+  <section class="py-16 md:py-24 px-6 bg-white">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+      <div class="order-2 md:order-1 relative group">
+        <div class="absolute -inset-2 bg-linear-to-r from-secundario to-acento rounded-2xl opacity-20 group-hover:opacity-40 transition duration-500 blur-lg"></div>
+        <img
+          src="/images/about/nueva-oficina.jpg"
+          alt="Our headquarters in Malaga with the team working"
+          class="relative rounded-2xl shadow-xl w-full h-[500px] object-cover"
+        />
+        <div class="absolute bottom-6 left-6 bg-white/95 backdrop-blur px-6 py-4 rounded-lg shadow-lg max-w-xs">
+          <p class="text-primario font-bold text-lg">Founded in 2010</p>
+          <p class="text-texto-secundario text-sm">Over 15 years of industry expertise.</p>
+        </div>
+      </div>
+
+      <div class="order-1 md:order-2">
+        <span class="text-secundario font-bold tracking-wider uppercase text-sm mb-2 block">Our Story</span>
+        <h2 class="text-3xl md:text-4xl font-bold text-primario mb-6">
+          From a small Soho office to local market leaders
+        </h2>
+        <div class="prose prose-lg text-texto-secundario space-y-4">
+          <p>
+            Costa del Sol Rentals was born in 2010 with a simple mission:
+            <strong>to put the human touch back into holiday rentals</strong>. Tired of impersonal
+            platforms, we built a service where every property is personally visited and every
+            guest is welcomed with genuine warmth.
+          </p>
+          <p>
+            We know every corner of Malaga — from the vibrant streets of the city centre to the
+            hidden coves of Nerja. We are not an algorithm; we are a team of passionate local
+            experts who love their region.
+          </p>
+          <ul class="space-y-3 mt-6">
+            <li class="flex items-start gap-3">
+              <svg class="w-5 h-5 text-secundario mt-1 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              <span><strong>In-person verification:</strong> We inspect every property to ensure it meets our quality and comfort standards.</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="w-5 h-5 text-secundario mt-1 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              <span><strong>24/7 Support:</strong> We are here for you before, during and after your stay.</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="w-5 h-5 text-secundario mt-1 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              <span><strong>Direct dealing:</strong> No unnecessary middlemen — we connect you directly with the best local properties.</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Trust signals -->
+  <section class="py-16 md:py-24 bg-fondo-claro border-t border-superficie">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <h2 class="text-3xl font-bold text-primario mb-4">Your peace of mind is our priority</h2>
+        <p class="text-texto-secundario text-lg">
+          Trust is built through actions. Here is how we guarantee a safe and satisfying experience
+          for both owners and guests.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="bg-white p-8 rounded-2xl shadow-sm hover:shadow-md transition border border-superficie">
+          <div class="bg-secundario/10 w-14 h-14 rounded-full flex items-center justify-center mb-6">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+              class="text-secundario" aria-hidden="true">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold text-primario mb-3">Secure Rental Guarantee</h3>
+          <p class="text-texto-secundario leading-relaxed">
+            All payments are protected. We hold payment to the owner until 24 hours after your
+            successful check-in to ensure everything is as described.
+          </p>
+        </div>
+
+        <div class="bg-white p-8 rounded-2xl shadow-sm hover:shadow-md transition border border-superficie">
+          <div class="bg-secundario/10 w-14 h-14 rounded-full flex items-center justify-center mb-6">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+              class="text-secundario" aria-hidden="true">
+              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle>
+              <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold text-primario mb-3">Real Local Team</h3>
+          <p class="text-texto-secundario leading-relaxed">
+            No overseas call centres. Our offices are in Malaga and Marbella.
+            If you need us, we are just around the corner.
+          </p>
+        </div>
+
+        <div class="bg-white p-8 rounded-2xl shadow-sm hover:shadow-md transition border border-superficie">
+          <div class="bg-secundario/10 w-14 h-14 rounded-full flex items-center justify-center mb-6">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+              class="text-secundario" aria-hidden="true">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold text-primario mb-3">Certified Quality</h3>
+          <p class="text-texto-secundario leading-relaxed">
+            We only list the <strong>top 20%</strong> of properties we evaluate. If we wouldn't
+            stay there ourselves, we won't offer it to you.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <SeccionInfo />
+</Layout>

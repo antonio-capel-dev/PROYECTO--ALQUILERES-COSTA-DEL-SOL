@@ -1,7 +1,45 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import Button from "../../components/ui/Button.astro";
+import Boton from "../../components/ui/Boton.astro";
 import Badge from "../../components/ui/Badge.astro";
+import Breadcrumbs from "../../components/ui/Breadcrumbs.astro";
+import PropertyImage from "../../components/ui/PropertyImage.astro";
+import BackButton from "../../components/ui/BackButton.astro";
+import type { StrapiMedia } from "../../utils/imagenes";
+import { resolveStrapiImage } from "../../utils/imagenes";
+import { fallbackPorSlug } from "../../config/zonas";
+import { getLangFromUrl, useTranslations } from "../../i18n/utils";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+
+interface Rental {
+  title: string;
+  price: number;
+  slug: string;
+  metaTitle?: string;
+  metaDescription?: string;
+  image?: StrapiMedia;
+  detalles?: {
+    capacidad: number;
+    habitaciones?: number;
+    banos?: number;
+    metros?: number;
+  };
+  ubicacion?: {
+    nombre: string;
+    slug: string;
+  };
+  location?: string;
+  Servicios?: {
+    wifi?: boolean;
+    aire_acondicionado?: boolean;
+    parking?: boolean;
+    mascotas?: boolean;
+  };
+  description?: string;
+}
 
 /**
  * getStaticPaths(): Astro llama a esta funcion en build-time.
@@ -9,97 +47,190 @@ import Badge from "../../components/ui/Badge.astro";
  * por cada una. Esto produce HTML estatico con SEO perfecto.
  */
 export async function getStaticPaths() {
-  const STRAPI_URL = import.meta.env.PUBLIC_STRAPI_URL || "http://localhost:1337";
+  const STRAPI_URL =
+    import.meta.env.PUBLIC_STRAPI_URL || "http://localhost:1337";
 
-  let rentals = [];
+  let rentals: any[] = [];
   try {
-    const res = await fetch(`${STRAPI_URL}/api/rentals?populate=*`);
+    const res = await fetch(
+      `${STRAPI_URL}/api/rentals?` +
+      `fields[0]=title&fields[1]=slug&fields[2]=price&fields[3]=description&` +
+      `populate[ubicacion][fields][0]=nombre&populate[ubicacion][fields][1]=slug&` +
+      `populate[image][fields][0]=url&populate[image][fields][1]=formats&populate[image][fields][2]=alternativeText&` +
+      `populate[detalles]=*&` +
+      `populate[Servicios]=*&` +
+      `populate[seo][populate]=ogImage&` +
+      `pagination[limit]=100`
+    );
     const json = await res.json();
     rentals = json.data || [];
   } catch (e) {
     console.error("Error fetching rentals for static paths:", e);
   }
 
-  return rentals.map((rental) => ({
-    params: { slug: rental.slug },
-    props: { rental },
-  }));
+  // Fallback: JSON local si Strapi no devuelve datos
+  if (rentals.length === 0) {
+    const { default: propiedades20 } = await import("../../data/propiedades_20.json");
+    const { normalizarSlug } = await import("../../lib/zona/getZonaSlug");
+    rentals = (propiedades20 as any[]).map((p: any) => ({
+      title: p.titulo,
+      slug: p.slug,
+      price: p.precio,
+      description: p.descripcionCorta || "",
+      image_url: p.image_url,
+      ubicacion: p.zona ? { nombre: p.zona, slug: normalizarSlug(p.zona) } : undefined,
+      detalles: {
+        capacidad: p.capacidad,
+        habitaciones: p.habitaciones,
+        banos: p.banos,
+        metros: p.metros,
+      },
+      Servicios: p.amenities ? {
+        wifi: p.amenities.includes("wifi"),
+        aire_acondicionado: p.amenities.includes("aire_acondicionado"),
+        parking: p.amenities.includes("parking"),
+        mascotas: p.amenities.includes("mascotas"),
+      } : undefined,
+    }));
+  }
+
+  return rentals.map((rental: Rental) => {
+    // Fetch propiedades similares (misma zona, excluir actual)
+    const similares = rentals
+      .filter((r: any) => 
+        r.ubicacion?.slug === rental.ubicacion?.slug && 
+        r.slug !== rental.slug
+      )
+      .slice(0, 3);
+
+    return {
+      params: { slug: rental.slug },
+      props: { rental, similares },
+    };
+  });
 }
 
-const { rental } = Astro.props;
-const STRAPI_URL = import.meta.env.PUBLIC_STRAPI_URL || "http://localhost:1337";
+const { rental } = Astro.props as { rental: Rental };
 
-// SEO: Prioriza metaTitle/metaDescription del CMS, con fallback al title/description
-const seoTitle = rental.metaTitle || `${rental.title} | Alquiler en Costa del Sol`;
-const seoDescription =
-  rental.metaDescription ||
-  `Alquila ${rental.title} en ${rental.ubicacion?.nombre || rental.location || "Costa del Sol"}. Desde ${rental.price}€/noche. Reserva directa sin intermediarios.`;
-
-// Imagen: URL absoluta o relativa al Strapi
-const imageUrl = rental.image?.url
-  ? rental.image.url.startsWith("http")
-    ? rental.image.url
-    : `${STRAPI_URL}${rental.image.url}`
-  : undefined;
-
-// Componentes de Strapi (detalles y servicios)
+// Componentes de Strapi (Extracted first to avoid TDZ in SEO)
 const detalles = rental.detalles;
 const servicios = rental.Servicios;
-
-// Ubicacion (relacion)
 const ubicacion = rental.ubicacion;
+
+const seoTitle =
+  rental.metaTitle ||
+  `${rental.title} desde ${rental.price}€/noche | ${ubicacion?.nombre || "Costa del Sol"} ${new Date().getFullYear()}`;
+const seoDescription =
+  rental.metaDescription ||
+  `Reserva ${rental.title} en ${ubicacion?.nombre || "Costa del Sol"}. ${detalles?.habitaciones ? detalles.habitaciones + " hab, " : ""}${detalles?.capacidad || 4} huespedes. Desde ${rental.price}€/noche. Reserva directa sin comisiones.`;
+
+// Fallback determinista por slug: cada propiedad muestra su propia imagen de respaldo
+// en lugar del fallback global de zona (que era la misma foto para todos los rentals).
+const fallbackImg = fallbackPorSlug(rental.slug);
+
+// URL canónica de imagen para og:image (usamos "large" para máxima calidad en compartir)
+const ogImageUrl = rental.image
+  ? resolveStrapiImage(rental.image, "large").src
+  : fallbackImg;
+
+// JSON-LD específico para LodgingBusiness (resuelve warnings Search Console)
+const lodgingSchema = {
+  "@context": "https://schema.org",
+  "@type": "LodgingBusiness",
+  "name": rental.title,
+  "description": seoDescription,
+  "url": `https://alquileres-costadelsol.com/propiedad/${rental.slug}`,
+  "image": `https://alquileres-costadelsol.com${ogImageUrl}`,
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": ubicacion?.nombre || "Costa del Sol",
+    "addressRegion": "Málaga",
+    "addressCountry": "ES"
+  },
+  "numberOfRooms": detalles?.habitaciones || 1,
+  "occupancy": {
+    "@type": "QuantitativeValue",
+    "minValue": 1,
+    "maxValue": detalles?.capacidad || 4
+  },
+  "amenityFeature": [
+    servicios?.wifi && { "@type": "LocationFeatureSpecification", "name": "WiFi", "value": true },
+    servicios?.aire_acondicionado && { "@type": "LocationFeatureSpecification", "name": "Aire acondicionado", "value": true },
+    servicios?.parking && { "@type": "LocationFeatureSpecification", "name": "Parking", "value": true },
+  ].filter(Boolean),
+  "makesOffer": {
+    "@type": "Offer",
+    "priceSpecification": {
+      "@type": "UnitPriceSpecification",
+      "price": rental.price,
+      "priceCurrency": "EUR",
+      "unitText": "noche"
+    },
+    "availability": "https://schema.org/InStock"
+  }
+};
 ---
 
-<Layout title={seoTitle} description={seoDescription} image={imageUrl}>
+<Layout
+  titulo={seoTitle}
+  descripcion={seoDescription}
+  imagen={ogImageUrl}
+  breadcrumbs={[
+    {
+      nombre: ubicacion?.nombre || rental.location || "Costa del Sol",
+      url: `/zona/${ubicacion?.slug || ""}`,
+    },
+    { nombre: rental.title, url: `/propiedad/${rental.slug}` },
+  ]}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(lodgingSchema)} slot="head" />
+  
   <!-- Breadcrumb para SEO y navegacion -->
-  <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-    <ol class="flex items-center gap-2 text-sm text-slate-500">
-      <li><a href="/" class="hover:text-brand-primary transition">Inicio</a></li>
-      <li class="text-slate-300">/</li>
+  <Breadcrumbs
+    items={[
+      { label: t("property.breadcrumb.home"), href: "/" },
       {
-        ubicacion && (
-          <>
-            <li>
-              <a
-                href={`/zona/${ubicacion.slug}`}
-                class="hover:text-brand-primary transition"
-              >
-                {ubicacion.nombre}
-              </a>
-            </li>
-            <li class="text-slate-300">/</li>
-          </>
-        )
-      }
-      <li class="text-brand-dark font-medium truncate max-w-xs">{rental.title}</li>
-    </ol>
-  </nav>
+        label: ubicacion?.nombre || rental.location || "Costa del Sol",
+        href: `/zona/${ubicacion?.slug || ""}`,
+      },
+      { label: rental.title, href: Astro.url.pathname, active: true },
+    ]}
+    backLink={{
+      label: t("property.breadcrumb.list"),
+      href: `/zona/${ubicacion?.slug || ""}`,
+    }}
+  />
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
+    <BackButton
+      href={`/zona/${ubicacion?.slug || ""}`}
+      label={t("property.back")}
+      clase="mb-4"
+    />
+  </div>
 
   <article class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-24">
     <!-- Cabecera: Imagen + Info principal -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
       <!-- Imagen -->
-      <div class="relative rounded-3xl overflow-hidden bg-slate-200 aspect-[4/3]">
-        {
-          imageUrl ? (
-            <img
-              src={imageUrl}
-              alt={rental.title}
-              class="w-full h-full object-cover"
-              loading="eager"
-            />
-          ) : (
-            <div class="w-full h-full flex items-center justify-center text-slate-400">
-              <span class="text-8xl">🏡</span>
-            </div>
-          )
-        }
+      <div class="relative rounded-3xl overflow-hidden bg-superficie aspect-4/3">
+        <PropertyImage
+          media={rental.image}
+          fallback={fallbackImg}
+          alt={rental.image?.alternativeText || rental.title}
+          loading="eager"
+          fetchpriority="high"
+          preferFormat="large"
+          class="w-full h-full object-cover"
+        />
         <!-- Precio flotante -->
         <div
           class="absolute top-6 right-6 bg-white/95 backdrop-blur-sm px-6 py-3 rounded-full shadow-lg"
         >
-          <span class="text-2xl font-bold text-brand-dark">{rental.price}€</span>
-          <span class="text-sm text-slate-500">/ noche</span>
+          <span class="text-2xl font-bold text-primario"
+            >{rental.price}€</span
+          >
+          <span class="text-sm text-texto-secundario">{t("card.night")}</span>
         </div>
       </div>
 
@@ -107,100 +238,103 @@ const ubicacion = rental.ubicacion;
       <div class="flex flex-col justify-center">
         {
           ubicacion && (
-            <Badge variant="accent" class="mb-4 self-start">
+            <Badge variante="acento" clase="mb-4 self-start">
               {ubicacion.nombre}
             </Badge>
           )
         }
 
-        <h1 class="text-4xl md:text-5xl font-extrabold text-brand-dark tracking-tight mb-4">
+        <h1
+          class="text-4xl md:text-5xl font-extrabold text-primario tracking-tight mb-4"
+        >
           {rental.title}
         </h1>
 
         {
           (rental.location || ubicacion) && (
-            <p class="flex items-center text-slate-500 text-lg mb-8">
-              <span class="mr-2 text-brand-accent">📍</span>
+            <p class="flex items-center text-texto-secundario text-lg mb-8">
+              <svg
+                class="w-5 h-5 mr-2 text-acento"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <>
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                  />
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                  />
+                </>
+              </svg>
               {rental.location || ubicacion?.nombre || "Costa del Sol"}
             </p>
           )
         }
 
-        <!-- Detalles del inmueble (componente Strapi) -->
+        <!-- Detalles del inmueble  -->
         {
           detalles && (
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
               {detalles.habitaciones != null && (
-                <div class="bg-brand-light rounded-xl p-4 text-center">
-                  <span class="block text-2xl font-bold text-brand-dark">
+                <div class="bg-fondo-claro rounded-xl p-4 text-center">
+                  <span class="block text-2xl font-bold text-primario">
                     {detalles.habitaciones}
                   </span>
-                  <span class="text-sm text-slate-500">Habitaciones</span>
+                  <span class="text-sm text-texto-secundario">{t("property.details.rooms")}</span>
                 </div>
               )}
               {detalles.banos != null && (
-                <div class="bg-brand-light rounded-xl p-4 text-center">
-                  <span class="block text-2xl font-bold text-brand-dark">
+                <div class="bg-fondo-claro rounded-xl p-4 text-center">
+                  <span class="block text-2xl font-bold text-primario">
                     {detalles.banos}
                   </span>
-                  <span class="text-sm text-slate-500">Baños</span>
+                  <span class="text-sm text-texto-secundario">{t("property.details.baths")}</span>
                 </div>
               )}
               {detalles.metros != null && (
-                <div class="bg-brand-light rounded-xl p-4 text-center">
-                  <span class="block text-2xl font-bold text-brand-dark">
+                <div class="bg-fondo-claro rounded-xl p-4 text-center">
+                  <span class="block text-2xl font-bold text-primario">
                     {detalles.metros}m²
                   </span>
-                  <span class="text-sm text-slate-500">Superficie</span>
+                  <span class="text-sm text-texto-secundario">{t("property.details.surface")}</span>
                 </div>
               )}
               {detalles.capacidad != null && (
-                <div class="bg-brand-light rounded-xl p-4 text-center">
-                  <span class="block text-2xl font-bold text-brand-dark">
+                <div class="bg-fondo-claro rounded-xl p-4 text-center">
+                  <span class="block text-2xl font-bold text-primario">
                     {detalles.capacidad}
                   </span>
-                  <span class="text-sm text-slate-500">Huéspedes</span>
+                  <span class="text-sm text-texto-secundario">{t("property.details.guests")}</span>
                 </div>
               )}
             </div>
           )
         }
 
-        <!-- Servicios (componente Strapi) -->
+        <!-- Servicios  -->
         {
           servicios && (
             <div class="flex flex-wrap gap-3 mb-10">
-              {servicios.wifi && (
-                <span class="inline-flex items-center gap-1.5 bg-green-50 text-green-700 px-3 py-1.5 rounded-full text-sm font-medium border border-green-200">
-                  WiFi
-                </span>
-              )}
-              {servicios.aire_acondicionado && (
-                <span class="inline-flex items-center gap-1.5 bg-blue-50 text-blue-700 px-3 py-1.5 rounded-full text-sm font-medium border border-blue-200">
-                  Aire Acondicionado
-                </span>
-              )}
-              {servicios.parking && (
-                <span class="inline-flex items-center gap-1.5 bg-purple-50 text-purple-700 px-3 py-1.5 rounded-full text-sm font-medium border border-purple-200">
-                  Parking
-                </span>
-              )}
-              {servicios.mascotas && (
-                <span class="inline-flex items-center gap-1.5 bg-amber-50 text-amber-700 px-3 py-1.5 rounded-full text-sm font-medium border border-amber-200">
-                  Mascotas
-                </span>
-              )}
+              {servicios.wifi && <Badge variante="acento">{t("property.amenities.wifi")}</Badge>}
+              {servicios.aire_acondicionado && <Badge variante="acento">{t("property.amenities.ac")}</Badge>}
+              {servicios.parking && <Badge variante="acento">{t("property.amenities.parking")}</Badge>}
+              {servicios.mascotas && <Badge variante="acento">{t("property.amenities.pets")}</Badge>}
             </div>
           )
         }
 
         <div class="flex flex-col sm:flex-row gap-4">
-          <Button href="/contacto" variant="primary" size="lg">
-            Reservar Ahora
-          </Button>
-          <Button href="/#rentals" variant="outline" size="lg">
-            Ver más propiedades
-          </Button>
+          <Boton href="/contacto" variante="primario" tamano="grande">
+            {t("nav.reserve")}
+          </Boton>
         </div>
       </div>
     </div>
@@ -209,8 +343,8 @@ const ubicacion = rental.ubicacion;
     {
       rental.description && (
         <section class="mb-16">
-          <h2 class="text-2xl font-bold text-brand-dark mb-6">
-            Sobre esta propiedad
+          <h2 class="text-2xl font-bold text-primario mb-6">
+            {t("property.about")}
           </h2>
           <div class="prose prose-slate lg:prose-lg max-w-none">
             <Fragment set:html={rental.description} />
@@ -219,20 +353,80 @@ const ubicacion = rental.ubicacion;
       )
     }
 
-    <!-- CTA final -->
-    <section
-      class="bg-brand-dark rounded-3xl p-12 text-center"
-    >
+    <!-- Enlace a zona padre (internal linking SEO) -->
+    {ubicacion?.slug && (
+      <section class="mb-16 bg-fondo-claro rounded-2xl p-8 border border-superficie">
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div>
+            <h2 class="text-xl font-bold text-primario mb-2">
+              Descubre mas alojamientos en {ubicacion.nombre}
+            </h2>
+            <p class="text-texto-secundario">
+              Explora todos los apartamentos y villas disponibles en {ubicacion.nombre}, Costa del Sol.
+            </p>
+          </div>
+          <a
+            href={`/zona/${ubicacion.slug}`}
+            class="shrink-0 inline-flex items-center gap-2 bg-secundario text-white px-6 py-3 rounded-full font-semibold hover:bg-secundario/90 transition"
+          >
+            Alquiler en {ubicacion.nombre}
+            <span aria-hidden="true">&rarr;</span>
+          </a>
+        </div>
+      </section>
+    )}
+
+    <!-- Propiedades similares -->
+    {
+      Astro.props.similares && Astro.props.similares.length > 0 && (
+        <section class="mb-16">
+          <h2 class="text-2xl font-bold text-primario mb-6">
+            Propiedades similares en {ubicacion?.nombre || "la zona"}
+          </h2>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {Astro.props.similares.map((similar: any) => (
+              <a
+                href={`/propiedad/${similar.slug}`}
+                class="group bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all"
+              >
+                <div class="aspect-4/3 bg-superficie overflow-hidden">
+                  {similar.image?.url ? (
+                    <img
+                      src={similar.image.formats?.medium?.url || similar.image.url}
+                      alt={similar.image.alternativeText || similar.title}
+                      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <div class="w-full h-full bg-gradient-to-br from-primario/10 to-secundario/10" />
+                  )}
+                </div>
+                <div class="p-4">
+                  <h3 class="font-bold text-primario mb-2 line-clamp-2">
+                    {similar.title}
+                  </h3>
+                  <p class="text-2xl font-bold text-secundario">
+                    {similar.price}€<span class="text-sm text-texto-secundario">/noche</span>
+                  </p>
+                </div>
+              </a>
+            ))}
+          </div>
+        </section>
+      )
+    }
+
+    <!-- cta final -->
+    <section class="bg-primario rounded-3xl p-12 text-center">
       <h2 class="text-3xl font-bold text-white mb-4">
-        ¿Te interesa {rental.title}?
+        {t("property.cta.title")}{rental.title}?
       </h2>
-      <p class="text-slate-300 mb-8 max-w-xl mx-auto">
-        Contacta con nuestro equipo local para confirmar disponibilidad y reservar
-        sin intermediarios.
+      <p class="text-fondo-claro/80 mb-8 max-w-xl mx-auto">
+        {t("property.cta.desc")}
       </p>
-      <Button href="/contacto" variant="primary" size="lg">
-        Contactar Ahora
-      </Button>
+      <Boton href="/contacto" variante="primario" tamano="grande">
+        {t("property.cta.btn")}
+      </Boton>
     </section>
   </article>
 </Layout>

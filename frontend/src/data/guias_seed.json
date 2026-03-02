@@ -1,0 +1,38 @@
+[
+  {
+    "titulo": "Villas de lujo en la Costa del Sol – Alquiler Premium",
+    "slug": "villas-lujo-costa-del-sol",
+    "seo_title": "Villas de lujo en la Costa del Sol – Alquiler Premium 2026",
+    "seo_description": "Amplia selección de villas exclusivas en la Costa del Sol: familiares, vistas mar, junto a campos de golf. Reserva tu estancia de alto standing con atención personalizada.",
+    "extracto": "Descubre los secretos para alquilar las mejores villas premium en la Costa de Málaga. Consejos sobre zonas exclusivas, servicios VIP y reserva directa.",
+    "contenido": "<h2>Por que elegir la Costa del Sol para tu estancia de lujo</h2><p>La Costa del Sol se ha consolidado como el destino predilecto para el turismo premium en Europa. Con mas de 320 dias de sol al anio y una infraestructura de servicios de primer nivel, alquilar una villa de lujo aqui garantiza una experiencia inigualable.</p><h2>Zonas Exclusivas: Marbella, Estepona y mas</h2><p>Marbella atrae a quienes buscan la Milla de Oro y Puerto Banus. Estepona se posiciona como el nuevo 'Garden of the Costa del Sol' con villas mas modernas y tranquilas. Benalmadena ofrece vistas impresionantes desde sus colinas.</p><h2>Servicios Premium Incluidos</h2><p>Nuestras villas destacan por ofrecer mantenimiento de piscina, jardineria profesional y, en muchos casos, servicios de conserjeria y limpieza diaria para que tu unica preocupacion sea disfrutar.</p>",
+    "publicada": true,
+    "orden": 1,
+    "cta_texto": "Explorar Villas de Lujo",
+    "cta_url": "/propiedades/1"
+  },
+  {
+    "titulo": "Villa de lujo para familias en Marbella",
+    "slug": "villa-familias-marbella",
+    "seo_title": "Villa de lujo para familias en Marbella | Alquiler Directo",
+    "seo_description": "Amplia villa en Marbella ideal para familias, con piscina para niños, jardín y entretenimiento. Reserva directa sin comisiones y disfruta de la mejor zona de la Costa del Sol.",
+    "extracto": "Marbella es el destino perfecto para familias que buscan lujo y comodidad. Descubre que debe tener tu villa ideal para viajar con niños.",
+    "contenido": "<h2>Marbella en Familia: Lujo y Diversion</h2><p>Viajar con ninos no significa renunciar al lujo. Nuestras villas en Marbella estan equipadas con medidas de seguridad, zonas de juego y piscinas adaptadas para que toda la familia disfrute con total tranquilidad.</p><h2>Ubicaciones Estrategicas</h2><p>Recomendamos zonas como Nueva Andalucia o la zona Este de Marbella (Elviria), donde las playas son mas seguras para los ninos y el ambiente es mas residencial y exclusivo.</p>",
+    "publicada": true,
+    "orden": 2,
+    "cta_texto": "Ver Villas Familiares",
+    "cta_url": "/zona/marbella"
+  },
+  {
+    "titulo": "Actividades en familia en la Costa del Sol",
+    "slug": "actividades-familia-costa-del-sol",
+    "seo_title": "Actividades en familia en la Costa del Sol: Guía Completa",
+    "seo_description": "Descubre las mejores actividades para niños en la Costa del Sol: parques temáticos, acuarios y playas familiares. La guía definitiva para tus vacaciones premium.",
+    "extracto": "Desde parques acuáticos hasta excursiones por la naturaleza, la Costa del Sol ofrece infinitas opciones para disfrutar en familia.",
+    "contenido": "<h2>Diversion sin limites en Malaga</h2><p>La Costa del Sol es un parque de atracciones gigante. Recomendamos visitar el Aquavelis en Torre del Mar o el Bioparc en Fuengirola. Para un dia de relax, las playas de Nerja ofrecen calas tranquilas ideales para el snorkel familiar.</p>",
+    "publicada": true,
+    "orden": 3,
+    "cta_texto": "Planificar Actividades",
+    "cta_url": "/zona/nerja"
+  }
+]

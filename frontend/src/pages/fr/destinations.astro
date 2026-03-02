@@ -1,0 +1,92 @@
+---
+/**
+ * /fr/destinations — Page française des destinations.
+ * HTML séparé → Google indexe en français.
+ */
+import Layout from "../../layouts/Layout.astro";
+import ZoneCard from "../../components/ZoneCard.astro";
+import { IMAGENES_ZONA, IMAGEN_ZONA_FALLBACK } from "../../config/zonas";
+import { useTranslations } from "../../i18n/utils";
+import { normalizarRentalStrapi, normalizarRentalLocal } from "../../utils/normalizadores";
+import propiedades20 from "../../data/propiedades_20.json";
+
+const t = useTranslations("fr");
+
+const STRAPI_URL = import.meta.env.PUBLIC_STRAPI_URL || "http://localhost:1337";
+let strapiData: any[] = [];
+try {
+  const res = await fetch(`${STRAPI_URL}/api/rentals?populate[ubicacion][fields][0]=nombre&populate[ubicacion][fields][1]=slug&populate[image][fields][0]=url&populate[image][fields][1]=formats&populate[detalles]=*&pagination[limit]=100`);
+  const json = await res.json();
+  strapiData = json.data || [];
+} catch { /* Strapi indisponible */ }
+
+const data =
+  strapiData.length > 0
+    ? strapiData.map(normalizarRentalStrapi)
+    : (propiedades20 as any[]).map(normalizarRentalLocal);
+
+const zonasMap = new Map<string, { nombre: string; slug: string; img: string; cantidad: number }>();
+data.forEach((p) => {
+  const nombre = p.zona || "Costa del Sol";
+  const slug = nombre.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, "-");
+  if (!zonasMap.has(slug)) {
+    zonasMap.set(slug, { nombre, slug, img: IMAGENES_ZONA[slug] ?? IMAGEN_ZONA_FALLBACK, cantidad: 1 });
+  } else {
+    zonasMap.get(slug)!.cantidad++;
+  }
+});
+
+const zonasFallback = [
+  { nombre: "Marbella",      slug: "marbella",     img: IMAGENES_ZONA["marbella"],     cantidad: 0 },
+  { nombre: "Málaga",        slug: "malaga",        img: IMAGENES_ZONA["malaga"],        cantidad: 0 },
+  { nombre: "Benalmádena",   slug: "benalmadena",   img: IMAGENES_ZONA["benalmadena"],   cantidad: 0 },
+  { nombre: "Nerja",         slug: "nerja",         img: IMAGENES_ZONA["nerja"],         cantidad: 0 },
+  { nombre: "Fuengirola",    slug: "fuengirola",    img: IMAGENES_ZONA["fuengirola"],    cantidad: 0 },
+  { nombre: "Torremolinos",  slug: "torremolinos",  img: IMAGENES_ZONA["torremolinos"],  cantidad: 0 },
+  { nombre: "Estepona",      slug: "estepona",      img: IMAGENES_ZONA["estepona"],      cantidad: 0 },
+  { nombre: "Mijas",         slug: "mijas",         img: IMAGENES_ZONA["mijas"],         cantidad: 0 },
+  { nombre: "Torre del Mar", slug: "torre-del-mar", img: IMAGENES_ZONA["torre-del-mar"], cantidad: 0 },
+];
+
+const listadoZonas = zonasMap.size > 0 ? Array.from(zonasMap.values()) : zonasFallback;
+---
+
+<Layout
+  titulo={t('meta.zones.title')}
+  descripcion={t('meta.zones.desc')}
+  breadcrumbs={[{ nombre: "Destinations", url: "/fr/destinations" }]}
+>
+  <section class="bg-primario py-20 px-6 text-center relative overflow-hidden">
+    <div class="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_white_1px,_transparent_1px)] bg-[length:24px_24px]"></div>
+    <div class="relative z-10 max-w-3xl mx-auto">
+      <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-6 tracking-tight">
+        {t('zones.h1')}
+      </h1>
+      <p class="text-fondo-claro/80 text-xl leading-relaxed">
+        {t('zones.intro')}
+      </p>
+    </div>
+  </section>
+
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      {listadoZonas.map((zona) => (
+        <div class="flex flex-col gap-2">
+          <ZoneCard
+            nombre={zona.nombre}
+            slug={zona.slug}
+            imagen={zona.img}
+            cantidad={zona.cantidad}
+            descripcion={`${zona.cantidad} ${t('zones.properties')}`}
+          />
+          <a
+            href={`/fr/zone/${zona.slug}`}
+            class="text-center text-sm font-semibold text-secundario hover:underline"
+          >
+            {t('zones.cta')}
+          </a>
+        </div>
+      ))}
+    </div>
+  </section>
+</Layout>

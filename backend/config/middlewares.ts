@@ -11,6 +11,8 @@ const config: Core.Config.Middlewares = [
   'strapi::session',
   'strapi::favicon',
   'strapi::public',
+  // Rate limiting en POST /api/contactos: 5 solicitudes por IP cada 10 minutos
+  'global::rate-limit-contactos',
 ];
 
 export default config;

@@ -1,0 +1,89 @@
+[
+  {
+    "title": "Villa Lujo Marbella Club",
+    "slug": "villa-lujo-marbella-club",
+    "price": 450,
+    "description": "Espectacular villa de lujo en la Milla de Oro. Jardines privados, piscina climatizada y seguridad 24h. Perfecta para desconectar con estilo.",
+    "location": "Marbella, Milla de Oro",
+    "ubicacion": {
+      "ciudad": "Marbella",
+      "zona": "Milla de Oro",
+      "latitud": 36.5100,
+      "longitud": -4.8950
+    },
+    "servicios": {
+      "wifi": true,
+      "piscina": true,
+      "aire_acondicionado": true,
+      "cocina": true,
+      "parking": true,
+      "mascotas": false,
+      "tv": true,
+      "lavadora": true
+    },
+    "detalles": {
+      "habitaciones": 5,
+      "banos": 4,
+      "metros_cuadrados": 350,
+      "capacidad": 10
+    }
+  },
+  {
+    "title": "Ático Centro Málaga",
+    "slug": "atico-centro-malaga",
+    "price": 120,
+    "description": "Ático moderno con vistas a la Catedral. A un paso de la calle Larios y del puerto. Ideal para parejas y city breaks.",
+    "location": "Málaga, Centro Histórico",
+    "ubicacion": {
+      "ciudad": "Málaga",
+      "zona": "Centro Histórico",
+      "latitud": 36.7213,
+      "longitud": -4.4214
+    },
+    "servicios": {
+      "wifi": true,
+      "piscina": false,
+      "aire_acondicionado": true,
+      "cocina": true,
+      "parking": false,
+      "mascotas": true,
+      "tv": true,
+      "lavadora": true
+    },
+    "detalles": {
+      "habitaciones": 2,
+      "banos": 2,
+      "metros_cuadrados": 85,
+      "capacidad": 4
+    }
+  },
+  {
+    "title": "Villa Familiar Benalmádena",
+    "slug": "villa-familiar-benalmadena",
+    "price": 280,
+    "description": "Ideal para familias. Cerca de Tivoli World y el teleférico. Amplia piscina y zona de barbacoa.",
+    "location": "Benalmádena, Arroyo de la Miel",
+    "ubicacion": {
+      "ciudad": "Benalmádena",
+      "zona": "Arroyo de la Miel",
+      "latitud": 36.5972,
+      "longitud": -4.5360
+    },
+    "servicios": {
+      "wifi": true,
+      "piscina": true,
+      "aire_acondicionado": true,
+      "cocina": true,
+      "parking": true,
+      "mascotas": true,
+      "tv": true,
+      "lavadora": true
+    },
+    "detalles": {
+      "habitaciones": 4,
+      "banos": 3,
+      "metros_cuadrados": 200,
+      "capacidad": 8
+    }
+  }
+]

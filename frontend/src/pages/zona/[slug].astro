@@ -1,178 +1,480 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import RentalCard from "../../components/RentalCard.astro";
-import Button from "../../components/ui/Button.astro";
-import Badge from "../../components/ui/Badge.astro";
+import FichaAlquiler from "../../components/FichaAlquiler.astro";
+import Boton from "../../components/ui/Boton.astro";
+import Breadcrumbs from "../../components/ui/Breadcrumbs.astro";
+import HeroZona from "../../components/HeroZona.astro";
+import SeccionFaq from "../../components/SeccionFaq.astro";
+import ZoneCard from "../../components/ZoneCard.astro";
+import {
+  normalizarRentalStrapi,
+  normalizarRentalLocal,
+} from "../../utils/normalizadores";
+import { getLangFromUrl, useTranslations } from "../../i18n/utils";
+import { getContenidoZona } from "../../data/contenidoZonas";
+import { IMAGENES_ZONA, IMAGEN_ZONA_FALLBACK } from "../../config/zonas";
+import { fetchPropiedades } from "../../lib/zona/fetchPropiedades";
+import { buildZonasConPropiedades } from "../../lib/zona/buildZonas";
+import { getZonaSlug, getZonaNombre } from "../../lib/zona/getZonaSlug";
+import { isInZona } from "../../lib/zona/isInZona";
 
-/**
- * getStaticPaths(): Consulta todas las ubicaciones de Strapi.
- * Por cada ubicacion genera /zona/[slug] con sus rentals asociados.
- * populate=rentals.image trae la relacion anidada en una sola query.
- */
+// 1. GET STATIC PATHS (Build Time) — usa buildZonasConPropiedades (single source)
 export async function getStaticPaths() {
-  const STRAPI_URL = import.meta.env.PUBLIC_STRAPI_URL || "http://localhost:1337";
-
-  let ubicaciones = [];
-  try {
-    const res = await fetch(
-      `${STRAPI_URL}/api/ubicacions?populate[rentals][populate]=image&populate=imagen`
-    );
-    const json = await res.json();
-    ubicaciones = json.data || [];
-  } catch (e) {
-    console.error("Error fetching ubicaciones for static paths:", e);
-  }
-
-  return ubicaciones.map((ubi) => ({
-    params: { slug: ubi.slug },
-    props: { ubicacion: ubi },
-  }));
+  return await buildZonasConPropiedades();
 }
 
-const { ubicacion } = Astro.props;
-const STRAPI_URL = import.meta.env.PUBLIC_STRAPI_URL || "http://localhost:1337";
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 
-// SEO: campos del CMS con fallback generado
+const { zona, propiedades, todasLasZonas } = Astro.props;
+const zonaUrl = "/zona/" + zona.slug;
+
+// SEO title/desc defined after count
+
+const ts = (key: any) => t(key).replace("{zone}", zona.nombre);
+const contenidoZona = getContenidoZona(zona.slug, zona.nombre);
+const faqItems = contenidoZona.faqs;
+
+const breadcrumbConfig = [
+  { label: "Inicio", href: "/" },
+  { label: "Zonas", href: "/zonas" },
+  { label: zona.nombre, href: Astro.url.pathname, active: true },
+];
+
+// Otras zonas: dinámico desde TODAS las zonas generadas (escalable)
+const otrasZonas = (todasLasZonas || [])
+  .filter((z: any) => z.slug !== zona.slug)
+  .slice(0, 3);
+
+const count = propiedades.length;
+
 const seoTitle =
-  ubicacion.metaTitle ||
-  `Alquiler vacacional en ${ubicacion.nombre} | Pisos y Apartamentos`;
-const seoDescription =
-  ubicacion.metaDescription ||
-  `Encuentra los mejores alquileres en ${ubicacion.nombre}, Costa del Sol. Apartamentos, pisos y villas al mejor precio. Reserva directa.`;
-
-// Imagen hero de la ubicacion
-const heroImage = ubicacion.imagen?.url
-  ? ubicacion.imagen.url.startsWith("http")
-    ? ubicacion.imagen.url
-    : `${STRAPI_URL}${ubicacion.imagen.url}`
-  : undefined;
-
-// Rentals asociados a esta ubicacion (vienen por la relacion populate)
-const rentals = ubicacion.rentals || [];
+  contenidoZona.seo_title ||
+  `Alquiler en ${zona.nombre} ${new Date().getFullYear()} | Apartamentos y Villas Costa del Sol`;
+const seoDesc =
+  contenidoZona.seo_description ||
+  `${count > 0 ? count + " alojamientos verificados" : "Alojamientos"} en ${zona.nombre}, Costa del Sol. Reserva directa sin comisiones. Mejor precio garantizado.`;
 ---
 
-<Layout title={seoTitle} description={seoDescription} image={heroImage}>
-  <!-- Breadcrumb -->
-  <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-    <ol class="flex items-center gap-2 text-sm text-slate-500">
-      <li><a href="/" class="hover:text-brand-primary transition">Inicio</a></li>
-      <li class="text-slate-300">/</li>
-      <li class="text-brand-dark font-medium">{ubicacion.nombre}</li>
-    </ol>
-  </nav>
+<Layout
+  titulo={seoTitle}
+  descripcion={seoDesc}
+  breadcrumbs={[
+    { nombre: "Inicio", url: "/" },
+    { nombre: zona.nombre, url: zonaUrl },
+  ]}
+>
+  {/* NAVEGACION */}
+  <div class="relative z-40 bg-fondo-claro border-b border-superficie">
+    <Breadcrumbs
+      items={breadcrumbConfig}
+      backLink={{ label: t("zone.breadcrumb.back"), href: "/zonas" }}
+    />
+  </div>
 
-  <!-- Hero de zona -->
-  <section class="relative bg-brand-dark py-24 px-6 overflow-hidden">
-    {
-      heroImage && (
-        <img
-          src={heroImage}
-          alt={ubicacion.nombre}
-          class="absolute inset-0 w-full h-full object-cover opacity-30"
-        />
-      )
-    }
-    <div class="absolute inset-0 bg-gradient-to-t from-brand-dark/90 to-brand-dark/40"></div>
+  {/* HERO COMPACTO — banner (28vh) para internas */}
+  <HeroZona
+    nombre={zona.nombre}
+    slug={zona.slug}
+    imagen={zona.imagen}
+    propiedadesCount={count}
+  />
 
-    <div class="relative z-10 max-w-4xl mx-auto text-center">
-      <Badge variant="accent" class="mb-6">Costa del Sol</Badge>
-      <h1
-        class="text-5xl md:text-6xl font-extrabold text-white tracking-tight mb-6"
-      >
-        Alquileres en{" "}
-        <span
-          class="text-transparent bg-clip-text bg-gradient-to-r from-brand-accent to-brand-secondary"
-        >
-          {ubicacion.nombre}
-        </span>
-      </h1>
-      <p class="text-xl text-slate-300 max-w-2xl mx-auto font-light leading-relaxed">
-        {seoDescription}
-      </p>
-    </div>
-  </section>
-
-  <!-- Grid de propiedades -->
-  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 bg-brand-light">
-    <div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
-      <div>
-        <h2 class="text-3xl md:text-4xl font-bold text-brand-dark">
-          Propiedades en {ubicacion.nombre}
-        </h2>
-        <p class="text-slate-500 mt-2 text-lg">
-          {rentals.length}
-          {rentals.length === 1 ? "propiedad disponible" : "propiedades disponibles"}
-        </p>
+  {/* STATS BAND */}
+  <div class="bg-primario text-white">
+    <div class="contenedor-fluido py-5">
+      <div class="flex flex-wrap items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+          <div
+            class="w-8 h-8 rounded-full bg-secundario/20 flex items-center justify-center shrink-0"
+          >
+            <svg
+              class="w-4 h-4 text-secundario"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+              ></path>
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+            </svg>
+          </div>
+          <span class="font-bold text-lg">{zona.nombre}</span>
+          <span class="hidden sm:inline text-white/40">|</span>
+          <span class="hidden sm:inline text-white/70 text-sm"
+            >Costa del Sol</span
+          >
+        </div>
+        <div class="flex items-center gap-6">
+          <div class="text-center">
+            <div class="text-xl font-bold text-sol">{count}</div>
+            <div class="text-xs text-white/60 uppercase tracking-wide">
+              alojamientos
+            </div>
+          </div>
+          <div
+            class="flex items-center gap-2 bg-secundario/20 rounded-full px-4 py-1.5"
+          >
+            <div class="w-2 h-2 rounded-full bg-secundario animate-pulse"></div>
+            <span
+              class="text-xs font-semibold text-secundario uppercase tracking-wide"
+              >Verificado</span
+            >
+          </div>
+        </div>
       </div>
-      <a
-        href="/"
-        class="flex items-center text-brand-primary font-semibold hover:text-brand-secondary transition group"
-      >
-        Ver todas las zonas
-        <span class="ml-2 transform group-hover:translate-x-1 transition">→</span>
-      </a>
     </div>
+  </div>
 
-    {
-      rentals.length > 0 ? (
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-          {rentals.map((rental) => (
-            <RentalCard
-              title={rental.title}
-              price={rental.price}
-              slug={rental.slug || rental.documentId}
-              image={
-                rental.image?.url
-                  ? rental.image.url.startsWith("http")
-                    ? rental.image.url
-                    : `${STRAPI_URL}${rental.image.url}`
-                  : undefined
-              }
-              location={ubicacion.nombre}
-            />
-          ))}
-        </div>
-      ) : (
-        <div class="text-center py-24 bg-white rounded-3xl border-2 border-dashed border-slate-200">
-          <span class="text-6xl mb-6 block">🏖️</span>
-          <h3 class="text-2xl font-bold text-brand-dark mb-2">
-            Próximamente en {ubicacion.nombre}
-          </h3>
-          <p class="text-slate-500 max-w-md mx-auto mb-8">
-            Estamos preparando las mejores propiedades de esta zona. Vuelve
-            pronto o explora otras localidades.
+  {/* CONTENIDO SEO LARGO -- dinamico por zona */}
+  <section class="bg-fondo-claro section-md">
+    <div class="contenedor-fluido">
+      <div class="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-10 items-start">
+        {/* Columna principal */}
+        <div>
+          <p
+            class="text-lg text-texto-secundario leading-relaxed mb-10 pl-5 border-l-4 border-sol"
+          >
+            {contenidoZona.intro}
           </p>
-          <Button href="/" variant="outline">
-            Ver todas las propiedades
-          </Button>
+          {
+            contenidoZona.secciones.map((seccion: any) => (
+              <div class="mb-12">
+                <div class="flex items-center gap-3 mb-5 pb-3 border-b-2 border-superficie">
+                  <div class="w-1 h-7 rounded-full bg-secundario shrink-0" />
+                  <h2 class="font-bold text-primario">{seccion.h2}</h2>
+                </div>
+                {seccion.parrafos.map((p: string) => (
+                  <p class="text-texto-secundario leading-relaxed mb-4">{p}</p>
+                ))}
+                {seccion.subsecciones && seccion.subsecciones.length > 0 && (
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
+                    {seccion.subsecciones.map((sub: any) => (
+                      <div class="bg-white rounded-xl border border-superficie p-5 shadow-sm">
+                        <h3 class="font-semibold text-primario mb-2 flex items-center gap-2">
+                          <div class="w-2 h-2 rounded-full bg-secundario shrink-0" />
+                          {sub.h3}
+                        </h3>
+                        <p class="text-sm text-texto-secundario leading-relaxed">
+                          {sub.texto}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                {seccion.listaCaracteristicas &&
+                  seccion.listaCaracteristicas.length > 0 && (
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-6">
+                      {seccion.listaCaracteristicas.map((item: string) => (
+                        <div class="flex items-start gap-3">
+                          <div class="w-5 h-5 rounded-full bg-secundario/10 flex items-center justify-center shrink-0 mt-0.5">
+                            <svg
+                              class="w-3 h-3 text-secundario"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                              stroke-width="3"
+                            >
+                              <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M5 13l4 4L19 7"
+                              />
+                            </svg>
+                          </div>
+                          <span class="text-sm text-texto-secundario">
+                            {item}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+              </div>
+            ))
+          }
         </div>
-      )
-    }
+        <aside class="lg:sticky lg:top-24 space-y-4">
+          <div class="bg-primario rounded-2xl p-6 text-white">
+            <h4 class="text-lg font-bold mb-1">{zona.nombre}</h4>
+            <p class="text-white/60 text-sm mb-6">
+              Costa del Sol | Alquiler vacacional
+            </p>
+            <div class="mb-6">
+              <div class="bg-white/10 rounded-xl p-3 text-center">
+                <div class="text-2xl font-bold text-sol">{count}</div>
+                <div class="text-xs text-white/60 mt-0.5">
+                  Alojamientos disponibles
+                </div>
+              </div>
+            </div>
+            <ul class="space-y-3 mb-6 text-sm">
+              <li class="flex items-center gap-3">
+                <div
+                  class="w-5 h-5 rounded-full bg-secundario/30 flex items-center justify-center shrink-0"
+                >
+                  <svg
+                    class="w-3 h-3 text-secundario"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M5 13l4 4L19 7"></path>
+                  </svg>
+                </div>
+                <span class="text-white/80"
+                  >Precios verificados sin sorpresas</span
+                >
+              </li>
+              <li class="flex items-center gap-3">
+                <div
+                  class="w-5 h-5 rounded-full bg-secundario/30 flex items-center justify-center shrink-0"
+                >
+                  <svg
+                    class="w-3 h-3 text-secundario"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M5 13l4 4L19 7"></path>
+                  </svg>
+                </div>
+                <span class="text-white/80">Atencion personalizada 24h</span>
+              </li>
+              <li class="flex items-center gap-3">
+                <div
+                  class="w-5 h-5 rounded-full bg-secundario/30 flex items-center justify-center shrink-0"
+                >
+                  <svg
+                    class="w-3 h-3 text-secundario"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M5 13l4 4L19 7"></path>
+                  </svg>
+                </div>
+                <span class="text-white/80"
+                  >Reserva directa sin intermediarios</span
+                >
+              </li>
+            </ul>
+            <Boton
+              href="/contacto"
+              variante="primario"
+              tamano="peque"
+              clase="w-full"
+            >
+              Consultar disponibilidad
+            </Boton>
+          </div>
+          <div class="border border-superficie rounded-2xl p-5 bg-white">
+            <p class="text-sm text-texto-secundario mb-3 font-medium">
+              Buscas algo especifico?
+            </p>
+            <Boton
+              href="/propiedades"
+              variante="outline"
+              tamano="peque"
+              clase="w-full"
+            >
+              Ver todos los alojamientos
+            </Boton>
+          </div>
+        </aside>
+      </div>
+    </div>
   </section>
 
-  <!-- Contenido SEO de la zona (richtext desde Strapi) -->
+  {/* LISTADO DE PROPIEDADES */}
+  <section class="bg-fondo-claro section-md">
+    <div class="contenedor-fluido">
+      <div
+        class="flex items-center justify-between mb-8 border-b border-superficie pb-4"
+      >
+        <h2 class="font-bold text-primario">
+          {ts("zone.listings.h2")}
+        </h2>
+        <span class="text-sm text-texto-secundario font-semibold">
+          {count}
+          {count === 1 ? "resultado" : "resultados"}
+        </span>
+      </div>
+
+      {
+        propiedades.length > 0 ? (
+          <div class="grid-responsive">
+            {propiedades.map((prop: any) => {
+              const p = prop.titulo
+                ? (prop as any)
+                : normalizarRentalStrapi(prop);
+              return (
+                <FichaAlquiler
+                  slug={p.slug}
+                  titulo={p.titulo || p.title}
+                  zona={p.zona || zona.nombre}
+                  precio={p.precio || p.price}
+                  capacidad={p.capacidad || p.detalles?.capacidad || 4}
+                  habitaciones={p.habitaciones ?? p.detalles?.habitaciones}
+                  image={p.image}
+                  image_url={p.image_url}
+                />
+              );
+            })}
+          </div>
+        ) : (
+          <div class="space-y-12">
+            {/* Empty state: mensaje + destinos cercanos */}
+            <div class="surface text-center py-12 px-6">
+              <svg
+                class="w-16 h-16 mx-auto mb-4 text-superficie"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.5"
+                  d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+                />
+              </svg>
+              <h3 class="font-bold text-primario mb-2">
+                {ts("zone.empty.title")}
+              </h3>
+              <p class="text-texto-secundario max-w-md mx-auto mb-6">
+                {t("zone.empty.desc")}
+              </p>
+              <div class="flex flex-col sm:flex-row gap-3 justify-center">
+                <Boton href="/zonas" variante="primario">
+                  {t("zone.empty.btn")}
+                </Boton>
+                <Boton href="/contacto" variante="outline">
+                  Contactar
+                </Boton>
+              </div>
+            </div>
+
+            {/* Destinos cercanos — la página nunca queda vacía */}
+            <div>
+              <h3 class="font-bold text-primario mb-6 text-center">
+                Otros destinos en la Costa del Sol
+              </h3>
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {otrasZonas.map((z: any) => (
+                  <ZoneCard
+                    nombre={z.nombre}
+                    slug={z.slug}
+                    imagen={IMAGENES_ZONA[z.slug] ?? IMAGEN_ZONA_FALLBACK}
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+        )
+      }
+    </div>
+  </section>
+
+  {/* FAQs CON SCHEMA (Structured Data) — inline dinámico por zona */}
   {
-    ubicacion.descripcion && (
-      <section class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pb-24">
-        <div class="prose prose-slate lg:prose-lg max-w-none">
-          <Fragment set:html={ubicacion.descripcion} />
+    faqItems.length > 0 && (
+      <section class="py-24 bg-fondo-claro">
+        <div class="max-w-4xl mx-auto px-6">
+          <div class="text-center mb-16">
+            <h2 class="font-bold text-primario mb-4">
+              Preguntas Frecuentes sobre {zona.nombre}
+            </h2>
+            <p class="text-texto-secundario text-lg">
+              Todo lo que necesitas saber sobre tu proximo alquiler en{" "}
+              {zona.nombre}.
+            </p>
+          </div>
+          <div class="space-y-4">
+            {faqItems.map((item: any) => (
+              <details class="group bg-white rounded-2xl border border-superficie p-6 transition-all duration-300 hover:shadow-md open:shadow-lg">
+                <summary class="flex justify-between items-center cursor-pointer list-none font-bold text-lg text-primario">
+                  <span>{item.pregunta}</span>
+                  <span class="text-secundario transition-transform duration-300 group-open:rotate-180">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-6 w-6"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M19 9l-7 7-7-7"
+                      />
+                    </svg>
+                  </span>
+                </summary>
+                <div class="mt-4 text-texto-secundario leading-relaxed">
+                  <p>{item.respuesta}</p>
+                </div>
+              </details>
+            ))}
+          </div>
         </div>
+        <script
+          type="application/ld+json"
+          set:html={JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            mainEntity: faqItems.map((f: any) => ({
+              "@type": "Question",
+              name: f.pregunta,
+              acceptedAnswer: { "@type": "Answer", text: f.respuesta },
+            })),
+          })}
+        />
       </section>
     )
   }
 
-  <!-- CTA -->
-  <section class="bg-brand-dark py-16 px-4">
-    <div class="max-w-3xl mx-auto text-center">
-      <h2 class="text-3xl font-bold text-white mb-4">
-        ¿Buscas algo concreto en {ubicacion.nombre}?
-      </h2>
-      <p class="text-slate-300 mb-8">
-        Nuestro equipo local conoce cada rincón. Cuéntanos qué necesitas.
-      </p>
-      <Button href="/contacto" variant="primary" size="lg">
-        Contactar
-      </Button>
-    </div>
-  </section>
+  {
+    /* INTERNAL LINKING — solo si hay propiedades (evita duplicar con empty state) */
+  }
+  {
+    propiedades.length > 0 && (
+      <section class="section-md border-t border-superficie">
+        <div class="contenedor-fluido">
+          <h3 class="font-bold text-primario mb-8 text-center">
+            {t("zone.others.h3")}
+          </h3>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {otrasZonas.map((z: any) => (
+              <ZoneCard
+                nombre={z.nombre}
+                slug={z.slug}
+                imagen={IMAGENES_ZONA[z.slug] ?? IMAGEN_ZONA_FALLBACK}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
 </Layout>
